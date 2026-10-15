@@ -160,9 +160,9 @@ Requirements:
   * *Supabase Realtime Silent Failure:* Enabling RLS on `kendra_fsm_events` without a `FOR SELECT TO anon` policy causes Supabase Realtime to silently drop all broadcast rows. The explicit `SELECT` policy added above fixes this completely.
   * *EIP-55 Checksum Validation in `web3.py`:* Mixed-case hex strings like `0x71C...A91` fail `web3.py` validation unless converted via `Web3.to_checksum_address()`. Applying `to_checksum_address()` during sandbox generation prevents runtime `InvalidAddress` exceptions.
 * **7. Feature Verification Checklist:**
-  - [ ] `api/requirements.txt` excludes `scipy` and `scikit-learn` so Vercel serverless bundle size is `<65 MB`.
-  - [ ] Supabase RLS blocks `anon` reads on `merchant_private_cashflows`, allows `anon` reads on `kendra_fsm_events`, and blocks `UPDATE/DELETE` on `zerotrust_security_intercepts`.
-  - [ ] `python api/data/generate_sandbox.py` outputs `dhaka_kendra_90d.json` where `AGT-01`'s 90-day array produces `DSCR == 1.6800` and `AGT-04/02/03` buffers produce exact `0.4000 / 0.3500 / 0.2500` stakes[cite: 2].
+  - [x] `api/requirements.txt` excludes `scipy` and `scikit-learn` so Vercel serverless bundle size is `<65 MB`.
+  - [x] Supabase RLS blocks `anon` reads on `merchant_private_cashflows`, allows `anon` reads on `kendra_fsm_events`, and blocks `UPDATE/DELETE` on `zerotrust_security_intercepts`.
+  - [x] `python api/data/generate_sandbox.py` outputs `dhaka_kendra_90d.json` where `AGT-01`'s 90-day array produces `DSCR == 1.6800` and `AGT-04/02/03` buffers produce exact `0.4000 / 0.3500 / 0.2500` stakes[cite: 2].
 
 ---
 
@@ -191,8 +191,8 @@ Requirements:
 * **6. Senior Architect, Debugger & Tester Review (Potential Pitfalls & Edge Cases):**
   * *Asserted Booleans in `ZKCommitmentProof`:* By embedding `bit_range_proofs: List[BitRangeProof]` and `psi_supplier_hmac_hex` inside `ZKCommitmentProof`, peer agents mathematically verify the cryptographic proof components before setting `dscr_verified_ge_125`[cite: 2].
 * **7. Feature Verification Checklist:**
-  - [ ] `schemas.py` validates EIP-55 checksummed wallet addresses and `BitRangeProof` structures.
-  - [ ] `verify_zerotrust_hmac` blocks unsigned or replayed requests (`>30s`).
+  - [x] `schemas.py` validates EIP-55 checksummed wallet addresses and `BitRangeProof` structures.
+  - [x] `verify_zerotrust_hmac` blocks unsigned or replayed requests (`>30s`).
 
 ---
 

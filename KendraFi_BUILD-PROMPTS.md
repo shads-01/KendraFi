@@ -220,8 +220,8 @@ Requirements:
 * **6. Senior Architect, Debugger & Tester Review (Potential Pitfalls & Edge Cases):**
   * *Scenario B Phone Persona Mismatch:* Previously, Scenario B showed Rahim's (`AGT-01`) phone header while sending `borrower_agent_id = "AGT-05"`. Now, clicking Scenario B automatically switches the Left Panel phone header to **Sohel Electronics (`AGT-05` — Adversarial Node)** so the UI and backend payload match 100%[cite: 2].
 * **7. Feature Verification Checklist:**
-  - [ ] `SCENARIO_A_VALID` extracts `AGT-01`, `45,000 BDT`, `30 days`, and checksummed `0x71C...A91`[cite: 2].
-  - [ ] `SCENARIO_B_REDTEAM` extracts `AGT-05` and returns both `TIER0_PROMPT_INJECTION_DETECTED` and `X402_UNVERIFIED_SUPPLIER_ADDRESS`[cite: 2].
+  - [x] `SCENARIO_A_VALID` extracts `AGT-01`, `45,000 BDT`, `30 days`, and checksummed `0x71C...A91`[cite: 2].
+  - [x] `SCENARIO_B_REDTEAM` extracts `AGT-05` and returns both `TIER0_PROMPT_INJECTION_DETECTED` and `X402_UNVERIFIED_SUPPLIER_ADDRESS`[cite: 2].
 
 ---
 

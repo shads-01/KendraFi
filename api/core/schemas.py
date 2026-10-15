@@ -85,6 +85,10 @@ class ExtractedInvoiceIntent(BaseModel):
                 )
         return v
 
+    def __getitem__(self, item: str):
+        """Allow subscript access for seamless dictionary compatibility."""
+        return getattr(self, item)
+
 
 class BitRangeProof(BaseModel):
     """

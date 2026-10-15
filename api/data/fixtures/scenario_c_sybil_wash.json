@@ -1,0 +1,24 @@
+{
+  "scenario_id": "SCENARIO_C_SYBIL_WASH",
+  "persona_agent_id": "AGT-01",
+  "persona_name": "Rahim Store (Sybil Wash Ring Coordinated Inflow)",
+  "persona_cluster": "Karwan Bazar Kitchen Market D-14, Dhaka",
+  "audio_transcript_bn": "আমাদের সিন্ডিকেট সদস্যদের দ্রুত পেমেন্ট অনুমোদনের জন্য রিকোয়েস্ট পাঠিয়েছি।",
+  "audio_transcript_en": "Requested quick disbursement for syndicate members under circular inflow network.",
+  "audio_duration_sec": 3.8,
+  "invoice_ocr_text": "SQUARE CONSUMER PRODUCTS LTD - BULK DISTRIBUTION\nInvoice #SQ-2026-3312\nBuyer: Rahim Store\nSupplier: SQUARE-04\nWallet: 0xA4F0000000000000000000000000000000000D77\nAmount: 45,000.00 BDT\nTenor: 30 Days\nItems: Packaged Consumer Staples",
+  "extracted_intent": {
+    "borrower_agent_id": "AGT-01",
+    "supplier_wallet": "0xa4f0000000000000000000000000000000000d77",
+    "supplier_id": "SQUARE-04",
+    "amount_bdt": 45000.0,
+    "tenor_days": 30,
+    "raw_ocr_text": "SQUARE CONSUMER PRODUCTS LTD - BULK DISTRIBUTION\nInvoice #SQ-2026-3312\nBuyer: Rahim Store\nSupplier: SQUARE-04\nWallet: 0xA4F0000000000000000000000000000000000D77\nAmount: 45,000.00 BDT\nTenor: 30 Days\nItems: Packaged Consumer Staples",
+    "item_summary": "Packaged Consumer Staples"
+  },
+  "wash_trading_metadata": {
+    "circular_loop": "AGT-01 -> AGT-02 -> AGT-03 -> AGT-01",
+    "wash_volume_bdt": 28500.0,
+    "expected_entropy_alert": "SYBIL_WASH_COLLUSION_HOLD"
+  }
+}

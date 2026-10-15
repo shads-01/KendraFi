@@ -143,14 +143,18 @@ All wallet addresses **MUST** be normalized through `Web3.to_checksum_address()`
   - `compute_hmac_signature(secret: str, timestamp: str, body: bytes) -> str`: Produces `HMAC-SHA256(timestamp + "." + body)`.
   - `verify_zerotrust_hmac(request: Request) -> bool`: Validates `X-ZeroTrust-Signature` and enforces a strict `abs(now - timestamp) <= 30.0` seconds window.
 
-#### 11. `api/core/perception_sandbox.py`
+#### 11. `api/core/perception_sandbox.py` [STATUS: IMPLEMENTED - PROMPT 03]
 - **Location:** `/media/arkosaha/Volume13/KendraFi/api/core/perception_sandbox.py`
 - **Created By:** Prompt 03 (`feat/lead2-tier0-perception-firewall`)
 - **Role:** Tier-0 untrusted multimodal perception boundary (Gemini 2.5 Flash OCR & Whisper audio transcription).
-- **Security Constraints:** Strictly zero access to private cash flows, private keys, database writes, or Web3 relayer.
+- **Security Constraints:** Strictly zero access to private cash flows, private keys, database writes, or Web3 relayer. Adheres strictly to Rule 1 (Zero LLM Math) and Rule 3 (Zero-Trust Perception & x402 Guardrails).
 - **Key Functions:**
-  - `parse_bangla_audio_and_receipt(scenario: str) -> ExtractedInvoiceIntent`: Parses inputs into clean JSON.
-  - `run_tier0_and_x402_firewall(intent: ExtractedInvoiceIntent) -> Tuple[bool, List[str]]`: Runs regex/perplexity prompt injection check AND x402 KYB counterparty check **in parallel without short-circuiting** so Scenario B reports both `TIER0_PROMPT_INJECTION_DETECTED` and `X402_UNVERIFIED_SUPPLIER_ADDRESS`.
+  - `load_scenario_fixture(scenario: str) -> Dict[str, Any]`: Loads disk fixtures for `SCENARIO_A_VALID`, `SCENARIO_B_REDTEAM`, `SCENARIO_C_SYBIL_WASH`.
+  - `get_active_persona_for_scenario(scenario: str) -> Dict[str, Any]`: Resolves active phone persona (`AGT-01` for Scenario A & C, switches to `AGT-05` Sohel Electronics for Scenario B to guarantee 100% UI-payload consistency).
+  - `parse_bangla_audio_and_receipt(scenario: str) -> ExtractedInvoiceIntent | RawPerceptionDict`: Parses inputs into clean JSON/Pydantic models without computing any financial metrics.
+  - `run_tier0_and_x402_firewall(intent: ExtractedInvoiceIntent | Dict) -> Tuple[bool, List[str]]`: Runs regex/perplexity prompt injection check AND x402 KYB counterparty check **in parallel without short-circuiting** so Scenario B reports both `TIER0_PROMPT_INJECTION_DETECTED` and `X402_UNVERIFIED_SUPPLIER_ADDRESS` simultaneously.
+  - `create_zero_trust_intercept_logs(violations, payload)`: Generates structured `ZeroTrustInterceptLog` audit records.
+  - `log_security_intercept_to_supabase(...)`: Writes tamper-proof security intercept records to Supabase.
 
 #### 12. `api/core/risk_engine.py`
 - **Location:** `/media/arkosaha/Volume13/KendraFi/api/core/risk_engine.py`
@@ -411,7 +415,7 @@ All wallet addresses **MUST** be normalized through `Web3.to_checksum_address()`
 | **Prompt 00** | `00_Write_Master_CONTEXT_MD_Specification` | `chore/lead5-master-context-spec` | Lead 5: Security Auditor & Submission Director | `CONTEXT.md`, `AI_USE_LOG.md`, `PROJECT_FILES_MANIFEST.md` | **DONE** |
 | **Prompt 01** | `01_Monorepo_Supabase_RLS_Triggers_And_Calibrated_Sandbox` | `feat/lead3-supabase-rls-and-sandbox` | Lead 3: Quant Risk & Supabase DB Lead | `vercel.json`, `package.json`, `api/requirements.txt`, `supabase/migrations/20261015000000_kendra_zerotrust_schema.sql`, `api/data/generate_sandbox.py`, `api/data/dhaka_kendra_90d.json` | **DONE** |
 | **Prompt 02** | `02_ZeroTrust_Gateway_HMAC_And_Pydantic_Schemas` | `feat/lead5-zerotrust-hmac-schemas` | Lead 5: Security Auditor & Submission Director | `api/core/schemas.py`, `api/core/zerotrust_guard.py`, `src/lib/zerotrust.ts`, `src/lib/supabase-browser.ts`, `src/lib/supabase-server.ts`, `types/index.ts` | **DONE** |
-| **Prompt 03** | `03_Tier0_Multimodal_Perception_And_Parallel_Firewall` | `feat/lead2-tier0-perception-firewall` | Lead 2: Multi-Agent State Machine Engineer | `api/core/perception_sandbox.py`, test audio & invoice fixtures |
+| **Prompt 03** | `03_Tier0_Multimodal_Perception_And_Parallel_Firewall` | `feat/lead2-tier0-perception-firewall` | Lead 2: Multi-Agent State Machine Engineer | `api/core/perception_sandbox.py`, `api/data/fixtures/scenario_*.json`, `tests/test_prompt03_perception_firewall.py` | **DONE** |
 | **Prompt 04** | `04_Tier2_Deterministic_Risk_Besley_Coate_And_Wash_Filter` | `feat/lead3-tier2-reconciled-risk-engine` | Lead 3: Quant Risk & Supabase DB Lead | `api/core/risk_engine.py` |
 | **Prompt 05** | `05_Layer4_Secp256k1_Pedersen_Range_Proof_And_FATE_Scorer` | `feat/lead3-secp256k1-zk-range-proof` | Lead 3: Quant Risk & Supabase DB Lead | `api/core/zk_fate_privacy.py` |
 | **Prompt 06** | `06_Layer5_Solidity_OnChain_EIP712_Quorum_And_Repayment` | `feat/lead1-solidity-onchain-eip712-escrow` | Lead 1: Smart Contract Architect | `contracts/foundry.toml`, `contracts/src/MockBDTc.sol`, `contracts/src/AgentSessionAccount.sol`, `contracts/src/KendraEscrow.sol`, `contracts/script/DeployKendra.s.sol`, `contracts/test/KendraEscrow.t.sol` |

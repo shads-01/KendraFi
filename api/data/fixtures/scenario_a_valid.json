@@ -1,0 +1,19 @@
+{
+  "scenario_id": "SCENARIO_A_VALID",
+  "persona_agent_id": "AGT-01",
+  "persona_name": "Rahim Store",
+  "persona_cluster": "Karwan Bazar Kitchen Market D-14, Dhaka",
+  "audio_transcript_bn": "মেঘনা গ্রুপ থেকে ৫০ বস্তা মিনিকেট চাল আর সরিষার তেল স্টক করার জন্য ৪৫,০০০ টাকার ইনভয়েস পেয়েছি। ৩০ দিনের মধ্যে পরিশোধ করতে হবে।",
+  "audio_transcript_en": "Received a 45,000 BDT invoice from Meghna Group for 50 sacks Miniket rice and mustard oil restock. Repayment period is 30 days.",
+  "audio_duration_sec": 5.2,
+  "invoice_ocr_text": "MEGHNA GROUP OF INDUSTRIES - WHOLESALE DIVISION\nInvoice #MGI-2026-8891\nDate: 2026-10-15\nBuyer: Rahim Store (Karwan Bazar D-14)\nSupplier: MEGHNA-01\nSupplier Settlement Wallet: 0x71c0000000000000000000000000000000000a91\nItems: 50x Miniket Rice 50kg (35,000 BDT), 10x Mustard Oil 5L (10,000 BDT)\nTotal Payable: 45,000.00 BDT\nPayment Terms: 30 Days Net",
+  "extracted_intent": {
+    "borrower_agent_id": "AGT-01",
+    "supplier_wallet": "0x71c0000000000000000000000000000000000a91",
+    "supplier_id": "MEGHNA-01",
+    "amount_bdt": 45000.0,
+    "tenor_days": 30,
+    "raw_ocr_text": "MEGHNA GROUP OF INDUSTRIES - WHOLESALE DIVISION\nInvoice #MGI-2026-8891\nDate: 2026-10-15\nBuyer: Rahim Store (Karwan Bazar D-14)\nSupplier: MEGHNA-01\nSupplier Settlement Wallet: 0x71c0000000000000000000000000000000000a91\nItems: 50x Miniket Rice 50kg (35,000 BDT), 10x Mustard Oil 5L (10,000 BDT)\nTotal Payable: 45,000.00 BDT\nPayment Terms: 30 Days Net",
+    "item_summary": "50 sacks Miniket Rice 50kg, 10x Mustard Oil 5L"
+  }
+}

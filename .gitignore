@@ -11,6 +11,8 @@ __pycache__/
 coverage/
 .nyc_output/
 *.lcov
+.pytest_cache/
+*.tsbuildinfo
 
 # Next.js build output
 .next/

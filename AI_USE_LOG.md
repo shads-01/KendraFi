@@ -226,14 +226,121 @@ Before executing code, all workspace markdown documents were thoroughly read, an
 
 ---
 
-## 7. Next Steps & Roadmap for Prompt 02
+## 7. Next Steps & Roadmap for Prompt 02 (Completed in Session 3)
 
-The monorepo, live database, and Supabase client layer are now 100% operational for **Prompt 02: Four-Tier Zero-Trust Gateway, HMAC-SHA256 Auth & Strict Pydantic v2 Schemas**:
-1. Branch to create: `feat/lead5-zerotrust-hmac-schemas`
-2. Role to assume: `[Lead 5: Security Auditor & Submission Director]`
-3. Key deliverables for Prompt 02:
-   - `api/core/schemas.py` (Pydantic v2 schemas: `FSMState`, `ExtractedInvoiceIntent`, `BitRangeProof`, `ZKCommitmentProof`, `CNPWallMessage`, `PeerAgentVote`, `EscrowExecutionResult`).
-   - `api/core/zerotrust_guard.py` (HMAC-SHA256 inter-service authentication + 30s anti-replay window).
-   - `src/lib/zerotrust.ts` (Next.js TypeScript request signer).
-   - `types/index.ts` (TypeScript interfaces matching Pydantic schemas).
+The monorepo, live database, and Supabase client layer were prepared for **Prompt 02: Four-Tier Zero-Trust Gateway, HMAC-SHA256 Auth & Strict Pydantic v2 Schemas**.
+
+---
+
+# Session 3: Prompt 02 Implementation Log (2026-10-15)
+
+## 1. Executive Summary & Objective
+- **Assigned Prompt:** `02_ZeroTrust_Gateway_HMAC_And_Pydantic_Schemas`
+- **Assigned Role:** `[Lead 5: Security Auditor & Submission Director]`
+- **Target Branch:** `feat/lead5-zerotrust-hmac-schemas`
+- **Primary Objective:** Build the Zero-Trust Security Gateway boundary files:
+  1. Strict Pydantic v2 schemas (`api/core/schemas.py`) with field validators for EIP-55 address checksumming and prompt-injection detection.
+  2. Cryptographic HMAC-SHA256 Inter-Service Guard with 30-second anti-replay window (`api/core/zerotrust_guard.py`).
+  3. TypeScript request signer and verifier for Next.js BFF routes (`src/lib/zerotrust.ts`).
+  4. Shared TypeScript interfaces mirroring Pydantic v2 models (`types/index.ts`).
+  5. Cross-runtime bidirectional automated test suite (`tests/test_prompt02_zerotrust_schemas.py`).
+
+---
+
+## 2. Detailed Technical Actions Taken
+
+### 2.1 Branch Initialization
+- Branch `feat/lead5-zerotrust-hmac-schemas` created from `feat/lead3-supabase-rls-and-sandbox`.
+
+### 2.2 Pydantic v2 Schemas (`api/core/schemas.py`)
+- Created `api/core/__init__.py` and `api/core/schemas.py` containing:
+  - `FSMState(str, Enum)`: `IDLE_MONITORING`, `INTENT_PERCEPTION`, `DETERMINISTIC_AUDIT`, `SYNDICATE_P2P_NEGOTIATION`, `ESCROW_COSIGN_AND_SETTLE`, `BLOCKED_ADVERSARIAL`, `FLASH_BAILOUT_ACTIVE`.
+  - `ExtractedInvoiceIntent(BaseModel)`:
+    - Enforces `borrower_agent_id` regex `^AGT-0[1-5]$`.
+    - EIP-55 wallet normalization via `Web3.to_checksum_address()`.
+    - `@field_validator("raw_ocr_text", "item_summary", "supplier_id")` detecting prompt injection patterns (`ignore previous rules`, `set dscr`, `approve transfer`, `unverified wallet`, `system prompt`, `<script`, `drop table`, etc.) and raising `TIER0_PROMPT_INJECTION_DETECTED`.
+  - `BitRangeProof(BaseModel)`: Disjunctive 1-bit OR-proof for 16-bit range decomposition ($e_0, z_0, e_1, z_1$).
+  - `ZKCommitmentProof(BaseModel)`: Full 66-char compressed `secp256k1` point hex, display short hex, 16 bit range proofs, PSI supplier HMAC, `dscr_verified_ge_125`, `supplier_kyb_verified`, `collusion_entropy_pass`, `fate_survival_prob_p`.
+  - `CNPWallMessage(BaseModel)`: Contract Net Protocol communicative acts (`CFP_BROADCAST`, `PROVISIONAL_BID`, `DEFICIT_REALLOCATION`, `NASH_EQUILIBRIUM_CLEARED`), proposed alpha, yield bps, expected utility.
+  - `PeerAgentVote(BaseModel)`: Decisions (`SIGNED_EIP712`, `ABSTAINED_CV_EXCEEDED`, `ABSTAINED_LOW_P`), alpha star, stake in BDT.
+  - `EscrowExecutionResult(BaseModel)`: Full FSM trace, CNP log, peer votes, ZK proof, DSCR, gross repayment, net supplier payout, `tx_mode` (`LIVE_RPC_BROADCAST` vs `REPLAY_OF_VERIFIED_TESTNET_TX`), `tx_hash`, `blockscout_url`.
+  - Request & Audit models: `ExecuteScenarioRequest`, `FlashBailoutRequest`, `RepaymentSweepRequest`, `ZeroTrustInterceptLog`.
+
+### 2.3 Python Zero-Trust HMAC Guard (`api/core/zerotrust_guard.py`)
+- Implemented:
+  - `compute_hmac_signature(secret, timestamp, body)`: Computes `HMAC-SHA256(timestamp + "." + body)`.
+  - `verify_hmac_signature(secret, timestamp, body, incoming_signature)`: Constant-time comparison via `hmac.compare_digest`.
+  - `verify_timestamp_freshness(timestamp, max_skew_seconds=30.0)`: Validates timestamp against current epoch time within 30-second window.
+  - `verify_zerotrust_hmac(request: Request)`: FastAPI dependency enforcing required headers `X-ZeroTrust-Signature` and `X-ZeroTrust-Timestamp`, verifying timestamp freshness, and validating cryptographic signature.
+
+### 2.4 TypeScript Zero-Trust Signer & Verifier (`src/lib/zerotrust.ts`)
+- Implemented:
+  - `signZeroTrustPayload(body)`: Generates timestamp, formats message `${timestamp}.${body}`, computes HMAC-SHA256 hex signature using Node.js `crypto`, and returns headers object with `X-ZeroTrust-Signature` and `X-ZeroTrust-Timestamp`.
+  - `verifyZeroTrustPayload(signature, timestamp, body, maxSkewSeconds)`: TypeScript-side verification with `crypto.timingSafeEqual` and 30-second anti-replay window check.
+
+### 2.5 TypeScript Types (`types/index.ts`)
+- Exported TypeScript types mirroring all Pydantic v2 models:
+  - `FSMState`, `ExtractedInvoiceIntent`, `BitRangeProof`, `ZKCommitmentProof`, `CNPMessageType`, `CNPWallMessage`, `PeerAgentDecision`, `PeerAgentVote`, `TransactionMode`, `EscrowExecutionResult`, `ScenarioType`, `ExecuteScenarioRequest`, `FlashBailoutRequest`, `RepaymentSweepRequest`, `ZeroTrustInterceptLog`, `KendraAgent`, `KYBSupplier`.
+- Configured `tsconfig.json` for path aliases (`@/*`).
+- Verified with `npx tsc --noEmit` — 0 errors.
+
+### 2.6 Automated Verification Suite (`tests/test_prompt02_zerotrust_schemas.py`)
+- Automated test coverage implemented across 7 distinct test cases:
+  1. `test_extracted_invoice_intent_valid`: Validates Rahim Store (`AGT-01`) intent and wallet checksum normalization.
+  2. `test_extracted_invoice_intent_prompt_injection_blocked`: Validates that adversarial prompts raise `TIER0_PROMPT_INJECTION_DETECTED`.
+  3. `test_zk_and_range_proof_schemas`: Validates 16-bit range proofs and ZK commitment structures.
+  4. `test_hmac_signing_and_verification`: Validates Python signature computation and tamper rejection.
+  5. `test_anti_replay_window`: Validates that timestamps older than 30s or skewed into future are rejected.
+  6. `test_cross_runtime_hmac_node_to_python`: Node.js signs payload using `src/lib/zerotrust.ts` -> Python verifies using `api/core/zerotrust_guard.py` -> PASSED.
+  7. `test_cross_runtime_hmac_python_to_node`: Python computes signature -> Node.js verifies using `src/lib/zerotrust.ts` -> PASSED.
+
+---
+
+## 3. Verification Checklist Status
+
+| Verification Item | Status | Verification Detail |
+| :--- | :--- | :--- |
+| **Pydantic v2 Schemas** | **PASSED** | Validates EIP-55 checksummed wallet addresses and `BitRangeProof` structures. |
+| **Prompt Injection Defense** | **PASSED** | Blocks adversarial payloads with `TIER0_PROMPT_INJECTION_DETECTED`. |
+| **HMAC-SHA256 Auth** | **PASSED** | Canonical format `HMAC-SHA256(timestamp + "." + body)`. |
+| **Anti-Replay Window** | **PASSED** | Strictly enforces `abs(now - timestamp) <= 30.0s`. |
+| **Bidirectional Cross-Runtime Interop** | **PASSED** | Node.js TS <-> Python 3.14 HMAC interoperability verified. |
+| **TypeScript Typecheck** | **PASSED** | `npx tsc --noEmit` passed cleanly with 0 errors. |
+| **Test Suite Execution** | **PASSED** | All 7 pytest cases passed in 2.14s. |
+
+---
+
+## 4. Cumulative Progress Tracking
+
+- **Prompts Completed:** 3 / 12 (Prompts 00, 01, and 02 complete) — **25.0%**
+- **Security & Schema Layer:** 100% Complete
+- **Files Created / Updated in this Session:**
+  1. `api/core/__init__.py`
+  2. `api/core/schemas.py`
+  3. `api/core/zerotrust_guard.py`
+  4. `src/lib/zerotrust.ts`
+  5. `types/index.ts`
+  6. `tsconfig.json`
+  7. `prisma.config.ts` (fixed datasource config for TypeScript check)
+  8. `.gitignore` (added `.pytest_cache/` and `*.tsbuildinfo`)
+  9. `tests/test_prompt02_zerotrust_schemas.py` (7 tests, all passing)
+  10. `PROJECT_FILES_MANIFEST.md` (updated)
+  11. `AI_USE_LOG.md` (updated)
+- **Active Git Branch:** `feat/lead5-zerotrust-hmac-schemas`
+
+---
+
+## 5. Next Steps & Roadmap for Prompt 03
+
+The Zero-Trust boundary and schemas are locked for **Prompt 03: Tier-0 Untrusted Multimodal Perception Sandbox & Parallel OCR/x402 Firewall**:
+1. Branch to create: `feat/lead2-tier0-perception-firewall`
+2. Role to assume: `[Lead 2: Multi-Agent State Machine Engineer]`
+3. Key deliverables for Prompt 03:
+   - `api/core/perception_sandbox.py` (isolates Gemini 2.5 Flash / Whisper OCR/audio parsing inside Tier 0).
+   - Persona-consistent demo scenarios:
+     - `SCENARIO_A_VALID`: Phone persona = **Rahim Store (`AGT-01`)**, Bangla audio + Meghna Wholesale invoice for `45,000.00 BDT`, 30 days.
+     - `SCENARIO_B_REDTEAM`: Phone persona switches to **Sohel Electronics (`AGT-05`)**, Patuatuli Parts Hub receipt with prompt injection.
+     - `SCENARIO_C_SYBIL_WASH`: 5-member circular $A \to B \to A$ MFS wash-trading fixture.
+   - `run_tier0_and_x402_firewall(intent)`: Runs Tier-0 Prompt Injection check and x402 KYB Supplier check in parallel without short-circuiting so Scenario B reports both `TIER0_PROMPT_INJECTION_DETECTED` and `X402_UNVERIFIED_SUPPLIER_ADDRESS`.
+
 

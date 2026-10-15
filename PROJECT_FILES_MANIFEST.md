@@ -122,7 +122,7 @@ All wallet addresses **MUST** be normalized through `Web3.to_checksum_address()`
   - `GET /api/py/state`: Query live FSM state and active syndicate commitments.
 - **Middleware:** `verify_zerotrust_hmac` security guard checking `X-ZeroTrust-Signature` and timestamp.
 
-#### 9. `api/core/schemas.py`
+#### 9. `api/core/schemas.py` [STATUS: IMPLEMENTED - PROMPT 02]
 - **Location:** `/media/arkosaha/Volume13/KendraFi/api/core/schemas.py`
 - **Created By:** Prompt 02 (`feat/lead5-zerotrust-hmac-schemas`)
 - **Role:** Strict Pydantic v2 data models for zero-trust boundaries.
@@ -135,7 +135,7 @@ All wallet addresses **MUST** be normalized through `Web3.to_checksum_address()`
   - `PeerAgentVote(BaseModel)`: `agent_id`, `alpha_star`, `stake_bdt`, `expected_utility_bdt`, `decision`, `abstention_reason`.
   - `EscrowExecutionResult(BaseModel)`: `fsm_trace`, `cnp_negotiation_log`, `peer_votes`, `zk_proof`, `dscr`, `gross_repayment_bdt`, `net_supplier_payout_bdt`, `tx_mode`, `tx_hash`, `blockscout_url`.
 
-#### 10. `api/core/zerotrust_guard.py`
+#### 10. `api/core/zerotrust_guard.py` [STATUS: IMPLEMENTED - PROMPT 02]
 - **Location:** `/media/arkosaha/Volume13/KendraFi/api/core/zerotrust_guard.py`
 - **Created By:** Prompt 02 (`feat/lead5-zerotrust-hmac-schemas`)
 - **Role:** Python-side HMAC-SHA256 inter-service authentication and replay protection.
@@ -279,11 +279,11 @@ All wallet addresses **MUST** be normalized through `Web3.to_checksum_address()`
 
 ### 3.5 Frontend Next.js 15 App Router & Zero-Trust BFF (`src/`)
 
-#### 27. `src/lib/zerotrust.ts`
+#### 27. `src/lib/zerotrust.ts` [STATUS: IMPLEMENTED - PROMPT 02]
 - **Location:** `/media/arkosaha/Volume13/KendraFi/src/lib/zerotrust.ts`
 - **Created By:** Prompt 02 (`feat/lead5-zerotrust-hmac-schemas`)
 - **Role:** TypeScript HMAC-SHA256 signer for Next.js BFF routes communicating with the Python runtime.
-- **Functions:** `signZeroTrustPayload(body: any): { signature: string, timestamp: string }`.
+- **Functions:** `signZeroTrustPayload(body: any): SignedZeroTrustRequest`, `verifyZeroTrustPayload(...)`.
 
 #### 28. `src/lib/supabase-browser.ts` [STATUS: IMPLEMENTED - PROMPT 01/02]
 - **Location:** `/media/arkosaha/Volume13/KendraFi/src/lib/supabase-browser.ts`
@@ -300,7 +300,7 @@ All wallet addresses **MUST** be normalized through `Web3.to_checksum_address()`
 - **Created By:** Prompt 01 Supabase Integration
 - **Role:** Next.js SSR Supabase client helpers and session refresh middleware using `@supabase/ssr`.
 
-#### 30. `types/index.ts`
+#### 30. `types/index.ts` [STATUS: IMPLEMENTED - PROMPT 02]
 - **Location:** `/media/arkosaha/Volume13/KendraFi/types/index.ts`
 - **Created By:** Prompt 02 (`feat/lead5-zerotrust-hmac-schemas`)
 - **Role:** Shared TypeScript interface definitions mirroring Pydantic v2 schemas: `FSMState`, `BitRangeProof`, `ZKCommitmentProof`, `CNPWallMessage`, `PeerAgentVote`, `EscrowExecutionResult`.
@@ -410,7 +410,7 @@ All wallet addresses **MUST** be normalized through `Web3.to_checksum_address()`
 | :--- | :--- | :--- | :--- | :--- |
 | **Prompt 00** | `00_Write_Master_CONTEXT_MD_Specification` | `chore/lead5-master-context-spec` | Lead 5: Security Auditor & Submission Director | `CONTEXT.md`, `AI_USE_LOG.md`, `PROJECT_FILES_MANIFEST.md` | **DONE** |
 | **Prompt 01** | `01_Monorepo_Supabase_RLS_Triggers_And_Calibrated_Sandbox` | `feat/lead3-supabase-rls-and-sandbox` | Lead 3: Quant Risk & Supabase DB Lead | `vercel.json`, `package.json`, `api/requirements.txt`, `supabase/migrations/20261015000000_kendra_zerotrust_schema.sql`, `api/data/generate_sandbox.py`, `api/data/dhaka_kendra_90d.json` | **DONE** |
-| **Prompt 02** | `02_ZeroTrust_Gateway_HMAC_And_Pydantic_Schemas` | `feat/lead5-zerotrust-hmac-schemas` | Lead 5: Security Auditor & Submission Director | `api/core/schemas.py`, `api/core/zerotrust_guard.py`, `src/lib/zerotrust.ts`, `src/lib/supabase-browser.ts`, `src/lib/supabase-server.ts`, `types/index.ts` |
+| **Prompt 02** | `02_ZeroTrust_Gateway_HMAC_And_Pydantic_Schemas` | `feat/lead5-zerotrust-hmac-schemas` | Lead 5: Security Auditor & Submission Director | `api/core/schemas.py`, `api/core/zerotrust_guard.py`, `src/lib/zerotrust.ts`, `src/lib/supabase-browser.ts`, `src/lib/supabase-server.ts`, `types/index.ts` | **DONE** |
 | **Prompt 03** | `03_Tier0_Multimodal_Perception_And_Parallel_Firewall` | `feat/lead2-tier0-perception-firewall` | Lead 2: Multi-Agent State Machine Engineer | `api/core/perception_sandbox.py`, test audio & invoice fixtures |
 | **Prompt 04** | `04_Tier2_Deterministic_Risk_Besley_Coate_And_Wash_Filter` | `feat/lead3-tier2-reconciled-risk-engine` | Lead 3: Quant Risk & Supabase DB Lead | `api/core/risk_engine.py` |
 | **Prompt 05** | `05_Layer4_Secp256k1_Pedersen_Range_Proof_And_FATE_Scorer` | `feat/lead3-secp256k1-zk-range-proof` | Lead 3: Quant Risk & Supabase DB Lead | `api/core/zk_fate_privacy.py` |

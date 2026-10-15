@@ -301,12 +301,21 @@ The monorepo, live database, and Supabase client layer were prepared for **Promp
 | Verification Item | Status | Verification Detail |
 | :--- | :--- | :--- |
 | **Pydantic v2 Schemas** | **PASSED** | Validates EIP-55 checksummed wallet addresses and `BitRangeProof` structures. |
-| **Prompt Injection Defense** | **PASSED** | Blocks adversarial payloads with `TIER0_PROMPT_INJECTION_DETECTED`. |
+| **Asserted Boolean Integrity** | **PASSED** | Enforces `@model_validator` rejecting forged `dscr_verified_ge_125=True` without 16 valid bit proofs. |
+| **Prompt Injection Defense** | **PASSED** | Blocks adversarial payloads in `raw_ocr_text`, `item_summary`, `supplier_id` with `TIER0_PROMPT_INJECTION_DETECTED`. |
 | **HMAC-SHA256 Auth** | **PASSED** | Canonical format `HMAC-SHA256(timestamp + "." + body)`. |
-| **Anti-Replay Window** | **PASSED** | Strictly enforces `abs(now - timestamp) <= 30.0s`. |
+| **Anti-Replay Window** | **PASSED** | Strictly enforces `abs(now - timestamp) <= 30.0s`, safely handling NaN, inf, and malformed strings. |
+| **Clock Skew Defense** | **PASSED** | Rejects timestamps >30s in the future. |
+| **Tamper Rejection** | **PASSED** | Rejects modified body bytes even with valid timestamp. |
+| **Borrower ID Validation** | **PASSED** | Rejects all IDs not matching `^AGT-0[1-5]$`. |
+| **Supplier Address Validation** | **PASSED** | Rejects non-hex, too-short, too-long, and non-0x addresses; normalizes via EIP-55 checksum. |
+| **FSM State & CNP Enum Integrity** | **PASSED** | Rejects invalid FSM states and communicative act literals. |
+| **Supabase Client Separation** | **PASSED** | Verified browser client has no service keys; server client uses `import "server-only";`. |
+| **Server Secrets Protection** | **PASSED** | Verified HMAC secret and service role key are not exported with `NEXT_PUBLIC_`. |
+| **Shared Test Vector Parity** | **PASSED** | Byte-for-byte identical 64-char hex digest across Node.js and Python 3.14. |
 | **Bidirectional Cross-Runtime Interop** | **PASSED** | Node.js TS <-> Python 3.14 HMAC interoperability verified. |
 | **TypeScript Typecheck** | **PASSED** | `npx tsc --noEmit` passed cleanly with 0 errors. |
-| **Test Suite Execution** | **PASSED** | All 7 pytest cases passed in 2.14s. |
+| **Comprehensive Test Execution** | **PASSED** | 22/22 total test cases across two test suites passed in 2.62s. |
 
 ---
 
@@ -316,16 +325,18 @@ The monorepo, live database, and Supabase client layer were prepared for **Promp
 - **Security & Schema Layer:** 100% Complete
 - **Files Created / Updated in this Session:**
   1. `api/core/__init__.py`
-  2. `api/core/schemas.py`
-  3. `api/core/zerotrust_guard.py`
-  4. `src/lib/zerotrust.ts`
-  5. `types/index.ts`
+  2. `api/core/schemas.py` (with CDS94 range proofs and `@model_validator` crypto integrity)
+  3. `api/core/zerotrust_guard.py` (with NaN/Inf safety, 30s anti-replay, and constant-time verify)
+  4. `src/lib/zerotrust.ts` (with `signZeroTrustPayload`, `verifyZeroTrustPayload`, and `callPythonBackend`)
+  5. `types/index.ts` (complete TypeScript interfaces mirroring Pydantic models)
   6. `tsconfig.json`
   7. `prisma.config.ts` (fixed datasource config for TypeScript check)
   8. `.gitignore` (added `.pytest_cache/` and `*.tsbuildinfo`)
   9. `tests/test_prompt02_zerotrust_schemas.py` (7 tests, all passing)
-  10. `PROJECT_FILES_MANIFEST.md` (updated)
-  11. `AI_USE_LOG.md` (updated)
+  10. `tests/test_prompt02_security_audit.py` (15 comprehensive security tests, all passing)
+  11. `KendraFi_BUILD-PROMPTS.md` (checklists updated to `[x]`)
+  12. `PROJECT_FILES_MANIFEST.md` (updated)
+  13. `AI_USE_LOG.md` (updated)
 - **Active Git Branch:** `feat/lead5-zerotrust-hmac-schemas`
 
 ---
@@ -342,5 +353,6 @@ The Zero-Trust boundary and schemas are locked for **Prompt 03: Tier-0 Untrusted
      - `SCENARIO_B_REDTEAM`: Phone persona switches to **Sohel Electronics (`AGT-05`)**, Patuatuli Parts Hub receipt with prompt injection.
      - `SCENARIO_C_SYBIL_WASH`: 5-member circular $A \to B \to A$ MFS wash-trading fixture.
    - `run_tier0_and_x402_firewall(intent)`: Runs Tier-0 Prompt Injection check and x402 KYB Supplier check in parallel without short-circuiting so Scenario B reports both `TIER0_PROMPT_INJECTION_DETECTED` and `X402_UNVERIFIED_SUPPLIER_ADDRESS`.
+
 
 

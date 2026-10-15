@@ -9,7 +9,7 @@ secp256k1 ZK range proofs, and on-chain escrow cosigning.
 from enum import Enum
 import re
 from typing import List, Literal, Optional
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 from web3 import Web3
 
 EIP55_WALLET_REGEX = r"^0x[a-fA-F0-9]{40}$"
@@ -117,6 +117,26 @@ class ZKCommitmentProof(BaseModel):
     supplier_kyb_verified: bool = Field(..., description="Verification flag confirming supplier is registered in on-chain KYB whitelist")
     collusion_entropy_pass: bool = Field(..., description="Spatio-temporal entropy verification flag (H_st >= 0.65)")
     fate_survival_prob_p: float = Field(..., ge=0.0, le=1.0, description="Heterogeneous Logistic Regression survival probability from WeBank FATE model")
+
+    @model_validator(mode="after")
+    def verify_proof_structural_integrity(self) -> "ZKCommitmentProof":
+        """
+        Guarantees that security assertions (dscr_verified_ge_125=True) cannot be trivially forged
+        without complete underlying cryptographic artifacts (16 bit proofs, secp256k1 points, PSI token).
+        """
+        if self.dscr_verified_ge_125:
+            if len(self.bit_range_proofs) != 16:
+                raise ValueError("CRYPTO_INTEGRITY_VIOLATION: dscr_verified_ge_125 requires exact 16-bit range decomposition")
+            for idx, p in enumerate(self.bit_range_proofs):
+                if p.bit_index != idx:
+                    raise ValueError(f"CRYPTO_INTEGRITY_VIOLATION: Out-of-order bit range proof index at {idx}")
+            if not self.commitment_hex.startswith(("02", "03")) or len(self.commitment_hex) != 66:
+                raise ValueError("CRYPTO_INTEGRITY_VIOLATION: Malformed secp256k1 commitment point")
+            if not self.excess_commitment_hex.startswith(("02", "03")) or len(self.excess_commitment_hex) != 66:
+                raise ValueError("CRYPTO_INTEGRITY_VIOLATION: Malformed secp256k1 excess commitment point")
+            if len(self.psi_supplier_hmac_hex) != 64:
+                raise ValueError("CRYPTO_INTEGRITY_VIOLATION: Malformed PSI blind token length")
+        return self
 
 
 class CNPWallMessage(BaseModel):

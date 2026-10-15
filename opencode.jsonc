@@ -1,0 +1,5 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  // Inject the master spec into every session so no agent has to discover it.
+  "instructions": ["CONTEXT.md"]
+}

@@ -90,10 +90,15 @@ All wallet addresses **MUST** be normalized through `Web3.to_checksum_address()`
 - **Dependencies:** `next: ^15.0.0`, `react: ^19.0.0`, `react-dom: ^19.0.0`, `typescript`, `viem: ^2.20.0`, `@supabase/supabase-js: ^2.45.0`, `lucide-react`, `framer-motion`, `clsx`, `tailwind-merge`.
 - **Scripts:** `dev`, `build`, `start`, `lint`, `generate:sandbox`.
 
-#### 6. `.env.example` [STATUS: PENDING - PROMPT 01/02]
+#### 6. `.env.example` [STATUS: IMPLEMENTED - PROMPT 01]
 - **Location:** `/media/arkosaha/Volume13/KendraFi/.env.example`
 - **Created By:** Prompt 01 (`feat/lead3-supabase-rls-and-sandbox`)
 - **Role:** Template for all environment variables: Supabase URL/keys, HMAC secrets, Gemini/Whisper keys, Base Sepolia RPC, contract addresses, and session private keys.
+
+#### 6b. `prisma.config.ts` & `prisma/schema.prisma` [STATUS: IMPLEMENTED - LIVE SUPABASE CONFIG]
+- **Location:** `/media/arkosaha/Volume13/KendraFi/prisma.config.ts`, `/media/arkosaha/Volume13/KendraFi/prisma/schema.prisma`
+- **Created By:** Prompt 01 Supabase Integration
+- **Role:** Prisma ORM 7.x configuration for Supabase PostgreSQL (IPv4 Session & Transaction Poolers) and generated client.
 
 ---
 
@@ -280,15 +285,20 @@ All wallet addresses **MUST** be normalized through `Web3.to_checksum_address()`
 - **Role:** TypeScript HMAC-SHA256 signer for Next.js BFF routes communicating with the Python runtime.
 - **Functions:** `signZeroTrustPayload(body: any): { signature: string, timestamp: string }`.
 
-#### 28. `src/lib/supabase-browser.ts`
+#### 28. `src/lib/supabase-browser.ts` [STATUS: IMPLEMENTED - PROMPT 01/02]
 - **Location:** `/media/arkosaha/Volume13/KendraFi/src/lib/supabase-browser.ts`
-- **Created By:** Prompt 02 (`feat/lead5-zerotrust-hmac-schemas`)
-- **Role:** Client-side Supabase client using `NEXT_PUBLIC_SUPABASE_ANON_KEY` strictly for Realtime event subscriptions.
+- **Created By:** Prompt 01/02 (`feat/lead3-supabase-rls-and-sandbox`)
+- **Role:** Client-side Supabase client using `NEXT_PUBLIC_SUPABASE_ANON_KEY` strictly for Realtime event subscriptions (`kendra_fsm_events`, `zk_solvency_commitments`).
 
-#### 29. `src/lib/supabase-server.ts`
+#### 29. `src/lib/supabase-server.ts` [STATUS: IMPLEMENTED - PROMPT 01/02]
 - **Location:** `/media/arkosaha/Volume13/KendraFi/src/lib/supabase-server.ts`
-- **Created By:** Prompt 02 (`feat/lead5-zerotrust-hmac-schemas`)
-- **Role:** Server-only Supabase client (`import "server-only"`) using `SUPABASE_SERVICE_ROLE_KEY` for secure backend database operations.
+- **Created By:** Prompt 01/02 (`feat/lead3-supabase-rls-and-sandbox`)
+- **Role:** Server-only Supabase client (`import "server-only"`) using `SUPABASE_SERVICE_ROLE_KEY` for secure backend database operations bypassing RLS.
+
+#### 29b. `utils/supabase/{server,client,middleware}.ts` [STATUS: IMPLEMENTED - LIVE SUPABASE CONFIG]
+- **Location:** `/media/arkosaha/Volume13/KendraFi/utils/supabase/`
+- **Created By:** Prompt 01 Supabase Integration
+- **Role:** Next.js SSR Supabase client helpers and session refresh middleware using `@supabase/ssr`.
 
 #### 30. `types/index.ts`
 - **Location:** `/media/arkosaha/Volume13/KendraFi/types/index.ts`

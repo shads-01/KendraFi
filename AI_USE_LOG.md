@@ -207,25 +207,33 @@ Before executing code, all workspace markdown documents were thoroughly read, an
   2. `vercel.json`
   3. `package.json`
   4. `api/requirements.txt`
-  5. `supabase/migrations/20261015000000_kendra_zerotrust_schema.sql`
-  6. `api/data/generate_sandbox.py`
-  7. `api/data/dhaka_kendra_90d.json`
-  8. `PROJECT_FILES_MANIFEST.md` (updated)
-  9. `AI_USE_LOG.md` (updated)
+  5. `supabase/migrations/20261015000000_kendra_zerotrust_schema.sql` (applied to live Supabase DB)
+  6. `api/data/generate_sandbox.py` (updated with non-negative constraints)
+  7. `api/data/dhaka_kendra_90d.json` (450 records seeded to live Supabase DB)
+  8. `.env`, `.env.local`, `.env.example`
+  9. `utils/supabase/server.ts`, `utils/supabase/client.ts`, `utils/supabase/middleware.ts`
+  10. `src/lib/supabase-browser.ts`, `src/lib/supabase-server.ts`
+  11. `prisma.config.ts`, `prisma/schema.prisma` (generated Prisma Client v7.10)
+  12. `PROJECT_FILES_MANIFEST.md` (updated)
+  13. `AI_USE_LOG.md` (updated)
 - **Active Git Branch:** `feat/lead3-supabase-rls-and-sandbox`
+- **Live Supabase Verification Results:**
+  - Database URL: Connected via IPv4 session-mode pooler `aws-0-ap-northeast-2.pooler.supabase.com:5432/postgres`.
+  - Tables created on remote database: `kendra_agents`, `kendra_fsm_events`, `kyb_supplier_registry`, `merchant_private_cashflows`, `relayer_nonce_lock`, `zerotrust_security_intercepts`, `zk_solvency_commitments`.
+  - Live rows verified: 5 agents, 4 KYB suppliers, 450 daily cash flow records.
+  - Zero-Trust RLS isolation test: Anonymous query on `merchant_private_cashflows` returns `[]` (blocked); service role query returns all 450 rows.
+  - Public Realtime policy test: Anonymous query on `kyb_supplier_registry` returns `['MEGHNA-01', 'ISLAMPUR-02', 'SHYAMOLI-03', 'SQUARE-04']`.
 
 ---
 
 ## 7. Next Steps & Roadmap for Prompt 02
 
-The monorepo and database layer are now ready for **Prompt 02: Four-Tier Zero-Trust Gateway, HMAC-SHA256 Auth & Strict Pydantic v2 Schemas**:
+The monorepo, live database, and Supabase client layer are now 100% operational for **Prompt 02: Four-Tier Zero-Trust Gateway, HMAC-SHA256 Auth & Strict Pydantic v2 Schemas**:
 1. Branch to create: `feat/lead5-zerotrust-hmac-schemas`
 2. Role to assume: `[Lead 5: Security Auditor & Submission Director]`
 3. Key deliverables for Prompt 02:
    - `api/core/schemas.py` (Pydantic v2 schemas: `FSMState`, `ExtractedInvoiceIntent`, `BitRangeProof`, `ZKCommitmentProof`, `CNPWallMessage`, `PeerAgentVote`, `EscrowExecutionResult`).
    - `api/core/zerotrust_guard.py` (HMAC-SHA256 inter-service authentication + 30s anti-replay window).
    - `src/lib/zerotrust.ts` (Next.js TypeScript request signer).
-   - `src/lib/supabase-browser.ts` (client-side anon Realtime client).
-   - `src/lib/supabase-server.ts` (`server-only` service_role client).
    - `types/index.ts` (TypeScript interfaces matching Pydantic schemas).
 

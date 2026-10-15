@@ -1,0 +1,112 @@
+// KendraFi (Weiyedai-Global) Prisma Schema
+// Configured for Supabase PostgreSQL (IPv4 Session & Transaction Poolers)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model KybSupplier {
+  supplierId    String   @id @map("supplier_id")
+  walletAddress String   @unique @map("wallet_address")
+  companyName   String   @map("company_name")
+  category      String
+  taxIdentifier String?  @map("tax_identifier")
+  isVerified    Boolean  @default(true) @map("is_verified")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  agents KendraAgent[]
+
+  @@map("kyb_supplier_registry")
+}
+
+model KendraAgent {
+  agentId             String   @id @map("agent_id")
+  merchantName        String   @map("merchant_name")
+  businessType        String   @map("business_type")
+  walletAddress       String   @unique @map("wallet_address")
+  reliabilityScoreP   Decimal  @map("reliability_score_p") @db.Decimal(5, 4)
+  liquidityBufferBdt  Decimal  @map("liquidity_buffer_bdt") @db.Decimal(12, 2)
+  preferredSupplierId String?  @map("preferred_supplier_id")
+  createdAt           DateTime @default(now()) @map("created_at")
+
+  preferredSupplier   KybSupplier?             @relation(fields: [preferredSupplierId], references: [supplierId])
+  cashflows           MerchantPrivateCashflow[]
+  solvencyCommitments ZkSolvencyCommitment[]
+
+  @@map("kendra_agents")
+}
+
+model MerchantPrivateCashflow {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  agentId     String   @map("agent_id")
+  recordDate  DateTime @map("record_date") @db.Date
+  inflowBdt   Decimal  @map("inflow_bdt") @db.Decimal(12, 2)
+  outflowBdt  Decimal  @map("outflow_bdt") @db.Decimal(12, 2)
+  netFlowBdt  Decimal  @map("net_flow_bdt") @db.Decimal(12, 2)
+  mfsProvider String   @default("bKash") @map("mfs_provider")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  agent KendraAgent @relation(fields: [agentId], references: [agentId])
+
+  @@unique([agentId, recordDate], map: "uq_agent_record_date")
+  @@map("merchant_private_cashflows")
+}
+
+model ZkSolvencyCommitment {
+  id                   String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  invoiceId            String   @unique @map("invoice_id")
+  borrowerAgentId      String   @map("borrower_agent_id")
+  commitmentHex        String   @map("commitment_hex")
+  displayShortHex      String   @map("display_short_hex")
+  excessCommitmentHex  String   @map("excess_commitment_hex")
+  bitRangeProofs       Json     @map("bit_range_proofs")
+  psiSupplierHmacHex   String   @map("psi_supplier_hmac_hex")
+  dscrVerifiedGe125    Boolean  @map("dscr_verified_ge_125")
+  supplierKybVerified  Boolean  @map("supplier_kyb_verified")
+  collusionEntropyPass Boolean  @map("collusion_entropy_pass")
+  fateSurvivalProbP    Decimal  @map("fate_survival_prob_p") @db.Decimal(5, 4)
+  createdAt            DateTime @default(now()) @map("created_at")
+
+  borrower KendraAgent @relation(fields: [borrowerAgentId], references: [agentId])
+
+  @@map("zk_solvency_commitments")
+}
+
+model KendraFsmEvent {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  invoiceId    String   @map("invoice_id")
+  fromState    String   @map("from_state")
+  toState      String   @map("to_state")
+  triggerEvent String   @map("trigger_event")
+  roundNum     Int?     @default(0) @map("round_num")
+  payload      Json     @default("{}")
+  timestampSec BigInt   @map("timestamp_sec")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@map("kendra_fsm_events")
+}
+
+model ZeroTrustSecurityIntercept {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  invoiceId       String   @map("invoice_id")
+  attemptedBy     String   @map("attempted_by")
+  attackType      String   @map("attack_type")
+  interceptReason String   @map("intercept_reason")
+  payload         Json
+  clientIp        String?  @map("client_ip")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@map("zerotrust_security_intercepts")
+}
+
+model RelayerNonceLock {
+  relayerAddress String   @id @map("relayer_address")
+  currentNonce   BigInt   @default(0) @map("current_nonce")
+  updatedAt      DateTime @default(now()) @map("updated_at")
+
+  @@map("relayer_nonce_lock")
+}

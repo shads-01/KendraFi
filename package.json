@@ -11,7 +11,10 @@
     "generate:sandbox": "([ -f .venv/bin/python3 ] && .venv/bin/python3 api/data/generate_sandbox.py) || python3 api/data/generate_sandbox.py"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.45.6",
+    "@prisma/client": "^7.10.0",
+    "@supabase/server": "^1.4.1",
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.109.0",
     "clsx": "^2.1.1",
     "framer-motion": "^11.11.9",
     "lucide-react": "^0.453.0",
@@ -28,6 +31,7 @@
     "@types/react-dom": "^18.3.1",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.47",
+    "prisma": "^7.10.0",
     "tailwindcss": "^3.4.14",
     "typescript": "^5.6.3"
   }

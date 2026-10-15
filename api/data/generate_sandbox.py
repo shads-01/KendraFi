@@ -136,20 +136,36 @@ def generate_90d_sandbox() -> Dict[str, Any]:
     mfs_transactions = []
 
     for agent_id, spec in agents_spec.items():
-        # Generate raw standard normals
-        raw_net = rng.normal(size=days_count)
-        raw_in = rng.normal(size=days_count)
-
-        # Standardize net flow and inflow to target statistics
-        calibrated_net = standardize_array(raw_net, spec["mean_net"], spec["std_net"])
-        calibrated_in = standardize_array(raw_in, spec["mean_in"], spec["std_in"])
-        calibrated_out = np.round(calibrated_in - calibrated_net, 2)
+        if agent_id == "AGT-01":
+            # Target exact net mean 5050.00 and net std 1012.35
+            raw_net = rng.normal(size=days_count)
+            calibrated_net = standardize_array(raw_net, spec["mean_net"], spec["std_net"])
+            # Outflows bounded in [2000, 4900] with mean 3450.00
+            raw_out = rng.uniform(2000, 4900, size=days_count)
+            calibrated_out = np.round(spec["mean_out"] + (raw_out - np.mean(raw_out)), 2)
+            calibrated_in = np.round(calibrated_net + calibrated_out, 2)
+        elif agent_id == "AGT-05":
+            # High volatility node: Gamma distributed inflows ensuring min >= 500, mean 4100, std 2600
+            raw_in = rng.gamma(shape=2.5, scale=1640, size=days_count)
+            calibrated_in = np.round(4100.00 + 2600.00 * (raw_in - np.mean(raw_in)) / np.std(raw_in, ddof=1), 2)
+            calibrated_in = np.maximum(calibrated_in, 500.00)
+            calibrated_in = np.round(4100.00 + 2600.00 * (calibrated_in - np.mean(calibrated_in)) / np.std(calibrated_in, ddof=1), 2)
+            raw_out = rng.uniform(1200, 3800, size=days_count)
+            calibrated_out = np.round(spec["mean_out"] + (raw_out - np.mean(raw_out)), 2)
+            calibrated_net = np.round(calibrated_in - calibrated_out, 2)
+        else:
+            # AGT-02, AGT-03, AGT-04
+            raw_net = rng.normal(size=days_count)
+            calibrated_net = standardize_array(raw_net, spec["mean_net"], spec["std_net"])
+            raw_out = rng.uniform(spec["mean_out"] * 0.6, spec["mean_out"] * 1.4, size=days_count)
+            calibrated_out = np.round(spec["mean_out"] + (raw_out - np.mean(raw_out)), 2)
+            calibrated_in = np.round(calibrated_net + calibrated_out, 2)
 
         # Build daily records
         daily_records = []
         for d_idx in range(days_count):
-            in_val = float(calibrated_in[d_idx])
-            out_val = float(calibrated_out[d_idx])
+            in_val = max(0.0, float(calibrated_in[d_idx]))
+            out_val = max(0.0, float(calibrated_out[d_idx]))
             net_val = float(calibrated_net[d_idx])
             record = {
                 "day_index": d_idx + 1,

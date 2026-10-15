@@ -77,20 +77,20 @@ All wallet addresses **MUST** be normalized through `Web3.to_checksum_address()`
 - **Created By:** Prompt 00 (`chore/lead5-master-context-spec`)
 - **Role:** THIS FILE. Complete architectural index and technical specification of all planned and existing files across the entire project.
 
-#### 4. `vercel.json`
+#### 4. `vercel.json` [STATUS: IMPLEMENTED - PROMPT 01]
 - **Location:** `/media/arkosaha/Volume13/KendraFi/vercel.json`
 - **Created By:** Prompt 01 (`feat/lead3-supabase-rls-and-sandbox`)
 - **Role:** Unified Next.js 15 + FastAPI serverless routing and build configuration on Vercel.
 - **Specifications:** Configures Python 3.11 runtime for `/api/py/(.*)` or `/api/(.*)` while preserving Next.js App Router root handling, keeping max function duration and memory settings tuned.
 
-#### 5. `package.json`
+#### 5. `package.json` [STATUS: IMPLEMENTED - PROMPT 01]
 - **Location:** `/media/arkosaha/Volume13/KendraFi/package.json`
 - **Created By:** Prompt 01 (`feat/lead3-supabase-rls-and-sandbox`)
 - **Role:** Monorepo Node.js dependencies and script orchestrator.
 - **Dependencies:** `next: ^15.0.0`, `react: ^19.0.0`, `react-dom: ^19.0.0`, `typescript`, `viem: ^2.20.0`, `@supabase/supabase-js: ^2.45.0`, `lucide-react`, `framer-motion`, `clsx`, `tailwind-merge`.
-- **Scripts:** `dev`, `build`, `start`, `lint`, `contracts:build`, `contracts:test`.
+- **Scripts:** `dev`, `build`, `start`, `lint`, `generate:sandbox`.
 
-#### 6. `.env.example`
+#### 6. `.env.example` [STATUS: PENDING - PROMPT 01/02]
 - **Location:** `/media/arkosaha/Volume13/KendraFi/.env.example`
 - **Created By:** Prompt 01 (`feat/lead3-supabase-rls-and-sandbox`)
 - **Role:** Template for all environment variables: Supabase URL/keys, HMAC secrets, Gemini/Whisper keys, Base Sepolia RPC, contract addresses, and session private keys.
@@ -99,7 +99,7 @@ All wallet addresses **MUST** be normalized through `Web3.to_checksum_address()`
 
 ### 3.2 Backend Python Serverless Runtime (`api/`)
 
-#### 7. `api/requirements.txt`
+#### 7. `api/requirements.txt` [STATUS: IMPLEMENTED - PROMPT 01]
 - **Location:** `/media/arkosaha/Volume13/KendraFi/api/requirements.txt`
 - **Created By:** Prompt 01 (`feat/lead3-supabase-rls-and-sandbox`)
 - **Role:** Lean Python serverless dependencies (<65 MB unzipped bundle).
@@ -191,13 +191,13 @@ All wallet addresses **MUST** be normalized through `Web3.to_checksum_address()`
   - `execute_onchain_monsoon_bailout(invoice_id)`: Calls `triggerBesleyCoateBailout()`.
   - `execute_onchain_adversarial_log(invoice_id, invalid_supplier, reason)`: Calls `recordAdversarialIntercept()`.
 
-#### 16. `api/data/generate_sandbox.py`
+#### 16. `api/data/generate_sandbox.py` [STATUS: IMPLEMENTED - PROMPT 01]
 - **Location:** `/media/arkosaha/Volume13/KendraFi/api/data/generate_sandbox.py`
 - **Created By:** Prompt 01 (`feat/lead3-supabase-rls-and-sandbox`)
 - **Role:** Generates the deterministically calibrated 90-day Karwan Bazar dataset using `np.random.default_rng(seed=2026)`.
 - **Outputs:** `api/data/dhaka_kendra_90d.json` where `AGT-01` produces native $\text{DSCR} = 1.6800\text{x}$ and `AGT-04/02/03` produce exact `0.4000 / 0.3500 / 0.2500` staking shares.
 
-#### 17. `api/data/dhaka_kendra_90d.json`
+#### 17. `api/data/dhaka_kendra_90d.json` [STATUS: IMPLEMENTED - PROMPT 01]
 - **Location:** `/media/arkosaha/Volume13/KendraFi/api/data/dhaka_kendra_90d.json`
 - **Created By:** Prompt 01 (`feat/lead3-supabase-rls-and-sandbox`)
 - **Role:** JSON dataset containing 90 days of inflows, outflows, MFS transaction graph, wash-trading fixtures, and monsoon shock series for `AGT-01` through `AGT-05`.
@@ -216,7 +216,7 @@ All wallet addresses **MUST** be normalized through `Web3.to_checksum_address()`
 
 ### 3.3 Database & Zero-Trust Storage (`supabase/`)
 
-#### 20. `supabase/migrations/20261015000000_kendra_zerotrust_schema.sql`
+#### 20. `supabase/migrations/20261015000000_kendra_zerotrust_schema.sql` [STATUS: IMPLEMENTED - PROMPT 01]
 - **Location:** `/media/arkosaha/Volume13/KendraFi/supabase/migrations/20261015000000_kendra_zerotrust_schema.sql`
 - **Created By:** Prompt 01 (`feat/lead3-supabase-rls-and-sandbox`)
 - **Role:** PostgreSQL database schema, RLS policies, immutability triggers, and atomic nonce lock.
@@ -398,8 +398,8 @@ All wallet addresses **MUST** be normalized through `Web3.to_checksum_address()`
 
 | Prompt # | Prompt Name | Branch Name | Assigned Role | Primary Files Created / Modified |
 | :--- | :--- | :--- | :--- | :--- |
-| **Prompt 00** | `00_Write_Master_CONTEXT_MD_Specification` | `chore/lead5-master-context-spec` | Lead 5: Security Auditor & Submission Director | `CONTEXT.md`, `AI_USE_LOG.md`, `PROJECT_FILES_MANIFEST.md` |
-| **Prompt 01** | `01_Monorepo_Supabase_RLS_Triggers_And_Calibrated_Sandbox` | `feat/lead3-supabase-rls-and-sandbox` | Lead 3: Quant Risk & Supabase DB Lead | `vercel.json`, `package.json`, `api/requirements.txt`, `supabase/migrations/20261015000000_kendra_zerotrust_schema.sql`, `api/data/generate_sandbox.py`, `api/data/dhaka_kendra_90d.json` |
+| **Prompt 00** | `00_Write_Master_CONTEXT_MD_Specification` | `chore/lead5-master-context-spec` | Lead 5: Security Auditor & Submission Director | `CONTEXT.md`, `AI_USE_LOG.md`, `PROJECT_FILES_MANIFEST.md` | **DONE** |
+| **Prompt 01** | `01_Monorepo_Supabase_RLS_Triggers_And_Calibrated_Sandbox` | `feat/lead3-supabase-rls-and-sandbox` | Lead 3: Quant Risk & Supabase DB Lead | `vercel.json`, `package.json`, `api/requirements.txt`, `supabase/migrations/20261015000000_kendra_zerotrust_schema.sql`, `api/data/generate_sandbox.py`, `api/data/dhaka_kendra_90d.json` | **DONE** |
 | **Prompt 02** | `02_ZeroTrust_Gateway_HMAC_And_Pydantic_Schemas` | `feat/lead5-zerotrust-hmac-schemas` | Lead 5: Security Auditor & Submission Director | `api/core/schemas.py`, `api/core/zerotrust_guard.py`, `src/lib/zerotrust.ts`, `src/lib/supabase-browser.ts`, `src/lib/supabase-server.ts`, `types/index.ts` |
 | **Prompt 03** | `03_Tier0_Multimodal_Perception_And_Parallel_Firewall` | `feat/lead2-tier0-perception-firewall` | Lead 2: Multi-Agent State Machine Engineer | `api/core/perception_sandbox.py`, test audio & invoice fixtures |
 | **Prompt 04** | `04_Tier2_Deterministic_Risk_Besley_Coate_And_Wash_Filter` | `feat/lead3-tier2-reconciled-risk-engine` | Lead 3: Quant Risk & Supabase DB Lead | `api/core/risk_engine.py` |

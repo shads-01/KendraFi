@@ -1,0 +1,34 @@
+{
+  "name": "kendrafi",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Zero-Trust Multi-Agent Cooperative Risk and Programmable B2B Escrow Protocol for WeBank Weiyedai-Global",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "generate:sandbox": "([ -f .venv/bin/python3 ] && .venv/bin/python3 api/data/generate_sandbox.py) || python3 api/data/generate_sandbox.py"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.6",
+    "clsx": "^2.1.1",
+    "framer-motion": "^11.11.9",
+    "lucide-react": "^0.453.0",
+    "next": "^15.0.0",
+    "react": "^19.0.0-rc-65a47c0e-20241020",
+    "react-dom": "^19.0.0-rc-65a47c0e-20241020",
+    "server-only": "^0.0.1",
+    "tailwind-merge": "^2.5.4",
+    "viem": "^2.21.26"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.0",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.1",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.14",
+    "typescript": "^5.6.3"
+  }
+}

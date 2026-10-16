@@ -518,14 +518,80 @@ Implemented Layer 4 cryptographic privacy in `api/core/zk_fate_privacy.py`:
 ## 7. Next Steps & Roadmap for Prompt 06
 
 Layer 4 cryptographic privacy is verified. Ready for **Prompt 06: Layer-5 Solidity Escrow (`solc 0.8.20` Paris EVM for FISCO BCOS & Sepolia) with On-Chain EIP-712 Quorum & Repayment Sweep**:
-1. Branch to create: `feat/lead1-solidity-onchain-eip712-escrow`
-2. Role to assume: `[Lead 1: Smart Contract & Account Abstraction Architect]`
-3. Key deliverables for Prompt 06:
-   - `contracts/foundry.toml`: configured with `solc_version = "0.8.20"` and `evm_version = "paris"`.
-   - `contracts/src/KendraEscrow.sol`: on-chain `ECDSA.recover` verification of 4-of-5 EIP-712 multisig quorum, $\alpha_j \le 0.40$ on-chain stake cap enforcement, 98.5% direct wholesaler settlement, and daily repayment sweep.
-   - `contracts/src/MockBDTc.sol`: Mock ERC-20 stablecoin token.
-   - `contracts/src/AgentSessionAccount.sol`: ERC-4337 session key smart contract account.
-   - Comprehensive Foundry test suite (`contracts/test/KendraEscrow.t.sol`).
+---
+
+# Session 7: Prompt 06 Implementation Log (2026-10-16)
+
+## 1. Executive Summary & Objective
+- **Assigned Prompt:** `06_Layer5_Solidity_OnChain_EIP712_Quorum_And_Repayment`
+- **Assigned Role:** `[Lead 1: Smart Contract & Account Abstraction Architect]`
+- **Target Branch:** `feat/lead1-solidity-onchain-eip712-escrow`
+- **Primary Objective:** Build Layer 5 smart contract architecture under `contracts/`:
+  1. `contracts/foundry.toml`: dual Base Sepolia and FISCO BCOS v3 compatible compiler profile (`solc_version = "0.8.20"`, `evm_version = "paris"`, `via_ir = true`).
+  2. `contracts/src/MockBDTc.sol`: 18-decimal ERC-20 token representing digital Bangladeshi Taka.
+  3. `contracts/src/AgentSessionAccount.sol`: ERC-4337 `IAccount` smart account with bounded session key policy enforcing the strict $\alpha_j \le 40.0\%$ (4,000 bps) liability cap.
+  4. `contracts/src/KendraEscrow.sol`: on-chain EIP-712 `ECDSA.recover` 4-of-5 quorum verification, 40% liability cap enforcement, 98.5% direct B2B settlement, `repayFacility()` daily MFS sweep + 1.0% APR peer yield (`ySCT`) payout, and `triggerBesleyCoateBailout()`.
+  5. `contracts/script/DeployKendra.s.sol`: deterministic deployment script for Base Sepolia & FISCO BCOS.
+  6. `contracts/test/KendraEscrow.t.sol`: 8 comprehensive Foundry test cases verifying full lifecycle and security constraints.
+
+---
+
+## 2. Key Architecture & Cryptographic Decisions
+
+### 2.1 Dual-Chain EVM Compatibility (`paris` EVM, `solc 0.8.20`)
+- **No `PUSH0` Opcode:** By setting `evm_version = "paris"`, the compiled bytecode avoids the `PUSH0` opcode introduced in Shanghai (Solidity 0.8.24). This ensures identical bytecode deploys without modification to both enterprise consortium chains (FISCO BCOS v3 EVM nodes) and public rollups (Base Sepolia).
+
+### 2.2 On-Chain EIP-712 Quorum Verification
+- Implemented internal EIP-712 hashing:
+  - `BORROWER_INTENT_TYPEHASH = keccak256("BorrowerIntent(bytes32 invoiceId,address borrower,address supplier,uint256 principal,uint256 grossRepayment)")`
+  - `GUARANTEE_STAKE_TYPEHASH = keccak256("GuaranteeStake(bytes32 invoiceId,address borrower,address supplier,uint256 principal,address guarantor,uint256 stakeAmount)")`
+- Uses `ECDSA.recover` on-chain to verify the 1 borrower signature and 3 guarantor signatures passed in `bytes[4] calldata quorumSignatures`.
+- Reverts immediately with `INVALID_BORROWER_EIP712_SIGNATURE` or `INVALID_GUARANTOR_EIP712_SIGNATURE` if any cryptographic signature is forged or invalid.
+
+### 2.3 On-Chain 40.0% ($\alpha_j \le 0.40$) Liability Cap Enforcement
+- In `_verifyGuarantorsQuorum`, every guarantor's individual stake is checked against `(grossRepayment * MAX_STAKE_CAP_BPS) / 10000`. Any stake exceeding this limit reverts with `STAKE_EXCEEDS_40_PERCENT_CAP`.
+- Total stakes must equal `grossRepayment` ($100.0\%$).
+
+### 2.4 B2B Direct Settlement & Wholesaler MDR
+- Verifies counterparty against `isKYBSupplier[supplier]` (`X402_UNVERIFIED_SUPPLIER_ADDRESS`).
+- Calculates early-settlement payout: `netSupplierPayout = (principal * 985) / 1000` (e.g. `44,325 BDTc` on a `45,000 BDTc` invoice).
+- Transfers payout directly to supplier wallet (`0x71c...a91`, Meghna Group).
+
+### 2.5 Daily Repayment Sweeps & 1.0% APR Peer Yield (`ySCT`)
+- In `repayFacility(invoiceId, amount)`:
+  - Daily MFS micro-installments are swept into escrow.
+  - When `amountRepaid >= grossRepayment`, status transitions to `REPAID`.
+  - Automatically unlocks guarantor social collateral and distributes 1.0% APR peer micro-guarantee yield: `(stake * PEER_YIELD_APR_BPS * fac.tenorDays) / (10000 * 365)`.
+  - Expands borrower dynamic credit ceiling: `syndicateCreditMultiplierBps[borrower] += 1500` (+15%).
+
+---
+
+## 3. Test & Verification Matrix (Prompt 06)
+
+| Test ID | Test Name | Result | Gas | Verification |
+| :--- | :--- | :---: | :---: | :--- |
+| T1 | `test_executeSyndicateEscrow_success` | **PASS** | 612,548 | Verifies 4 EIP-712 signatures, 98.5% supplier transfer, collateral locks. |
+| T2 | `test_revertOnForgedBorrowerSignature` | **PASS** | 175,335 | Attacker key reverts with `INVALID_BORROWER_EIP712_SIGNATURE`. |
+| T3 | `test_revertOnForgedGuarantorSignature` | **PASS** | 192,429 | Attacker key reverts with `INVALID_GUARANTOR_EIP712_SIGNATURE`. |
+| T4 | `test_revertOnStakeExceeding40PercentCap` | **PASS** | 166,071 | 50% stake reverts with `STAKE_EXCEEDS_40_PERCENT_CAP`. |
+| T5 | `test_revertOnUnverifiedSupplierAddress` | **PASS** | 168,178 | Untrusted supplier reverts with `X402_UNVERIFIED_SUPPLIER_ADDRESS`. |
+| T6 | `test_repayFacility_dailySweeps_andSettlement` | **PASS** | 971,749 | Partial daily sweeps, full settlement, 1.0% APR yield payout, +15% credit ceiling. |
+| T7 | `test_triggerBesleyCoateBailout` | **PASS** | 638,757 | Monsoon flooding shock unlocks collateral without reputation slashing. |
+| T8 | `test_agentSessionAccount_boundedPolicy` | **PASS** | 141,185 | Session key registration, 40% cap check, expiry validation. |
+
+- **Foundry Test Suite Results:** **8 passed, 0 failed** in 3.81ms.
+- **Python Monorepo Test Suite Results:** **51 passed, 0 failed** across Prompts 02, 03, 04, 05.
+- **Combined Test Total:** **59 tests passed, 0 failed**.
+
+---
+
+## 4. Next Steps & Roadmap for Prompt 07
+
+Ready for **Prompt 07: Tier-1 ERC-4337 Session-Key Signer, Serverless Nonce Lock & Honest Live/Replay Relayer** (`api/core/chain_executor.py`):
+1. Branch: `feat/lead1-eip712-signer-and-relayer`
+2. Implement `ZeroTrustSessionKeySigner` to generate the 4 EIP-712 signatures matching `KendraEscrow.sol`.
+3. Implement `KendraChainRelayer` with serverless-safe nonce manager and honest transaction-mode badging.
+
 
 
 

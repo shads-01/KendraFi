@@ -339,9 +339,9 @@ Requirements:
 * **6. Senior Architect, Debugger & Tester Review (Potential Pitfalls & Edge Cases):**
   * *Why On-Chain `ECDSA.recover` Fixes the Security Audit Critique:* Previously, EIP-712 signatures were only checked in Python while `executeSyndicateEscrow` trusted `onlyRelayer`. Now, even if the relayer is compromised, `KendraEscrow.sol` will revert on-chain with `INVALID_EIP712_AGENT_SIGNATURE` unless 4 valid cryptographic signatures from the registered agent session keys are passed in `quorumSignatures`!
 * **7. Feature Verification Checklist:**
-  - [ ] `forge build` compiles cleanly with `solc 0.8.20` (`evm_version = "paris"`) for both FISCO BCOS and Base Sepolia[cite: 2].
-  - [ ] `forge test -vvv` verifies that passing a forged signature or a stake $>40\%$ reverts on-chain inside `KendraEscrow.sol`[cite: 2].
-  - [ ] `repayFacility()` sweeps daily MFS repayments, unlocks stakes, and pays out the 1.0% APR peer yield on-chain[cite: 2].
+  - [x] `forge build` compiles cleanly with `solc 0.8.20` (`evm_version = "paris"`) for both FISCO BCOS and Base Sepolia[cite: 2].
+  - [x] `forge test -vvv` verifies that passing a forged signature or a stake $>40\%$ reverts on-chain inside `KendraEscrow.sol`[cite: 2].
+  - [x] `repayFacility()` sweeps daily MFS repayments, unlocks stakes, and pays out the 1.0% APR peer yield on-chain[cite: 2].
 
 ---
 
@@ -568,7 +568,7 @@ Run through this final checklist to confirm that every prompt and every mathemat
 ### 4.2 Cryptographic, Smart Contract & Infrastructure Checklist
 - [ ] **Prompt 00 (`CONTEXT.md`):** Written to disk and referenced by Prompts 01–11[cite: 2].
 - [x] **Sound `secp256k1` 16-Bit Range Proof (Prompt 05):** `zk_fate_privacy.py` uses `secp256k1` elliptic-curve Pedersen Commitments and verifies 16 CDS94 Disjunctive OR-Sigma bit-proofs ($\sum_{k=0}^{15} 2^k C_{b_k} == C_i - T \cdot G$)[cite: 2].
-- [ ] **On-Chain EIP-712 Signature Recovery & FISCO BCOS Bytecode (Prompt 06):** `KendraEscrow.sol` compiles under `solc 0.8.20` (`evm_version = "paris"`), recovers all 4 agent EIP-712 signatures on-chain via `ECDSA.recover`, enforces the $\le 40\%$ stake cap on-chain, and implements `repayFacility()`[cite: 2].
+- [x] **On-Chain EIP-712 Signature Recovery & FISCO BCOS Bytecode (Prompt 06):** `KendraEscrow.sol` compiles under `solc 0.8.20` (`evm_version = "paris"`), recovers all 4 agent EIP-712 signatures on-chain via `ECDSA.recover`, enforces the $\le 40\%$ stake cap on-chain, and implements `repayFacility()`[cite: 2].
 - [ ] **Honest Tx Hash Badging & Serverless Nonce Lock (Prompt 07):** All wallet addresses use `Web3.to_checksum_address()`, nonces are locked via pending count + Supabase RPC, and any fallback replay is explicitly labeled `[REPLAY OF VERIFIED TESTNET TX]`[cite: 2].
 - [ ] **Multi-Round CNP & JSON Trace Export (Prompt 08):** `syndicate_fsm.py` runs 3 rounds of Contract Net Protocol negotiation and exports `docs/traces/scenario_{a,b,c}_trace.json`[cite: 2].
 - [ ] **Supabase RLS, Immutability Trigger & Lean Serverless Bundle (Prompts 01–02):** `merchant_private_cashflows` is RLS-isolated (`[ZERO-TRUST RLS ISOLATED — SERVER/EDGE ONLY]`), `kendra_fsm_events` has a `SELECT` policy for Realtime, `zerotrust_security_intercepts` has a `BEFORE UPDATE OR DELETE` trigger, and `scipy` is excluded from `api/requirements.txt` (<65 MB bundle).

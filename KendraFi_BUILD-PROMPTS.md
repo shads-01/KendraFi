@@ -302,9 +302,9 @@ Requirements:
 * **6. Senior Architect, Debugger & Tester Review (Potential Pitfalls & Edge Cases):**
   * *Why 16-Bit Decomposition Solves the Reviewer's ZK Critique:* A Schnorr proof only proves knowledge of *some* discrete log mod $q$, which could wrap around negatively. Proving that $\Delta v = \sum_{k=0}^{15} b_k 2^k$ where every $b_k \in \{0,1\}$ and $\sum 2^k C_{b_k} = C_i - T \cdot G$ mathematically guarantees $0 \le \Delta v < 2^{16}$, meaning $v \ge T$ ($\text{DSCR} \ge 1.25$) is cryptographically sound!
 * **7. Feature Verification Checklist:**
-  - [ ] `Secp256k1PedersenRangeProver` generates 16 valid CDS94 bit-proofs on `secp256k1` in `<15ms`.
-  - [ ] Passing a negative excess cash flow ($v < T$) fails bit-decomposition and returns `verify_zk_solvency_proof() == False`.
-  - [ ] Tampering with any bit commitment $C_{b_k}$ breaks the homomorphic sum $\sum 2^k C_{b_k} == C_i - T \cdot G$ and is rejected by peer agents.
+  - [x] `Secp256k1PedersenRangeProver` generates 16 valid CDS94 bit-proofs on `secp256k1` in `<15ms`.
+  - [x] Passing a negative excess cash flow ($v < T$) fails bit-decomposition and returns `verify_zk_solvency_proof() == False`.
+  - [x] Tampering with any bit commitment $C_{b_k}$ breaks the homomorphic sum $\sum 2^k C_{b_k} == C_i - T \cdot G$ and is rejected by peer agents.
 
 ---
 
@@ -567,7 +567,7 @@ Run through this final checklist to confirm that every prompt and every mathemat
 
 ### 4.2 Cryptographic, Smart Contract & Infrastructure Checklist
 - [ ] **Prompt 00 (`CONTEXT.md`):** Written to disk and referenced by Prompts 01–11[cite: 2].
-- [ ] **Sound `secp256k1` 16-Bit Range Proof (Prompt 05):** `zk_fate_privacy.py` uses `secp256k1` elliptic-curve Pedersen Commitments and verifies 16 CDS94 Disjunctive OR-Sigma bit-proofs ($\sum_{k=0}^{15} 2^k C_{b_k} == C_i - T \cdot G$)[cite: 2].
+- [x] **Sound `secp256k1` 16-Bit Range Proof (Prompt 05):** `zk_fate_privacy.py` uses `secp256k1` elliptic-curve Pedersen Commitments and verifies 16 CDS94 Disjunctive OR-Sigma bit-proofs ($\sum_{k=0}^{15} 2^k C_{b_k} == C_i - T \cdot G$)[cite: 2].
 - [ ] **On-Chain EIP-712 Signature Recovery & FISCO BCOS Bytecode (Prompt 06):** `KendraEscrow.sol` compiles under `solc 0.8.20` (`evm_version = "paris"`), recovers all 4 agent EIP-712 signatures on-chain via `ECDSA.recover`, enforces the $\le 40\%$ stake cap on-chain, and implements `repayFacility()`[cite: 2].
 - [ ] **Honest Tx Hash Badging & Serverless Nonce Lock (Prompt 07):** All wallet addresses use `Web3.to_checksum_address()`, nonces are locked via pending count + Supabase RPC, and any fallback replay is explicitly labeled `[REPLAY OF VERIFIED TESTNET TX]`[cite: 2].
 - [ ] **Multi-Round CNP & JSON Trace Export (Prompt 08):** `syndicate_fsm.py` runs 3 rounds of Contract Net Protocol negotiation and exports `docs/traces/scenario_{a,b,c}_trace.json`[cite: 2].

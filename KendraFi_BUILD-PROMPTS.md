@@ -412,9 +412,9 @@ Requirements:
 * **6. Senior Architect, Debugger & Tester Review (Potential Pitfalls & Edge Cases):**
   * *Why Multi-Round CNP Directly Boosts the 25% Theme Score:* Judges evaluating *"AI as a Financial Participant"* want to see agents actively negotiate prices and quantities[cite: 2]. Showing `AGT-04` hit its 40% session-key ceiling in Round 1 and watching `AGT-02` and `AGT-03` dynamically step up to `35%` and `25%` when the syndicate risk fee clears at `1.00% APR` in Round 2 proves genuine multi-agent economic agency[cite: 2].
 * **7. Feature Verification Checklist:**
-  - [ ] `syndicate_fsm.py` emits all 3 CNP negotiation rounds (`Round 1: Initial Bid & 40% Cap`, `Round 2: Deficit Reallocation @ 1.0% Yield`, `Round 3: EIP-712 Quorum Lock`)[cite: 2].
-  - [ ] `POST /api/kendra/repay` executes the on-chain repayment sweep and distributes the 1.0% APR peer yield[cite: 2].
-  - [ ] `docs/traces/scenario_{a,b,c}_trace.json` are generated and saved on disk[cite: 2].
+  - [x] `syndicate_fsm.py` emits all 3 CNP negotiation rounds (`Round 1: Initial Bid & 40% Cap`, `Round 2: Deficit Reallocation @ 1.0% Yield`, `Round 3: EIP-712 Quorum Lock`)[cite: 2].
+  - [x] `POST /api/kendra/repay` executes the on-chain repayment sweep and distributes the 1.0% APR peer yield[cite: 2].
+  - [x] `docs/traces/scenario_{a,b,c}_trace.json` are generated and saved on disk[cite: 2].
 
 ---
 
@@ -570,6 +570,6 @@ Run through this final checklist to confirm that every prompt and every mathemat
 - [x] **Sound `secp256k1` 16-Bit Range Proof (Prompt 05):** `zk_fate_privacy.py` uses `secp256k1` elliptic-curve Pedersen Commitments and verifies 16 CDS94 Disjunctive OR-Sigma bit-proofs ($\sum_{k=0}^{15} 2^k C_{b_k} == C_i - T \cdot G$)[cite: 2].
 - [x] **On-Chain EIP-712 Signature Recovery & FISCO BCOS Bytecode (Prompt 06):** `KendraEscrow.sol` compiles under `solc 0.8.20` (`evm_version = "paris"`), recovers all 4 agent EIP-712 signatures on-chain via `ECDSA.recover`, enforces the $\le 40\%$ stake cap on-chain, and implements `repayFacility()`[cite: 2].
 - [x] **Honest Tx Hash Badging & Serverless Nonce Lock (Prompt 07):** All wallet addresses use `Web3.to_checksum_address()`, nonces are locked via pending count + Supabase RPC, and any fallback replay is explicitly labeled `[REPLAY OF VERIFIED TESTNET TX]`[cite: 2].
-- [ ] **Multi-Round CNP & JSON Trace Export (Prompt 08):** `syndicate_fsm.py` runs 3 rounds of Contract Net Protocol negotiation and exports `docs/traces/scenario_{a,b,c}_trace.json`[cite: 2].
+- [x] **Multi-Round CNP & JSON Trace Export (Prompt 08):** `syndicate_fsm.py` runs 3 rounds of Contract Net Protocol negotiation and exports `docs/traces/scenario_{a,b,c}_trace.json`[cite: 2].
 - [ ] **Supabase RLS, Immutability Trigger & Lean Serverless Bundle (Prompts 01–02):** `merchant_private_cashflows` is RLS-isolated (`[ZERO-TRUST RLS ISOLATED — SERVER/EDGE ONLY]`), `kendra_fsm_events` has a `SELECT` policy for Realtime, `zerotrust_security_intercepts` has a `BEFORE UPDATE OR DELETE` trigger, and `scipy` is excluded from `api/requirements.txt` (<65 MB bundle).
 - [ ] **5 Mandatory Competition Deliverables Ready (Prompts 10–11):** (1) Registration + 5 Passports emailed to `wangyr@pbcsf.tsinghua.edu.cn`, (2) `TECHNICAL_DOCUMENTATION.pdf`, (3) `SECURITY_SELF_ASSESSMENT.pdf`, (4) `PRESENTATION_DECK_SLIDES.pdf` ($\le 10$ min), and (5) 3-Minute Demo Video + `ONCHAIN_EXECUTION_EVIDENCE.pdf` + `docs/traces/*.json`[cite: 2].

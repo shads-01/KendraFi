@@ -155,7 +155,8 @@ class CNPWallMessage(BaseModel):
         "CFP_BROADCAST",
         "PROVISIONAL_BID",
         "DEFICIT_REALLOCATION",
-        "NASH_EQUILIBRIUM_CLEARED"
+        "NASH_EQUILIBRIUM_CLEARED",
+        "ABSTAIN_LIQUIDITY_STRESS",
     ] = Field(..., description="FIPA-compliant CNP communicative act")
     proposed_alpha: float = Field(..., ge=0.0, le=1.0, description="Proposed guarantee stake fraction (<= 0.40)")
     proposed_yield_apr_bps: int = Field(..., ge=0, description="Proposed interest yield in basis points (100 bps = 1.0% APR)")

@@ -1,0 +1,354 @@
+{
+  "scenario": "SCENARIO_A_VALID",
+  "invoice_payload": {
+    "raw_text": "Meghna Group Wholesale Oil & Rice Invoice #INV-2026-001\nBuyer: Rahim Store (Karwan Bazar)\nSupplier Wallet: 0x71c0000000000000000000000000000000000a91\nTotal Amount: 45,000 BDT\nTenor: 30 days"
+  },
+  "extracted_intent": {
+    "borrower_agent_id": "AGT-01",
+    "supplier_wallet": "0x71c0000000000000000000000000000000000a91",
+    "supplier_id": "MEGHNA-01",
+    "amount_bdt": 45000.0,
+    "tenor_days": 30,
+    "raw_ocr_text": "MEGHNA GROUP OF INDUSTRIES - WHOLESALE DIVISION\nInvoice #MGI-2026-8891\nDate: 2026-10-15\nBuyer: Rahim Store (Karwan Bazar D-14)\nSupplier: MEGHNA-01\nSupplier Settlement Wallet: 0x71c0000000000000000000000000000000000a91\nItems: 50x Miniket Rice 50kg (35,000 BDT), 10x Mustard Oil 5L (10,000 BDT)\nTotal Payable: 45,000.00 BDT\nPayment Terms: 30 Days Net",
+    "item_summary": "50 sacks Miniket Rice 50kg, 10x Mustard Oil 5L"
+  },
+  "dscr": 1.68,
+  "gross_repayment_bdt": 45462.33,
+  "net_supplier_payout_bdt": 44325.0,
+  "zk_proof": {
+    "commitment_hex": "03fc03857356dbebdc6e64d3001978534a733ee61a46c8294185bdd901dabde6d5",
+    "display_short_hex": "0x03fc0385...bde6d5",
+    "excess_commitment_hex": "03e189ac44f9e32f07c55c26919119433746bb0d2d7c3404cf70caf67afeccb9c0",
+    "bit_range_proofs": [
+      {
+        "bit_index": 0,
+        "commitment_point_hex": "030d8ed2439865c443339e72fd7668e3e9b764727edea5a7b50c91ffa7d438e318",
+        "e0_hex": "8bcd94bdfebf2716159cb648c0123afaf9f2ecd0fe5c3a26ffe54f4ec65bd0cf",
+        "z0_hex": "99e80ed690830b1ba014de328866db93b8e8e94c3fc647c77f7472ce43c19706",
+        "e1_hex": "00000000000000000000000000000000000000000000000024c5e387a021a9cc",
+        "z1_hex": "000000000000000000000000000000000000000000000000bcae5e1f32d7f1c3"
+      },
+      {
+        "bit_index": 1,
+        "commitment_point_hex": "028e20f37a332426b4eed54878cdc75e6200d7e83d9f8724df827d4ca0066e5a00",
+        "e0_hex": "ee4de070b403081d6935921c0ec98f77c3be770fc6f713b3a6a7eacde697f3c0",
+        "z0_hex": "feba35504fe8bb5c2e44ae747b29a63fc0248eb184482694e2a274c24e5418db",
+        "e1_hex": "0000000000000000000000000000000000000000000000005af734702f0aa35c",
+        "z1_hex": "00000000000000000000000000000000000000000000000044bf7c48393dd7a8"
+      },
+      {
+        "bit_index": 2,
+        "commitment_point_hex": "022fe45f025d5f290877b5b783683d55a4976d188ec0e9b9e9d98d1ac24bab2b26",
+        "e0_hex": "000000000000000000000000000000000000000000000000ac457cb39cb156bd",
+        "z0_hex": "000000000000000000000000000000000000000000000000d7494af929e47cfa",
+        "e1_hex": "d6c9b91fcf897fbbb6eba596c062af47c2316a9b6fcd21e48a6cf24a7b58334a",
+        "z1_hex": "7c64ba927928e023a4751f7c4bcb9136e109640c524b4f61e9f699bd668641fe"
+      },
+      {
+        "bit_index": 3,
+        "commitment_point_hex": "02982953c4b3e758d20c2059bedee9245dbe5f41586b871dd630b708451cd7dda5",
+        "e0_hex": "000000000000000000000000000000000000000000000000f095587e56a839ce",
+        "z0_hex": "000000000000000000000000000000000000000000000000da564b5fd467cef3",
+        "e1_hex": "645f1f9fd5b223aeb51ecd9ccf792737eadb730a8aceab802c077d4190d5fcf6",
+        "z1_hex": "6ca04cbad601096dd3edbc4713882ebe6d05031f5921d8326fcb571bad533913"
+      },
+      {
+        "bit_index": 4,
+        "commitment_point_hex": "036ff84162eaaaecbb589425e88adfb09e5739661b8cae9157b3c8735316967e81",
+        "e0_hex": "0000000000000000000000000000000000000000000000005960d55562e47ebd",
+        "z0_hex": "0000000000000000000000000000000000000000000000002598440512897e56",
+        "e1_hex": "1118ef08c233e3f44a8fa4aa154b4d33ce47a8daafec33669092e3aaa091991b",
+        "z1_hex": "43049f13f2f7c7a4014b40a3c7bfab0ae396d01e078265b8e8bc8f73920ded1d"
+      },
+      {
+        "bit_index": 5,
+        "commitment_point_hex": "02b326ff701f2c6e4209aa8bc4cf61ab4460f3eaf29558d65c441f7fd7aa4b4427",
+        "e0_hex": "6beb9f640912b91980934f731c24feb328d95972b6fc595bb1234fae5831bd2d",
+        "z0_hex": "a9f1b61d3fb8883d5aa5ab7a6fd713ade19761f8022e96f5d5e2acc1bb2d59bb",
+        "e1_hex": "00000000000000000000000000000000000000000000000053a3392a35cc6f39",
+        "z1_hex": "0000000000000000000000000000000000000000000000007a8dce8995ccdf71"
+      },
+      {
+        "bit_index": 6,
+        "commitment_point_hex": "0233db3aee7cfafb95085ebfa7da830d2554521bb31fafee33683e9fbccda63c86",
+        "e0_hex": "000000000000000000000000000000000000000000000000c3541c3c01b27925",
+        "z0_hex": "000000000000000000000000000000000000000000000000f881c065cd4b2945",
+        "e1_hex": "c31e18e57a3935971d053c3003ccf4f09c69a983b844df85df10241f8d85d9ed",
+        "z1_hex": "9eec14c38bad371d175e3d9d3272c161d480025cf49364f7965554c17ced8a1d"
+      },
+      {
+        "bit_index": 7,
+        "commitment_point_hex": "032ef124b9a7e51b6920c86a4f91ca6a5ef15a961462a06dd473c8c4ad25424020",
+        "e0_hex": "a21452aa17c5d7195585e7b430226774cf19741e2654282091f51008ca14539e",
+        "z0_hex": "10688e7339f267e3f314095db84752a9459b7c0c9c7ea1fcf4c8400a1f1627a4",
+        "e1_hex": "000000000000000000000000000000000000000000000000baf9bee298d3505e",
+        "z1_hex": "000000000000000000000000000000000000000000000000f28f60f5db8835a8"
+      },
+      {
+        "bit_index": 8,
+        "commitment_point_hex": "02a76250b026127aa31efc99216f82a73379fdeaf2d8accf27a2acfe89f6013c75",
+        "e0_hex": "a7506f99dc913425b8c8a536b1c8817d955ca067373a01954974ab8e4104a0d4",
+        "z0_hex": "602556e01e37985f758707451036bdebab96431262e7fbe8781f80119ac76e7b",
+        "e1_hex": "000000000000000000000000000000000000000000000000a87ac820ee66f936",
+        "z1_hex": "0000000000000000000000000000000000000000000000007582fd255e856e2e"
+      },
+      {
+        "bit_index": 9,
+        "commitment_point_hex": "03424ee4bb541c12aad97f5e0067fe1ceae5ad9a79419bfa72fbef610602d78603",
+        "e0_hex": "95c339a148987a8349348d92d9347dc233111143afacde06035b12088cd0bdfe",
+        "z0_hex": "16765d6c5d4a30214918c0d330706b4008c91700ade59113c5926bf703a9244d",
+        "e1_hex": "0000000000000000000000000000000000000000000000002f68ada173416e0a",
+        "z1_hex": "0000000000000000000000000000000000000000000000009e73a1907bcbf5f4"
+      },
+      {
+        "bit_index": 10,
+        "commitment_point_hex": "0340976fb48d23128ace047b17e96396b650e2ebac3bae38ddf6b8441c2f36a04a",
+        "e0_hex": "000000000000000000000000000000000000000000000000421b751c27e8e25d",
+        "z0_hex": "000000000000000000000000000000000000000000000000ef1e25c059401af7",
+        "e1_hex": "79dbec5909c8c102c75e85672a975aeef99956e30016504ff1bb23b0f4d038ee",
+        "z1_hex": "1495ee6219d0cfdffff78010141dfa4b62e6254675983d50b59db47a63b838f6"
+      },
+      {
+        "bit_index": 11,
+        "commitment_point_hex": "03a35bc255f30e20f874b2e02c53ebdcf40628abfde34422e091ca4cf16459ebe4",
+        "e0_hex": "000000000000000000000000000000000000000000000000766ea2a0276b76ff",
+        "z0_hex": "000000000000000000000000000000000000000000000000374b26c5bd68b2aa",
+        "e1_hex": "3ed9419bf2c054992ba4a3fb6058ce8bfd05373dda21be7025fd655911f447ee",
+        "z1_hex": "c098a9154c01a8c22e0664d56237cb1be95076e6ecd7d0171c7523295f6d7529"
+      },
+      {
+        "bit_index": 12,
+        "commitment_point_hex": "039b30a8d7aaa1780bdd532d8e006a6dcf2a3237ad0930267a4c6afbcc6c4f7cea",
+        "e0_hex": "2a227197347b26552f805b9eeabeb8742dfd3333efa8c29fe69047971b236c40",
+        "z0_hex": "5c7eb4359f51873dc31de4b8ed13b6176e40d0eaf90df16ba0c1f48cc3b95fd6",
+        "e1_hex": "000000000000000000000000000000000000000000000000e2625451450d3e78",
+        "z1_hex": "00000000000000000000000000000000000000000000000090943657ecb50207"
+      },
+      {
+        "bit_index": 13,
+        "commitment_point_hex": "03df637c8061af9f498e2e3eac768fdc966f78e5881db136364b8f07e7f701eee8",
+        "e0_hex": "0c22e126413d095d4aefe62bb447fe7a3ebbdf98de065c00f735b0870f277603",
+        "z0_hex": "51a02b26192dd7dcb5a04913b994426b218980fbff10dab37a85252b8603eadd",
+        "e1_hex": "000000000000000000000000000000000000000000000000bf18c4715d94855f",
+        "z1_hex": "000000000000000000000000000000000000000000000000e203fa3c1196c76e"
+      },
+      {
+        "bit_index": 14,
+        "commitment_point_hex": "023b13f7ee3162943d13dd943208cb0cf68e9b578e90cd076ee14ddb83b17d57f4",
+        "e0_hex": "000000000000000000000000000000000000000000000000b236b2121db13818",
+        "z0_hex": "00000000000000000000000000000000000000000000000058da744c23a81eac",
+        "e1_hex": "d1bdbec57d5e6d311e7f1d1439e7624ddb023e2b63e03f4e7e3dd4aa2de4616e",
+        "z1_hex": "9275e3b25187c187dc9d11a1ee3d77291aacae3258bf20d047db708d2110cebe"
+      },
+      {
+        "bit_index": 15,
+        "commitment_point_hex": "029549560a0fe92e436a7b1d4c9c17efb43b01574cfcfce47ff223da6af855ce2c",
+        "e0_hex": "1b1d3efdb305f973220794125b15c70dae47efc0196cce822a8b1ba10e316e80",
+        "z0_hex": "16eb5e7fc8e5fb74815b1c116405c12878aac9872660844b9a36d4f9e7080ab9",
+        "e1_hex": "0000000000000000000000000000000000000000000000003ac1bb18bd2b379b",
+        "z1_hex": "0000000000000000000000000000000000000000000000001ae7291d338f7b40"
+      }
+    ],
+    "psi_supplier_hmac_hex": "2da868110286a26c5bb2a4b15782adfe0f38671d364353215ca6af2046901baf",
+    "dscr_verified_ge_125": true,
+    "supplier_kyb_verified": true,
+    "collusion_entropy_pass": true,
+    "fate_survival_prob_p": 0.985
+  },
+  "fsm_trace": [
+    "IDLE_MONITORING",
+    "INTENT_PERCEPTION",
+    "DETERMINISTIC_AUDIT",
+    "SYNDICATE_P2P_NEGOTIATION",
+    "ESCROW_COSIGN_AND_SETTLE"
+  ],
+  "cnp_messages": [
+    {
+      "round_num": 1,
+      "sender_agent": "AGT-01",
+      "message_type": "CFP_BROADCAST",
+      "proposed_alpha": 1.0,
+      "proposed_yield_apr_bps": 85,
+      "expected_utility_bdt": 0.0,
+      "detail": "CreditGuaranteeRequest: Rahim Store requests syndicate guarantee for 45,000 BDT loan (R=45,462.33 BDT). 16-bit secp256k1 range proof commitment=0x029f8a... broadcast."
+    },
+    {
+      "round_num": 1,
+      "sender_agent": "AGT-04",
+      "message_type": "PROVISIONAL_BID",
+      "proposed_alpha": 0.4,
+      "proposed_yield_apr_bps": 85,
+      "expected_utility_bdt": 248.5,
+      "detail": "ProvisionalBid: Nasrin Pharmacy bids raw 51.6% share at 0.85% reservation yield, but enforces Tier-1 session key policy cap maxAlphaBps=4000 (40.0% max liability ceiling). 11.6% uncovered residual."
+    },
+    {
+      "round_num": 1,
+      "sender_agent": "AGT-02",
+      "message_type": "PROVISIONAL_BID",
+      "proposed_alpha": 0.282,
+      "proposed_yield_apr_bps": 95,
+      "expected_utility_bdt": 118.2,
+      "detail": "ProvisionalBid: Fatema Textiles submits initial assortative stake 28.2% (12,820.38 BDT) at 0.95% reservation yield based on buffer B_2=48,000 BDT."
+    },
+    {
+      "round_num": 1,
+      "sender_agent": "AGT-03",
+      "message_type": "PROVISIONAL_BID",
+      "proposed_alpha": 0.202,
+      "proposed_yield_apr_bps": 105,
+      "expected_utility_bdt": 42.1,
+      "detail": "ProvisionalBid: Kamal Agro submits initial stake 20.2% (9,183.39 BDT) at 1.05% reservation yield."
+    },
+    {
+      "round_num": 1,
+      "sender_agent": "AGT-05",
+      "message_type": "ABSTAIN_LIQUIDITY_STRESS",
+      "proposed_alpha": 0.0,
+      "proposed_yield_apr_bps": 0,
+      "expected_utility_bdt": -142.6,
+      "detail": "AbstainLiquidityStress: Tariq Hardware evaluates CV=0.6341 > 0.55 threshold => negative expected utility E[U_5]=-142.60 BDT. Formal abstention from syndicate."
+    },
+    {
+      "round_num": 2,
+      "sender_agent": "AGT-01",
+      "message_type": "DEFICIT_REALLOCATION",
+      "proposed_alpha": 0.116,
+      "proposed_yield_apr_bps": 100,
+      "expected_utility_bdt": 0.0,
+      "detail": "YieldClearingDeficitCall: 11.6% uncovered residual from AGT-04 ceiling. Syndicate clearing mechanism increases offered yield to phi*=1.00% APR (100 bps) to clear the market."
+    },
+    {
+      "round_num": 2,
+      "sender_agent": "AGT-02",
+      "message_type": "DEFICIT_REALLOCATION",
+      "proposed_alpha": 0.35,
+      "proposed_yield_apr_bps": 100,
+      "expected_utility_bdt": 165.4,
+      "detail": "DeficitStepUp: Fatema Textiles recomputes Besley-Coate marginal utility under phi*=1.00% APR (ySCT) and expands allocation from 28.2% -> 35.0% (15,911.82 BDT)."
+    },
+    {
+      "round_num": 2,
+      "sender_agent": "AGT-03",
+      "message_type": "DEFICIT_REALLOCATION",
+      "proposed_alpha": 0.25,
+      "proposed_yield_apr_bps": 100,
+      "expected_utility_bdt": 89.7,
+      "detail": "DeficitStepUp: Kamal Agro accepts phi*=1.00% APR yield and expands allocation from 20.2% -> 25.0% (11,365.58 BDT)."
+    },
+    {
+      "round_num": 2,
+      "sender_agent": "AGT-04",
+      "message_type": "DEFICIT_REALLOCATION",
+      "proposed_alpha": 0.4,
+      "proposed_yield_apr_bps": 100,
+      "expected_utility_bdt": 292.15,
+      "detail": "CeilingLocked: Nasrin Pharmacy confirms 40.0% stake (18,184.93 BDT) locked at cleared rate phi*=1.00% APR."
+    },
+    {
+      "round_num": 3,
+      "sender_agent": "AGT-01",
+      "message_type": "NASH_EQUILIBRIUM_CLEARED",
+      "proposed_alpha": 1.0,
+      "proposed_yield_apr_bps": 100,
+      "expected_utility_bdt": 1420.0,
+      "detail": "NashEquilibriumQuorumReached: Exactly 100.0% coverage achieved (AGT-04: 40.0%, AGT-02: 35.0%, AGT-03: 25.0%). All 4 agents initiating cryptographic EIP-712 cosigning."
+    }
+  ],
+  "peer_votes": [
+    {
+      "agent_id": "AGT-04",
+      "alpha_star": 0.4,
+      "stake_bdt": 18184.93,
+      "expected_utility_bdt": 292.15,
+      "decision": "SIGNED_EIP712",
+      "abstention_reason": null
+    },
+    {
+      "agent_id": "AGT-02",
+      "alpha_star": 0.35,
+      "stake_bdt": 15911.82,
+      "expected_utility_bdt": 165.4,
+      "decision": "SIGNED_EIP712",
+      "abstention_reason": null
+    },
+    {
+      "agent_id": "AGT-03",
+      "alpha_star": 0.25,
+      "stake_bdt": 11365.58,
+      "expected_utility_bdt": 89.7,
+      "decision": "SIGNED_EIP712",
+      "abstention_reason": null
+    },
+    {
+      "agent_id": "AGT-05",
+      "alpha_star": 0.0,
+      "stake_bdt": 0.0,
+      "expected_utility_bdt": -142.6,
+      "decision": "ABSTAINED_CV_EXCEEDED",
+      "abstention_reason": "CV=0.6341 > 0.55 liquidity stress threshold"
+    }
+  ],
+  "quorum_signatures": [
+    "0x7c2fa3b3b523bf2dacd869f7815240330ff97de3a228c059d60c2aa76a435c700282dc60532ed18441d37f0adff7c11b03753a8535ef2ed1cd6fddb2419281011c",
+    "0x5a5645b501bad6f986ed69665e6aa9f02a26e6a65148971af353ac8044ada9a46a7fabb4164aabdc91872cb838998c9d66c3123bfc18e6daae56eb389095ab0b1b",
+    "0xcac8b508943150a13e2da2e5e6dd4fbab20709ca5b52b39342ad275b804139a266fd8071b436d4585e4a86ffbc047a852e5b32cacdd1a3cc28af274e6c80ba251b",
+    "0xbae9af8c48aab6d0588e59170a7f33dee7bc619b03939ffeaa197e72554a183f7f2b8d1b7a7d52ae6bb10595ad64a0daf601c09a588b8d740160f68ff18b33701b"
+  ],
+  "tx_result": {
+    "tx_hash": "0xad38ba5e06fb6b2a18443655adc558bb6bc1f13290a6ee16991832b462df5b0f",
+    "tx_mode": "LIVE_RPC_BROADCAST",
+    "status": "SUCCESS",
+    "block_number": 48203917,
+    "gas_used": 44560,
+    "explorer_url": "https://base-sepolia.blockscout.com/tx/0xad38ba5e06fb6b2a18443655adc558bb6bc1f13290a6ee16991832b462df5b0f",
+    "invoice_id": "0xdd78efd823957576f48ad88f524525790c7b9a3b7f6f5c51752fe7a222882065",
+    "borrower": "0x14dC79964da2C08b23698B3D3cc7Ca32193d9955",
+    "supplier": "0x71c0000000000000000000000000000000000a91",
+    "principal_bdt": 45000.0,
+    "gross_repayment_bdt": 45462.33,
+    "net_supplier_payout_bdt": 44325.0,
+    "mdr_fee_bdt": 675.0,
+    "quorum_count": 4
+  },
+  "status": "SUCCESS",
+  "repayment_sweep": {
+    "facility_id": "INV-2026-DHAKA-001",
+    "days_swept": 30,
+    "daily_installment_bdt": 1515.41,
+    "total_repaid_bdt": 45462.33,
+    "voice_bot_telemetry": {
+      "language": "bn-BD",
+      "audio_transcription": "আসসালামু আলাইকুম রহিম ভাই, আজকের দৈনিক বিক্রয় সুইপ ১,৫১৫.৪১ টাকা সফলভাবে সম্পন্ন হয়েছে। আপনার কিস্তির পূর্ণ পরিশোধ নিবন্ধিত হয়েছে এবং জামিনদারদের ১.০% লভ্যাংশ প্রদান করা হয়েছে।",
+      "cost_per_nudge_usd": 0.00067,
+      "nudge_status": "DELIVERED_AND_ACKNOWLEDGED"
+    },
+    "onchain_tx": {
+      "tx_hash": "0x1e25ec0b0f9c58f915baa2df0744cd5ed1bb9484e00cd4f8b354abc95b3bd732",
+      "tx_mode": "LIVE_RPC_BROADCAST",
+      "status": "SUCCESS",
+      "block_number": 48203918,
+      "gas_used": 23000,
+      "explorer_url": "https://base-sepolia.blockscout.com/tx/0x1e25ec0b0f9c58f915baa2df0744cd5ed1bb9484e00cd4f8b354abc95b3bd732",
+      "invoice_id": "0xdd78efd823957576f48ad88f524525790c7b9a3b7f6f5c51752fe7a222882065",
+      "amount_repaid_bdt": 45462.33,
+      "peer_yield_apr_bps": 100
+    },
+    "peer_yield_distribution": {
+      "AGT-04": {
+        "stake_bdt": 18184.93,
+        "yield_earned_bdtc": 14.95
+      },
+      "AGT-02": {
+        "stake_bdt": 15911.82,
+        "yield_earned_bdtc": 13.08
+      },
+      "AGT-03": {
+        "stake_bdt": 11365.58,
+        "yield_earned_bdtc": 9.34
+      },
+      "total_yield_distributed_bdtc": 37.37
+    },
+    "credit_ceiling_expansion_bps": 1500,
+    "status": "REPAID_AND_YIELD_DISTRIBUTED"
+  }
+}

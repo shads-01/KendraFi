@@ -643,13 +643,76 @@ Layer 4 cryptographic privacy is verified. Ready for **Prompt 06: Layer-5 Solidi
 
 ---
 
-## 4. Next Steps & Roadmap for Prompt 08
+---
 
-Ready for **Prompt 08: Layer-2 Multi-Round LangGraph Contract Net Protocol (CNP) FSM, JSON Trace Exporter & Next.js BFF Routes**:
-1. Branch: `feat/lead2-langgraph-cnp-fsm`
-2. Implement `api/core/syndicate_fsm.py` (5-state LangGraph FSM with multi-round CNP negotiation).
-3. Export JSON traces for Scenarios A, B, and C to `docs/traces/`.
-4. Implement Next.js BFF Route Handlers (`src/app/api/kendra/...`).
+# Session 9: Prompt 08 Implementation Log (2026-10-17)
+
+## 1. Executive Summary & Objective
+- **Assigned Prompt:** `08_Layer2_MultiRound_LangGraph_CNP_FSM_And_Trace_Exporter`
+- **Assigned Role:** `[Lead 2: Multi-Agent State Machine Engineer]`
+- **Active Branch:** `feat/langgraph-cnp-fsm`
+- **Primary Objective:** Build Layer-2 Multi-Round LangGraph Contract Net Protocol (CNP) FSM, JSON trace exporter, Next.js BFF routes, and post-lending repayment sweep:
+  1. `api/core/syndicate_fsm.py`: 5-state LangGraph FSM (`IDLE_MONITORING`, `INTENT_PERCEPTION`, `DETERMINISTIC_AUDIT`, `SYNDICATE_P2P_NEGOTIATION`, `ESCROW_COSIGN_AND_SETTLE` + terminal branches `BLOCKED_ADVERSARIAL`, `FLASH_BAILOUT_ACTIVE`) with a true 3-round P2P Contract Net Protocol negotiation loop.
+  2. Post-lending automated repayment & Bangla voice-bot sweep (`POST /api/kendra/repay` & `run_repayment_sweep`): 30 daily simulated sweeps ($1,515.41 \times 30 = 45,462.33\text{ BDT}$), 1/15th cost Bangla voice-bot nudge telemetry, calls `execute_onchain_repayment_sweep()`, unlocks peer stakes, and distributes the 1.0% APR peer yield ($37.37\text{ BDTc}$).
+  3. JSON Trace Exporter (`api/scripts/export_fsm_traces.py`): exports complete JSON state-transition trace files for all 3 competition scenarios to `docs/traces/scenario_{a,b,c}_trace.json`.
+  4. FastAPI & Next.js BFF Route Handlers: `api/index.py` and `src/app/api/kendra/{execute,repay,bailout,state}/route.ts`.
+  5. Realtime event streaming to Supabase `kendra_fsm_events`.
+
+---
+
+## 2. Key Architecture & Multi-Agent CNP Design
+
+### 2.1 3-Round Contract Net Protocol (CNP) Negotiation
+- **Round 1 (`CFP_AND_INITIAL_BIDS`):**
+  - `AGT-01` broadcasts `CreditGuaranteeRequest(principal=45,000, R=45,462.33, commitment=0x029f8a...)`.
+  - `AGT-04` bids raw share `51.6%` at `0.85% APR`, but is constrained to the `40.0%` session-key ceiling, leaving an `11.6%` uncovered deficit.
+  - `AGT-02` bids initial share `28.2%` at `0.95% APR`.
+  - `AGT-03` bids initial share `20.2%` at `1.05% APR`.
+  - `AGT-05` evaluates $CV = 0.634 > 0.55 \implies E[U_5] = -142.60\text{ BDT} < 0$ and broadcasts `ABSTAIN_LIQUIDITY_STRESS`.
+- **Round 2 (`DEFICIT_REALLOCATION_AND_YIELD_CLEARING`):**
+  - Syndicate clearing mechanism offers equilibrium yield $\phi^* = 1.00\%\text{ APR}$ (`100 bps`) to clear the $11.6\%$ deficit.
+  - `AGT-02` recomputes Besley-Coate utility and steps up: $28.2\% \to 35.0\%$ ($15,911.82\text{ BDT}$).
+  - `AGT-03` steps up: $20.2\% \to 25.0\%$ ($11,365.58\text{ BDT}$).
+  - `AGT-04` confirms $40.0\%$ ($18,184.93\text{ BDT}$) at cleared rate.
+- **Round 3 (`NASH_EQUILIBRIUM_QUORUM_LOCK`):**
+  - Exactly $40.0\% + 35.0\% + 25.0\% = 100.0\%$ coverage locked.
+  - All 3 guarantors + borrower sign EIP-712 digests, producing the 4-element quorum signature array.
+
+### 2.2 Trace Files Produced (`docs/traces/`)
+1. `docs/traces/scenario_a_valid_trace.json` (16.9 KB): Complete 5-state trajectory, 10 CNP messages, EIP-712 quorum signatures, and on-chain escrow broadcast.
+2. `docs/traces/scenario_b_redteam_trace.json` (1.4 KB): Intercept of poisoned prompt injection, fast routing to `BLOCKED_ADVERSARIAL`.
+3. `docs/traces/scenario_c_bailout_trace.json` (1.7 KB): Sybil circular wash-trading loop detected by spatial-temporal collusion entropy, emergency routing to `FLASH_BAILOUT_ACTIVE`.
+
+---
+
+## 3. Test & Verification Matrix (Prompt 08)
+
+| Test ID | Test Name | Result | Verification Detail |
+| :--- | :--- | :---: | :--- |
+| T1 | `test_scenario_a_three_round_cnp_negotiation` | **PASS** | Emits all 3 rounds (CFP & 40% cap, clearing yield @ 1.0%, quorum lock), 4 EIP-712 sigs. |
+| T2 | `test_scenario_b_redteam_prompt_injection` | **PASS** | Intercepts adversarial payload, routes to `BLOCKED_ADVERSARIAL` without disbursement. |
+| T3 | `test_scenario_c_sybil_wash_and_monsoon_bailout` | **PASS** | Detects wash collusion, suspends facility, routes to `FLASH_BAILOUT_ACTIVE`. |
+| T4 | `test_simulated_30day_repayment_sweep` | **PASS** | 30 daily sweeps of 1,515.41 BDT, Bangla voice nudge, 1.0% APR yield distributed. |
+| T5 | `test_fastapi_health` | **PASS** | Verifies FastAPI health check endpoint. |
+| T6 | `test_fastapi_execute_scenario_a` | **PASS** | Executes scenario A through FastAPI route handler. |
+| T7 | `test_fastapi_repay_endpoint` | **PASS** | Sweeps repayment and verifies Bangla voice-bot response payload. |
+| T8 | `test_fastapi_bailout_endpoint` | **PASS** | Triggers emergency flash bailout via endpoint. |
+| T9 | `test_fastapi_state_endpoint` | **PASS** | Queries active syndicate state and quorum composition. |
+| T10 | `test_trace_files_exist_and_valid` | **PASS** | Validates existence and schema compliance of all 3 competition trace files. |
+
+- **Prompt 08 Test Suite:** **10 passed, 0 failed** in 17.02s.
+- **Python Monorepo Test Suite:** **73 passed, 0 failed** across Prompts 02, 03, 04, 05, 07, 08.
+- **Foundry Test Suite:** **8 passed, 0 failed** across Layer 5 contracts.
+- **Total Monorepo Tests:** **81 automated tests passed, 0 failed.**
+
+---
+
+## 4. Next Steps & Roadmap for Prompt 09
+
+Ready for **Prompt 09: Layer-1 3-Panel Judge Command Center UI (Part A) — Bilingual Header, Persona-Synced Left Mobile Panel & Multi-Round Center Pentagon Arena**:
+1. Target Branch: `feat/lead4-ui-left-center-reconciled`
+2. Build `src/components/JudgeCommandHeader.tsx`, `src/components/MerchantMobilePanel.tsx`, and `src/components/KendraArenaPanel.tsx`.
+3. Integrate bilingual EN/ZH badges, live 5-state FSM pill, camera zoom, persona-synced merchant phone, and multi-round Pentagon arena.
 
 
 

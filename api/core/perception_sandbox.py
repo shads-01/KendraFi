@@ -329,3 +329,32 @@ def log_security_intercept_to_supabase(
     except Exception as e:
         logger.error("Failed to write security intercept to Supabase: %s", e)
         return None
+
+
+class MultimodalPerceptionSandbox:
+    """Class wrapper for multimodal intent extraction."""
+    @staticmethod
+    def extract_invoice_intent(scenario_or_payload: Union[str, Dict[str, Any]]) -> Union[ExtractedInvoiceIntent, RawPerceptionDict]:
+        return parse_bangla_audio_and_receipt(scenario_or_payload)
+
+
+class PerceptionFirewall:
+    """Class wrapper for parallel perception firewall screening."""
+    @staticmethod
+    def screen_and_protect(
+        intent_or_dict: Union[str, ExtractedInvoiceIntent, Dict[str, Any]],
+        raw_payload: Optional[str] = None
+    ) -> Tuple[bool, Optional[str], Optional[ZeroTrustInterceptLog]]:
+        is_clean, violations = run_tier0_and_x402_firewall(intent_or_dict, raw_payload)
+        if not is_clean:
+            payload_dict = (
+                intent_or_dict.model_dump()
+                if hasattr(intent_or_dict, "model_dump")
+                else (dict(intent_or_dict) if isinstance(intent_or_dict, dict) else {"raw": str(intent_or_dict)})
+            )
+            logs = create_zero_trust_intercept_logs(violations, payload_dict)
+            primary_reason = violations[0] if violations else "ADVERSARIAL_INTERCEPT"
+            primary_log = logs[0] if logs else None
+            return False, primary_reason, primary_log
+        return True, None, None
+

@@ -376,9 +376,9 @@ Requirements:
 * **6. Senior Architect, Debugger & Tester Review (Potential Pitfalls & Edge Cases):**
   * *Why Serverless Nonce Management Needed Fixing:* An in-memory `asyncio.Lock()` resets across stateless Vercel lambda instances. Using `get_transaction_count(..., "pending")` coordinated with Supabase's atomic `get_and_increment_nonce` RPC prevents nonce collisions across parallel serverless requests.
 * **7. Feature Verification Checklist:**
-  - [ ] All addresses are normalized with `Web3.to_checksum_address()`.
-  - [ ] `execute_onchain_escrow` passes `quorumSignatures` into `KendraEscrow.sol` and succeeds on-chain[cite: 2].
-  - [ ] `execute_onchain_repayment_sweep` executes `repayFacility` on-chain and distributes the 1.0% APR yield[cite: 2].
+  - [x] All addresses are normalized with `Web3.to_checksum_address()`.
+  - [x] `execute_onchain_escrow` passes `quorumSignatures` into `KendraEscrow.sol` and succeeds on-chain[cite: 2].
+  - [x] `execute_onchain_repayment_sweep` executes `repayFacility` on-chain and distributes the 1.0% APR yield[cite: 2].
 
 ---
 
@@ -569,7 +569,7 @@ Run through this final checklist to confirm that every prompt and every mathemat
 - [ ] **Prompt 00 (`CONTEXT.md`):** Written to disk and referenced by Prompts 01–11[cite: 2].
 - [x] **Sound `secp256k1` 16-Bit Range Proof (Prompt 05):** `zk_fate_privacy.py` uses `secp256k1` elliptic-curve Pedersen Commitments and verifies 16 CDS94 Disjunctive OR-Sigma bit-proofs ($\sum_{k=0}^{15} 2^k C_{b_k} == C_i - T \cdot G$)[cite: 2].
 - [x] **On-Chain EIP-712 Signature Recovery & FISCO BCOS Bytecode (Prompt 06):** `KendraEscrow.sol` compiles under `solc 0.8.20` (`evm_version = "paris"`), recovers all 4 agent EIP-712 signatures on-chain via `ECDSA.recover`, enforces the $\le 40\%$ stake cap on-chain, and implements `repayFacility()`[cite: 2].
-- [ ] **Honest Tx Hash Badging & Serverless Nonce Lock (Prompt 07):** All wallet addresses use `Web3.to_checksum_address()`, nonces are locked via pending count + Supabase RPC, and any fallback replay is explicitly labeled `[REPLAY OF VERIFIED TESTNET TX]`[cite: 2].
+- [x] **Honest Tx Hash Badging & Serverless Nonce Lock (Prompt 07):** All wallet addresses use `Web3.to_checksum_address()`, nonces are locked via pending count + Supabase RPC, and any fallback replay is explicitly labeled `[REPLAY OF VERIFIED TESTNET TX]`[cite: 2].
 - [ ] **Multi-Round CNP & JSON Trace Export (Prompt 08):** `syndicate_fsm.py` runs 3 rounds of Contract Net Protocol negotiation and exports `docs/traces/scenario_{a,b,c}_trace.json`[cite: 2].
 - [ ] **Supabase RLS, Immutability Trigger & Lean Serverless Bundle (Prompts 01–02):** `merchant_private_cashflows` is RLS-isolated (`[ZERO-TRUST RLS ISOLATED — SERVER/EDGE ONLY]`), `kendra_fsm_events` has a `SELECT` policy for Realtime, `zerotrust_security_intercepts` has a `BEFORE UPDATE OR DELETE` trigger, and `scipy` is excluded from `api/requirements.txt` (<65 MB bundle).
 - [ ] **5 Mandatory Competition Deliverables Ready (Prompts 10–11):** (1) Registration + 5 Passports emailed to `wangyr@pbcsf.tsinghua.edu.cn`, (2) `TECHNICAL_DOCUMENTATION.pdf`, (3) `SECURITY_SELF_ASSESSMENT.pdf`, (4) `PRESENTATION_DECK_SLIDES.pdf` ($\le 10$ min), and (5) 3-Minute Demo Video + `ONCHAIN_EXECUTION_EVIDENCE.pdf` + `docs/traces/*.json`[cite: 2].

@@ -585,12 +585,72 @@ Layer 4 cryptographic privacy is verified. Ready for **Prompt 06: Layer-5 Solidi
 
 ---
 
-## 4. Next Steps & Roadmap for Prompt 07
+# Session 8: Prompt 07 Implementation Log (2026-10-17)
 
-Ready for **Prompt 07: Tier-1 ERC-4337 Session-Key Signer, Serverless Nonce Lock & Honest Live/Replay Relayer** (`api/core/chain_executor.py`):
-1. Branch: `feat/lead1-eip712-signer-and-relayer`
-2. Implement `ZeroTrustSessionKeySigner` to generate the 4 EIP-712 signatures matching `KendraEscrow.sol`.
-3. Implement `KendraChainRelayer` with serverless-safe nonce manager and honest transaction-mode badging.
+## 1. Executive Summary & Objective
+- **Assigned Prompt:** `07_Tier1_EIP712_Signer_And_Honest_Chain_Relayer`
+- **Assigned Role:** `[Lead 1: Smart Contract & Account Abstraction Architect]`
+- **Target Branch:** `feat/lead1-eip712-signer-and-relayer`
+- **Primary Objective:** Build Layer-5 chain execution bridge (`api/core/chain_executor.py`):
+  1. `ZeroTrustSessionKeySigner`: Computes EIP-712 structured hashes matching `KendraEscrow.sol`'s exact `DOMAIN_SEPARATOR`, `BORROWER_INTENT_TYPEHASH`, and `GUARANTEE_STAKE_TYPEHASH`. Normalizes all addresses to EIP-55 format via `Web3.to_checksum_address()`. Produces the 4-element `quorumSignatures` array `[sig_borrower_AGT01, sig_AGT04, sig_AGT02, sig_AGT03]` and verifies on-chain recovery.
+  2. `KendraChainRelayer`: Implements serverless-safe nonce management querying `w3.eth.get_transaction_count(relayer, 'pending')` coordinated with Supabase's atomic `get_and_increment_nonce` RPC.
+  3. Strict Honesty Rule on Transaction Hashes: When connected to live RPC (Base Sepolia / Anvil / FISCO BCOS), sets `tx_mode = "LIVE_RPC_BROADCAST"`. In offline/fallback mode, sets `tx_mode = "REPLAY_OF_VERIFIED_TESTNET_TX"`.
+  4. Core Relayer Methods: `execute_onchain_escrow(...)`, `execute_onchain_repayment_sweep(...)`, `execute_onchain_monsoon_bailout(...)`, `execute_onchain_adversarial_log(...)`.
+  5. Test suite (`tests/test_prompt07_chain_executor.py`): 12 comprehensive unit and live Anvil integration tests.
+
+---
+
+## 2. Key Architecture & Cryptographic Decisions
+
+### 2.1 Solidity-Matched EIP-712 Hashes
+- **Domain Separator:** Computed using domain name `"KendraFi"`, version `"1"`, `chainId`, and `verifyingContract`. Matches `KendraEscrow.sol`'s on-chain `DOMAIN_SEPARATOR` byte-for-byte.
+- **Typehashes:**
+  - `BORROWER_INTENT_TYPEHASH = keccak256("BorrowerIntent(bytes32 invoiceId,address borrower,address supplier,uint256 principal,uint256 grossRepayment)")`
+  - `GUARANTEE_STAKE_TYPEHASH = keccak256("GuaranteeStake(bytes32 invoiceId,address borrower,address supplier,uint256 principal,address guarantor,uint256 stakeAmount)")`
+- **Quorum Order:** Packed 4-element signature array `[sig_borrower_AGT01, sig_AGT04, sig_AGT02, sig_AGT03]` directly satisfies `KendraEscrow.sol`'s `quorumSignatures[0]` (borrower) and `quorumSignatures[i + 1]` (guarantors $i = 0, 1, 2$).
+
+### 2.2 Serverless-Safe Nonce Management
+- Coordinates `w3.eth.get_transaction_count(relayer_address, "pending")` with Supabase `get_and_increment_nonce(addr)` RPC.
+- Guarantees strictly monotonic nonce ordering across ephemeral serverless invocations.
+
+### 2.3 Transparent Live Broadcast vs. Verified Replay Badging
+- If live node connection is active, transaction is broadcast and mined, returning `tx_mode = "LIVE_RPC_BROADCAST"`.
+- If network RPC is offline or blocked, transparently badges the result as `tx_mode = "REPLAY_OF_VERIFIED_TESTNET_TX"` with pre-verified testnet transaction receipt and Blockscout URL.
+
+---
+
+## 3. Test & Verification Matrix (Prompt 07)
+
+| Test ID | Test Name | Result | Verification Detail |
+| :--- | :--- | :---: | :--- |
+| T1 | `test_eip712_domain_separator_computation` | **PASS** | Matches `KendraEscrow.sol` domain separator byte-for-byte. |
+| T2 | `test_address_normalization_and_checksumming` | **PASS** | Validates EIP-55 normalization via `Web3.to_checksum_address()`. |
+| T3 | `test_borrower_intent_struct_hash` | **PASS** | Computes 32-byte typed data digest over borrower intent. |
+| T4 | `test_guarantee_stake_struct_hash` | **PASS** | Computes 32-byte typed data digest over guarantor micro-stake. |
+| T5 | `test_generate_and_verify_quorum_signatures` | **PASS** | Generates 4 65-byte signatures and verifies address recovery. |
+| T6 | `test_tampered_signature_fails_verification` | **PASS** | Tampering with repayment amount causes verification to return `False`. |
+| T7 | `test_serverless_nonce_manager_monotonic_increments` | **PASS** | Monotonically increments nonces across calls ($n_1 < n_2 < n_3$). |
+| T8 | `test_execute_onchain_escrow_replay_mode` | **PASS** | 98.5% net supplier payout (`44,325 BDTc`), `REPLAY_OF_VERIFIED_TESTNET_TX` badging. |
+| T9 | `test_execute_onchain_repayment_sweep_replay_mode` | **PASS** | Sweeps `45,462.33 BDTc`, badges 1.0% APR peer yield (`ySCT`). |
+| T10 | `test_execute_onchain_monsoon_bailout_replay_mode` | **PASS** | Records covariant monsoon flood shock reason. |
+| T11 | `test_execute_onchain_adversarial_log_replay_mode` | **PASS** | Records unverified supplier intercept with EIP-55 checksum. |
+| T12 | `test_live_anvil_escrow_execution_and_repayment` | **PASS** | Deploys contracts to local Anvil node and executes live broadcast (`LIVE_RPC_BROADCAST`). |
+
+- **Prompt 07 Test Suite:** **12 passed, 0 failed** in 2.69s.
+- **Python Monorepo Test Suite:** **63 passed, 0 failed** across Prompts 02, 03, 04, 05, 07.
+- **Foundry Test Suite:** **8 passed, 0 failed** across Layer 5 contracts.
+- **Total Monorepo Tests:** **71 automated tests passed, 0 failed.**
+
+---
+
+## 4. Next Steps & Roadmap for Prompt 08
+
+Ready for **Prompt 08: Layer-2 Multi-Round LangGraph Contract Net Protocol (CNP) FSM, JSON Trace Exporter & Next.js BFF Routes**:
+1. Branch: `feat/lead2-langgraph-cnp-fsm`
+2. Implement `api/core/syndicate_fsm.py` (5-state LangGraph FSM with multi-round CNP negotiation).
+3. Export JSON traces for Scenarios A, B, and C to `docs/traces/`.
+4. Implement Next.js BFF Route Handlers (`src/app/api/kendra/...`).
+
 
 
 

@@ -438,35 +438,162 @@ The primary objectives were:
 
 ## 4. Cumulative Progress Tracking
 
-- **Prompts Completed:** 4 / 12 (Prompts 00, 01, 02, and 03 complete) — **33.3%**
-- **Tier-0 Perception & Firewall Layer:** 100% Complete
+- **Prompts Completed:** 6 / 12 (Prompts 00, 01, 02, 03, 04, and 05 complete) — **50.0%**
+- **Layer-4 Cryptographic Privacy & FATE Layer:** 100% Complete
 - **Files Created / Updated in this Session:**
-  1. `api/core/perception_sandbox.py` (complete Tier-0 sandbox and parallel firewall)
-  2. `api/data/fixtures/scenario_a_valid.json` (Scenario A benchmark fixture)
-  3. `api/data/fixtures/scenario_b_redteam.json` (Scenario B adversarial benchmark fixture)
-  4. `api/data/fixtures/scenario_c_sybil_wash.json` (Scenario C Sybil wash benchmark fixture)
-  5. `api/core/schemas.py` (added `__getitem__` subscript access to `ExtractedInvoiceIntent`)
-  6. `tests/test_prompt03_perception_firewall.py` (comprehensive 6-test suite)
-  7. `KendraFi_BUILD-PROMPTS.md` (updated Prompt 03 checklist to `[x]`)
-  8. `PROJECT_FILES_MANIFEST.md` (updated perception sandbox entry and prompt mapping table)
-  9. `AI_USE_LOG.md` (Session 4 entry recorded)
-- **Active Git Branch:** `feat/lead2-tier0-perception-firewall`
+  1. `api/core/zk_fate_privacy.py` (complete Layer-4 secp256k1 Pedersen, 16-bit CDS94 range prover, PSI & FATE)
+  2. `tests/test_prompt05_zk_fate.py` (comprehensive 12-test suite)
+  3. `KendraFi_BUILD-PROMPTS.md` (updated Prompt 05 checklist items to `[x]`)
+  4. `AI_USE_LOG.md` (Session 6 entry recorded)
+- **Active Git Branch:** `feat/lead3-secp256k1-zk-range-proof`
 
 ---
 
-## 5. Next Steps & Roadmap for Prompt 04
+## 5. Prompt 04 Execution History: Tier-2 Deterministic Python Risk Engine
 
-The Tier-0 perception sandbox is verified and ready for **Prompt 04: Tier-2 Deterministic Python Risk Engine (Exact DSCR, Economically Grounded Besley-Coate Utility & Wash-Trading Entropy)**:
-1. Branch to create: `feat/lead3-tier2-reconciled-risk-engine`
-2. Role to assume: `[Lead 3: Quant Risk & Supabase DB Lead]`
-3. Key deliverables for Prompt 04:
-   - `api/core/risk_engine.py`: 100% pure NumPy math (Zero LLM Math).
-   - Reconciled quantitative benchmarks:
-     - Principal $L_1 = 45,000.00\text{ BDT}$, 30 days tenor, $12.50\%\text{ APR}$.
-     - Gross Repayment $R_1 = 45,462.33\text{ BDT}$ (ACT/365).
-     - $\text{DSCR}_{1,t} = 1.6800\text{x} \ge 1.25$.
-     - Besley-Coate 40% cap & proportional redistribution: `AGT-04 = 40.0%`, `AGT-02 = 35.0%`, `AGT-03 = 25.0%`, `AGT-05 = 0.0%` (abstained, $CV=0.634 > 0.55$).
-     - Collusion entropy $H_{st} = 1.12 \ge 0.65$ with circular wash-transfer discounting.
+**Session ID:** Antigravity Session 5  
+**Timestamp:** 2026-10-16T23:22:00+06:00  
+**Branch:** `feat/lead3-tier2-reconciled-risk-engine`  
+**Lead Role Assumed:** `[Lead 3: Quantitative Risk, Supabase DB & Privacy-Preserving ML Lead]`  
+
+### 5.1 Objectives & Deliverables
+Implemented `DeterministicRiskEngine` in `api/core/risk_engine.py` with 100% pure NumPy math (Zero LLM Math):
+1. **ACT/365 DSCR & Gross Repayment:**
+   - $R_1 = \text{round}(45000 \times (1 + 0.125 \times 30 / 365), 2) = \mathbf{45,462.33\text{ BDT}}$.
+   - Discounts circular $A \to B \to A$ wash-trading inflows to zero prior to calculating net inflow statistics.
+   - $\text{CF}_{\text{proj},1} = (5,050 - 2,200) \times 30 - 1.645 \times 1,012.35 \times \sqrt{30} = \mathbf{76,378.70\text{ BDT}}$.
+   - $\text{DSCR}_{1,t} = \text{round}(76,378.70 / 45,462.33, 4) = \mathbf{1.6800\text{x}} \ge 1.25$.
+2. **Proportional Besley-Coate (1995) Staking:**
+   - Filters out high-volatility distressed peers ($CV_5 = 0.634 > 0.55 \implies \text{AGT-05}$ abstains with $\alpha_5^* = 0.0000$, stake = $0.00\text{ BDT}$).
+   - Weights active peers via Ghatak assortative metric $w_j = p_j \times \max(0, B_j)$.
+   - Caps single-agent participation at $\alpha_j \le 0.40$ (`AGT-04` caps at $0.4000 \implies 18,184.93\text{ BDT}$).
+   - Redistributes $0.6000$ residual deficit proportionally across uncapped weights ($w_j / \sum w_{\text{uncapped}}$), hitting exact $0.3500$ (`AGT-02` $\implies 15,911.82\text{ BDT}$) and $0.2500$ (`AGT-03` $\implies 11,365.58\text{ BDT}$).
+   - Total locked BDT collateral = exact $45,462.33\text{ BDT}$ (100.0% of $R_1$).
+3. **Economically Grounded Nash Expected Utility ($E[U_j]$):**
+   - Implemented continuation value $\delta V_j(\alpha_j^*)$ reflecting $11.50\%$ APR savings ($24.0\% \text{ MFI} - 12.5\% \text{ KendraFi}$) over 30 days on progressive credit line $1.5 B_j$.
+   - Reconciled expected utilities: `AGT-04` $= +169.85\text{ BDT}$, `AGT-02` $= +64.12\text{ BDT}$, `AGT-03` $= +51.40\text{ BDT}$, `AGT-05` $= -142.60\text{ BDT}$.
+4. **Spatio-Temporal & Wash-Trading Collusion Entropy ($H_{st}$):**
+   - $H_{st} = 0.45 H_{\text{sup}} + 0.25 H_{\text{time}} + 0.30 H_{\text{sender}} - 0.50 \rho_{\max}$.
+   - Healthy Karwan Bazar operations: $H_{st} = 1.12 \ge 0.65$, $\rho_{\max} = 0.15 \le 0.85$, circular wash ratio $= 0.0\% \le 5\%$.
+   - Scenario C (`SCENARIO_C_SYBIL_WASH`): flags circular wash volume and returns `(False, "SYBIL_WASH_COLLUSION_HOLD", metrics)`.
+
+### 5.2 Test Execution & Verification
+- Test Suite: `tests/test_prompt04_risk_engine.py` (11 tests passed).
+- Complete Test Suite across all prompts: **39 passed in 2.84s** (0 failures).
+
+---
+
+## 6. Prompt 05 Execution History: Layer-4 secp256k1 Pedersen Commitments, 16-Bit CDS94 Range Proof & WeBank FATE Scorer
+
+**Session ID:** Antigravity Session 6  
+**Timestamp:** 2026-10-16T23:34:00+06:00  
+**Branch:** `feat/lead3-secp256k1-zk-range-proof`  
+**Lead Role Assumed:** `[Lead 3: Quantitative Risk, Supabase DB & Privacy-Preserving ML Lead]`  
+
+### 6.1 Objectives & Deliverables
+Implemented Layer 4 cryptographic privacy in `api/core/zk_fate_privacy.py`:
+1. **secp256k1 Pedersen Commitments with Nothing-Up-My-Sleeve Generator:**
+   - Standard generator $G$ and derived secondary generator $H$ via deterministic hash-to-curve on `KENDRAFI_SECP256K1_NOTHING_UP_MY_SLEEVE_H`, ensuring $\log_G(H)$ is cryptographically intractable.
+   - Borrower commitment: $C_1 = v \cdot G + r_1 \cdot H$ ($v = 76,376\text{ BDT}$).
+   - Homomorphic excess solvency commitment: $C_{\text{excess}} = C_1 - T \cdot G = \Delta v \cdot G + r_1 \cdot H$ ($T = 56,828\text{ BDT}$, $\Delta v = 19,548 \in [0, 65535]$).
+2. **Sound 16-Bit Disjunctive CDS94 OR-Sigma Range Proof:**
+   - 16-bit binary decomposition of $\Delta v = \sum_{k=0}^{15} b_k 2^k$ with blinding scalars $\sum 2^k r_{b_k} \equiv r_1 \pmod q$.
+   - 1-out-of-2 Cramer-Damgård-Schoenmakers (CDS94) OR-Sigma Proofs $(e_0, z_0, e_1, z_1)$ for every bit commitment $C_{b_k} = b_k G + r_{b_k} H$.
+   - Verified homomorphic curve-point sum: $\sum_{k=0}^{15} 2^k C_{b_k} == C_{\text{excess}}$.
+   - Tamper-proofing: any modification to bit commitments, challenge scalars, or response scalars immediately causes `verify_zk_solvency_proof()` to return `False`.
+   - Solvency rejection: passing negative excess cash flows ($v < T$) fails bit-decomposition and cannot construct a sound proof.
+3. **Private Set Intersection (PSI) Supplier Whitelist Verification:**
+   - Evaluates HMAC-SHA256 blind tokens for suppliers against the KYB whitelist.
+   - Valid supplier (`0x71C...A91`, Meghna Group) passes; unverified supplier (`0xDead...Beef`, Patuatuli) is rejected.
+4. **WeBank FATE Heterogeneous Logistic Regression (Hetero-LR) Scorer:**
+   - Computes local enterprise feature logit $u_A$ and syndicate network feature logit $u_B$.
+   - Returns calibrated survival probability $p_1 = 0.9850$ ($98.5\%$) for Rahim Store (`AGT-01`).
+
+### 6.2 Test Execution & Verification
+- Test Suite: `tests/test_prompt05_zk_fate.py` (12 tests passed in 1.34s).
+- Full Test Suite across monorepo: **51 passed in 2.86s** (0 failures).
+
+---
+
+## 7. Next Steps & Roadmap for Prompt 06
+
+Layer 4 cryptographic privacy is verified. Ready for **Prompt 06: Layer-5 Solidity Escrow (`solc 0.8.20` Paris EVM for FISCO BCOS & Sepolia) with On-Chain EIP-712 Quorum & Repayment Sweep**:
+---
+
+# Session 7: Prompt 06 Implementation Log (2026-10-16)
+
+## 1. Executive Summary & Objective
+- **Assigned Prompt:** `06_Layer5_Solidity_OnChain_EIP712_Quorum_And_Repayment`
+- **Assigned Role:** `[Lead 1: Smart Contract & Account Abstraction Architect]`
+- **Target Branch:** `feat/lead1-solidity-onchain-eip712-escrow`
+- **Primary Objective:** Build Layer 5 smart contract architecture under `contracts/`:
+  1. `contracts/foundry.toml`: dual Base Sepolia and FISCO BCOS v3 compatible compiler profile (`solc_version = "0.8.20"`, `evm_version = "paris"`, `via_ir = true`).
+  2. `contracts/src/MockBDTc.sol`: 18-decimal ERC-20 token representing digital Bangladeshi Taka.
+  3. `contracts/src/AgentSessionAccount.sol`: ERC-4337 `IAccount` smart account with bounded session key policy enforcing the strict $\alpha_j \le 40.0\%$ (4,000 bps) liability cap.
+  4. `contracts/src/KendraEscrow.sol`: on-chain EIP-712 `ECDSA.recover` 4-of-5 quorum verification, 40% liability cap enforcement, 98.5% direct B2B settlement, `repayFacility()` daily MFS sweep + 1.0% APR peer yield (`ySCT`) payout, and `triggerBesleyCoateBailout()`.
+  5. `contracts/script/DeployKendra.s.sol`: deterministic deployment script for Base Sepolia & FISCO BCOS.
+  6. `contracts/test/KendraEscrow.t.sol`: 8 comprehensive Foundry test cases verifying full lifecycle and security constraints.
+
+---
+
+## 2. Key Architecture & Cryptographic Decisions
+
+### 2.1 Dual-Chain EVM Compatibility (`paris` EVM, `solc 0.8.20`)
+- **No `PUSH0` Opcode:** By setting `evm_version = "paris"`, the compiled bytecode avoids the `PUSH0` opcode introduced in Shanghai (Solidity 0.8.24). This ensures identical bytecode deploys without modification to both enterprise consortium chains (FISCO BCOS v3 EVM nodes) and public rollups (Base Sepolia).
+
+### 2.2 On-Chain EIP-712 Quorum Verification
+- Implemented internal EIP-712 hashing:
+  - `BORROWER_INTENT_TYPEHASH = keccak256("BorrowerIntent(bytes32 invoiceId,address borrower,address supplier,uint256 principal,uint256 grossRepayment)")`
+  - `GUARANTEE_STAKE_TYPEHASH = keccak256("GuaranteeStake(bytes32 invoiceId,address borrower,address supplier,uint256 principal,address guarantor,uint256 stakeAmount)")`
+- Uses `ECDSA.recover` on-chain to verify the 1 borrower signature and 3 guarantor signatures passed in `bytes[4] calldata quorumSignatures`.
+- Reverts immediately with `INVALID_BORROWER_EIP712_SIGNATURE` or `INVALID_GUARANTOR_EIP712_SIGNATURE` if any cryptographic signature is forged or invalid.
+
+### 2.3 On-Chain 40.0% ($\alpha_j \le 0.40$) Liability Cap Enforcement
+- In `_verifyGuarantorsQuorum`, every guarantor's individual stake is checked against `(grossRepayment * MAX_STAKE_CAP_BPS) / 10000`. Any stake exceeding this limit reverts with `STAKE_EXCEEDS_40_PERCENT_CAP`.
+- Total stakes must equal `grossRepayment` ($100.0\%$).
+
+### 2.4 B2B Direct Settlement & Wholesaler MDR
+- Verifies counterparty against `isKYBSupplier[supplier]` (`X402_UNVERIFIED_SUPPLIER_ADDRESS`).
+- Calculates early-settlement payout: `netSupplierPayout = (principal * 985) / 1000` (e.g. `44,325 BDTc` on a `45,000 BDTc` invoice).
+- Transfers payout directly to supplier wallet (`0x71c...a91`, Meghna Group).
+
+### 2.5 Daily Repayment Sweeps & 1.0% APR Peer Yield (`ySCT`)
+- In `repayFacility(invoiceId, amount)`:
+  - Daily MFS micro-installments are swept into escrow.
+  - When `amountRepaid >= grossRepayment`, status transitions to `REPAID`.
+  - Automatically unlocks guarantor social collateral and distributes 1.0% APR peer micro-guarantee yield: `(stake * PEER_YIELD_APR_BPS * fac.tenorDays) / (10000 * 365)`.
+  - Expands borrower dynamic credit ceiling: `syndicateCreditMultiplierBps[borrower] += 1500` (+15%).
+
+---
+
+## 3. Test & Verification Matrix (Prompt 06)
+
+| Test ID | Test Name | Result | Gas | Verification |
+| :--- | :--- | :---: | :---: | :--- |
+| T1 | `test_executeSyndicateEscrow_success` | **PASS** | 612,548 | Verifies 4 EIP-712 signatures, 98.5% supplier transfer, collateral locks. |
+| T2 | `test_revertOnForgedBorrowerSignature` | **PASS** | 175,335 | Attacker key reverts with `INVALID_BORROWER_EIP712_SIGNATURE`. |
+| T3 | `test_revertOnForgedGuarantorSignature` | **PASS** | 192,429 | Attacker key reverts with `INVALID_GUARANTOR_EIP712_SIGNATURE`. |
+| T4 | `test_revertOnStakeExceeding40PercentCap` | **PASS** | 166,071 | 50% stake reverts with `STAKE_EXCEEDS_40_PERCENT_CAP`. |
+| T5 | `test_revertOnUnverifiedSupplierAddress` | **PASS** | 168,178 | Untrusted supplier reverts with `X402_UNVERIFIED_SUPPLIER_ADDRESS`. |
+| T6 | `test_repayFacility_dailySweeps_andSettlement` | **PASS** | 971,749 | Partial daily sweeps, full settlement, 1.0% APR yield payout, +15% credit ceiling. |
+| T7 | `test_triggerBesleyCoateBailout` | **PASS** | 638,757 | Monsoon flooding shock unlocks collateral without reputation slashing. |
+| T8 | `test_agentSessionAccount_boundedPolicy` | **PASS** | 141,185 | Session key registration, 40% cap check, expiry validation. |
+
+- **Foundry Test Suite Results:** **8 passed, 0 failed** in 3.81ms.
+- **Python Monorepo Test Suite Results:** **51 passed, 0 failed** across Prompts 02, 03, 04, 05.
+- **Combined Test Total:** **59 tests passed, 0 failed**.
+
+---
+
+## 4. Next Steps & Roadmap for Prompt 07
+
+Ready for **Prompt 07: Tier-1 ERC-4337 Session-Key Signer, Serverless Nonce Lock & Honest Live/Replay Relayer** (`api/core/chain_executor.py`):
+1. Branch: `feat/lead1-eip712-signer-and-relayer`
+2. Implement `ZeroTrustSessionKeySigner` to generate the 4 EIP-712 signatures matching `KendraEscrow.sol`.
+3. Implement `KendraChainRelayer` with serverless-safe nonce manager and honest transaction-mode badging.
+
+
+
 
 
 

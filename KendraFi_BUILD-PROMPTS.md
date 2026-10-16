@@ -261,9 +261,9 @@ Requirements:
 * **6. Senior Architect, Debugger & Tester Review (Potential Pitfalls & Edge Cases):**
   * *Why Proportional Redistribution Matters:* Equal redistribution (`deficit / len(uncapped)`) distorted the `7:5` weight ratio between `AGT-02` and `AGT-03`. Proportional redistribution (`deficit * w_j / sum_uncapped_w`) preserves Ghatak (1999) assortative proportionality and hits `0.3500` and `0.2500` on the nose[cite: 2].
 * **7. Feature Verification Checklist:**
-  - [ ] `compute_dscr` returns `(1.6800, 45462.33)` for `AGT-01` without any hardcoded overrides[cite: 2].
-  - [ ] `allocate_besley_coate_stakes` returns `0.4000` (`18,184.93 BDT`), `0.3500` (`15,911.82 BDT`), `0.2500` (`11,365.58 BDT`), and `0.0000` (`0.00 BDT`, $E[U_5] < 0$)[cite: 2].
-  - [ ] Circular $A \to B \to A$ wash transfers are discounted to zero and flagged by `compute_collusion_entropy`[cite: 2].
+  - [x] `compute_dscr` returns `(1.6800, 45462.33)` for `AGT-01` without any hardcoded overrides[cite: 2].
+  - [x] `allocate_besley_coate_stakes` returns `0.4000` (`18,184.93 BDT`), `0.3500` (`15,911.82 BDT`), `0.2500` (`11,365.58 BDT`), and `0.0000` (`0.00 BDT`, $E[U_5] < 0$)[cite: 2].
+  - [x] Circular $A \to B \to A$ wash transfers are discounted to zero and flagged by `compute_collusion_entropy`[cite: 2].
 
 ---
 
@@ -559,11 +559,11 @@ Requirements:
 Run through this final checklist to confirm that every prompt and every mathematical, cryptographic, and architectural fix is verified before submitting to **`wangyr@pbcsf.tsinghua.edu.cn`**[cite: 2]:
 
 ### 4.1 Mathematical & Logic Reconciliation Checklist
-- [ ] **Exact ACT/365 Gross Repayment:** $45,000 \times (1 + 0.125 \times 30 / 365) = \mathbf{45,462.33\text{ \textbf{BDT}}}$ everywhere (no `45,468` discrepancy).
-- [ ] **Exact Proportional Staking Shares:** `AGT-04` = **`40.0%` (`18,184.93 BDT`)**, `AGT-02` = **`35.0%` (`15,911.82 BDT`)**, `AGT-03` = **`25.0%` (`11,365.58 BDT`)**, `AGT-05` = **`0.0%` (`0.00 BDT`)**, summing to **`45,462.33 BDT`** via proportional uncapped weight redistribution[cite: 2].
-- [ ] **Economically Grounded Nash Utility ($E[U_j]$):** Continuation value $\delta V_j$ is computed from the $11.5\%$ APR savings over a 30-day cycle minus volatility shadow cost, yielding `+169.85 BDT` (`AGT-04`), `+64.12 BDT` (`AGT-02`), `+51.40 BDT` (`AGT-03`), and `-142.60 BDT` (`AGT-05` abstained)[cite: 2].
-- [ ] **Reconciled 12.50% APR Breakdown:** Borrower APR components sum to $8.50\% + 0.40\% + 1.40\% + 2.20\% = \mathbf{12.50\%\text{ \textbf{APR}}}$, while the wholesaler's `1.50%` flat MDR (`675.00 BDT`, leaving `44,325.00 BDT` net supplier payout) is accounted for separately[cite: 2].
-- [ ] **Deterministic $\text{DSCR} = 1.6800\text{x}$:** `generate_sandbox.py` standardizes `AGT-01` with $\hat{\mu}_{\text{in},1}=8,500$, $\hat{\mu}_{\text{out},1}=3,450$, $C_{\text{sub},1}=2,200$, and $\hat{\sigma}_{\text{net},1}=1,012.35\text{ BDT/day}$ so `compute_dscr()` outputs `1.6800` natively[cite: 2].
+- [x] **Exact ACT/365 Gross Repayment:** $45,000 \times (1 + 0.125 \times 30 / 365) = \mathbf{45,462.33\text{ \textbf{BDT}}}$ everywhere (no `45,468` discrepancy).
+- [x] **Exact Proportional Staking Shares:** `AGT-04` = **`40.0%` (`18,184.93 BDT`)**, `AGT-02` = **`35.0%` (`15,911.82 BDT`)**, `AGT-03` = **`25.0%` (`11,365.58 BDT`)**, `AGT-05` = **`0.0%` (`0.00 BDT`)**, summing to **`45,462.33 BDT`** via proportional uncapped weight redistribution[cite: 2].
+- [x] **Economically Grounded Nash Utility ($E[U_j]$):** Continuation value $\delta V_j$ is computed from the $11.5\%$ APR savings over a 30-day cycle minus volatility shadow cost, yielding `+169.85 BDT` (`AGT-04`), `+64.12 BDT` (`AGT-02`), `+51.40 BDT` (`AGT-03`), and `-142.60 BDT` (`AGT-05` abstained)[cite: 2].
+- [x] **Reconciled 12.50% APR Breakdown:** Borrower APR components sum to $8.50\% + 0.40\% + 1.40\% + 2.20\% = \mathbf{12.50\%\text{ \textbf{APR}}}$, while the wholesaler's `1.50%` flat MDR (`675.00 BDT`, leaving `44,325.00 BDT` net supplier payout) is accounted for separately[cite: 2].
+- [x] **Deterministic $\text{DSCR} = 1.6800\text{x}$:** `generate_sandbox.py` standardizes `AGT-01` with $\hat{\mu}_{\text{in},1}=8,500$, $\hat{\mu}_{\text{out},1}=3,450$, $C_{\text{sub},1}=2,200$, and $\hat{\sigma}_{\text{net},1}=1,012.35\text{ BDT/day}$ so `compute_dscr()` outputs `1.6800` natively[cite: 2].
 
 ### 4.2 Cryptographic, Smart Contract & Infrastructure Checklist
 - [ ] **Prompt 00 (`CONTEXT.md`):** Written to disk and referenced by Prompts 01–11[cite: 2].

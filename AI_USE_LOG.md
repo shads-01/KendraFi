@@ -438,35 +438,61 @@ The primary objectives were:
 
 ## 4. Cumulative Progress Tracking
 
-- **Prompts Completed:** 4 / 12 (Prompts 00, 01, 02, and 03 complete) — **33.3%**
-- **Tier-0 Perception & Firewall Layer:** 100% Complete
+- **Prompts Completed:** 5 / 12 (Prompts 00, 01, 02, 03, and 04 complete) — **41.7%**
+- **Tier-2 Quantitative Risk Engine Layer:** 100% Complete
 - **Files Created / Updated in this Session:**
-  1. `api/core/perception_sandbox.py` (complete Tier-0 sandbox and parallel firewall)
-  2. `api/data/fixtures/scenario_a_valid.json` (Scenario A benchmark fixture)
-  3. `api/data/fixtures/scenario_b_redteam.json` (Scenario B adversarial benchmark fixture)
-  4. `api/data/fixtures/scenario_c_sybil_wash.json` (Scenario C Sybil wash benchmark fixture)
-  5. `api/core/schemas.py` (added `__getitem__` subscript access to `ExtractedInvoiceIntent`)
-  6. `tests/test_prompt03_perception_firewall.py` (comprehensive 6-test suite)
-  7. `KendraFi_BUILD-PROMPTS.md` (updated Prompt 03 checklist to `[x]`)
-  8. `PROJECT_FILES_MANIFEST.md` (updated perception sandbox entry and prompt mapping table)
-  9. `AI_USE_LOG.md` (Session 4 entry recorded)
-- **Active Git Branch:** `feat/lead2-tier0-perception-firewall`
+  1. `api/core/risk_engine.py` (complete Tier-2 DeterministicRiskEngine with pure NumPy)
+  2. `tests/test_prompt04_risk_engine.py` (comprehensive 11-test suite)
+  3. `KendraFi_BUILD-PROMPTS.md` (updated Prompt 04 checklist items to `[x]`)
+  4. `AI_USE_LOG.md` (Session 5 entry recorded)
+- **Active Git Branch:** `feat/lead3-tier2-reconciled-risk-engine`
 
 ---
 
-## 5. Next Steps & Roadmap for Prompt 04
+## 5. Prompt 04 Execution History: Tier-2 Deterministic Python Risk Engine
 
-The Tier-0 perception sandbox is verified and ready for **Prompt 04: Tier-2 Deterministic Python Risk Engine (Exact DSCR, Economically Grounded Besley-Coate Utility & Wash-Trading Entropy)**:
-1. Branch to create: `feat/lead3-tier2-reconciled-risk-engine`
-2. Role to assume: `[Lead 3: Quant Risk & Supabase DB Lead]`
-3. Key deliverables for Prompt 04:
-   - `api/core/risk_engine.py`: 100% pure NumPy math (Zero LLM Math).
-   - Reconciled quantitative benchmarks:
-     - Principal $L_1 = 45,000.00\text{ BDT}$, 30 days tenor, $12.50\%\text{ APR}$.
-     - Gross Repayment $R_1 = 45,462.33\text{ BDT}$ (ACT/365).
-     - $\text{DSCR}_{1,t} = 1.6800\text{x} \ge 1.25$.
-     - Besley-Coate 40% cap & proportional redistribution: `AGT-04 = 40.0%`, `AGT-02 = 35.0%`, `AGT-03 = 25.0%`, `AGT-05 = 0.0%` (abstained, $CV=0.634 > 0.55$).
-     - Collusion entropy $H_{st} = 1.12 \ge 0.65$ with circular wash-transfer discounting.
+**Session ID:** Antigravity Session 5  
+**Timestamp:** 2026-10-16T23:22:00+06:00  
+**Branch:** `feat/lead3-tier2-reconciled-risk-engine`  
+**Lead Role Assumed:** `[Lead 3: Quantitative Risk, Supabase DB & Privacy-Preserving ML Lead]`  
+
+### 5.1 Objectives & Deliverables
+Implemented `DeterministicRiskEngine` in `api/core/risk_engine.py` with 100% pure NumPy math (Zero LLM Math):
+1. **ACT/365 DSCR & Gross Repayment:**
+   - $R_1 = \text{round}(45000 \times (1 + 0.125 \times 30 / 365), 2) = \mathbf{45,462.33\text{ BDT}}$.
+   - Discounts circular $A \to B \to A$ wash-trading inflows to zero prior to calculating net inflow statistics.
+   - $\text{CF}_{\text{proj},1} = (5,050 - 2,200) \times 30 - 1.645 \times 1,012.35 \times \sqrt{30} = \mathbf{76,378.70\text{ BDT}}$.
+   - $\text{DSCR}_{1,t} = \text{round}(76,378.70 / 45,462.33, 4) = \mathbf{1.6800\text{x}} \ge 1.25$.
+2. **Proportional Besley-Coate (1995) Staking:**
+   - Filters out high-volatility distressed peers ($CV_5 = 0.634 > 0.55 \implies \text{AGT-05}$ abstains with $\alpha_5^* = 0.0000$, stake = $0.00\text{ BDT}$).
+   - Weights active peers via Ghatak assortative metric $w_j = p_j \times \max(0, B_j)$.
+   - Caps single-agent participation at $\alpha_j \le 0.40$ (`AGT-04` caps at $0.4000 \implies 18,184.93\text{ BDT}$).
+   - Redistributes $0.6000$ residual deficit proportionally across uncapped weights ($w_j / \sum w_{\text{uncapped}}$), hitting exact $0.3500$ (`AGT-02` $\implies 15,911.82\text{ BDT}$) and $0.2500$ (`AGT-03` $\implies 11,365.58\text{ BDT}$).
+   - Total locked BDT collateral = exact $45,462.33\text{ BDT}$ (100.0% of $R_1$).
+3. **Economically Grounded Nash Expected Utility ($E[U_j]$):**
+   - Implemented continuation value $\delta V_j(\alpha_j^*)$ reflecting $11.50\%$ APR savings ($24.0\% \text{ MFI} - 12.5\% \text{ KendraFi}$) over 30 days on progressive credit line $1.5 B_j$.
+   - Reconciled expected utilities: `AGT-04` $= +169.85\text{ BDT}$, `AGT-02` $= +64.12\text{ BDT}$, `AGT-03` $= +51.40\text{ BDT}$, `AGT-05` $= -142.60\text{ BDT}$.
+4. **Spatio-Temporal & Wash-Trading Collusion Entropy ($H_{st}$):**
+   - $H_{st} = 0.45 H_{\text{sup}} + 0.25 H_{\text{time}} + 0.30 H_{\text{sender}} - 0.50 \rho_{\max}$.
+   - Healthy Karwan Bazar operations: $H_{st} = 1.12 \ge 0.65$, $\rho_{\max} = 0.15 \le 0.85$, circular wash ratio $= 0.0\% \le 5\%$.
+   - Scenario C (`SCENARIO_C_SYBIL_WASH`): flags circular wash volume and returns `(False, "SYBIL_WASH_COLLUSION_HOLD", metrics)`.
+
+### 5.2 Test Execution & Verification
+- Test Suite: `tests/test_prompt04_risk_engine.py` (11 tests passed).
+- Complete Test Suite across all prompts: **39 passed in 2.84s** (0 failures).
+
+---
+
+## 6. Next Steps & Roadmap for Prompt 05
+
+The Tier-2 Deterministic Risk Engine is complete and verified. Ready for **Prompt 05: Layer-4 Elliptic-Curve (`secp256k1`) Pedersen Commitments, 16-Bit Disjunctive Range Proof & WeBank FATE Hetero-LR Scorer**:
+1. Branch to create: `feat/lead3-secp256k1-zk-range-proof`
+2. Role to assume: `[Lead 3: Quant Risk, Supabase DB & Privacy-Preserving ML Lead]`
+3. Key deliverables for Prompt 05:
+   - `api/core/zk_fate_privacy.py`: `Secp256k1PedersenRangeProver` with $C_i = vG + r_iH$ and 16 CDS94 bit-proofs.
+   - WeBank FATE Heterogeneous Logistic Regression survival score $p_1 = 98.5\%$.
+   - Comprehensive test suite in `tests/test_prompt05_zk_fate.py`.
+
 
 
 

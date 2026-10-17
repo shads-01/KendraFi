@@ -397,7 +397,7 @@ export const MerchantMobilePanel: React.FC<MerchantMobilePanelProps> = ({
             <span className="text-purple-400 font-bold">-675.00 BDT</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-slate-400">Net Direct Supplier Payout ($L_1 - \text{MDR}$):</span>
+            <span className="text-slate-400">Net Direct Supplier Payout (L₁ - MDR):</span>
             <span className="text-emerald-400 font-bold">44,325.00 BDTc</span>
           </div>
         </div>

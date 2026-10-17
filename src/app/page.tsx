@@ -174,7 +174,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#070B14] flex flex-col">
+    <div className="min-h-screen bg-[#F4F5F7] flex flex-col">
       {/* Top HUD Header */}
       <JudgeCommandHeader
         fsmState={fsmState}
@@ -188,7 +188,7 @@ export default function HomePage() {
       {/* Main 3-Panel Split-Screen Container with Dynamic Judge Zoom */}
       <main
         style={{ transform: `scale(${zoomLevel})`, transformOrigin: "top center" }}
-        className="flex-1 w-full max-w-[1720px] mx-auto p-4 transition-transform duration-300"
+        className="flex-1 w-full max-w-[1720px] mx-auto p-5 transition-transform duration-300"
       >
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
           {/* LEFT PANEL: Merchant Mobile & Scenarios (4 Cols) */}
@@ -216,93 +216,99 @@ export default function HomePage() {
             />
           </section>
 
-          {/* RIGHT PANEL PREVIEW: Zero-Trust Security & On-Chain Settlement (3 Cols) */}
+          {/* RIGHT PANEL: Zero-Trust Security & On-Chain Settlement (3 Cols) */}
           <section className="lg:col-span-3 flex flex-col gap-4">
-            <div className="flex items-center justify-between border-b border-white/10 pb-2">
+            <div className="flex items-center justify-between pb-2">
               <div className="flex items-center gap-2">
-                <Lock className="h-4 w-4 text-emerald-400" />
-                <h2 className="text-sm font-bold uppercase tracking-wider font-mono text-slate-200">
-                  Right Panel: Security &amp; Settlement
+                <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#E8F8F0]">
+                  <Lock className="h-4 w-4 text-[#00A35C]" />
+                </div>
+                <h2 className="text-sm font-bold text-[#1A1D1F]">
+                  Security &amp; Settlement
                 </h2>
               </div>
-              <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 px-1.5 py-0.5 rounded border border-emerald-500/30">
+              <span className="chip-info text-[10px]">
                 Prompt 10 Ready
               </span>
             </div>
 
-            {/* High-Visibility Red Security Intercept Alert */}
+            {/* High-Visibility Security Intercept Alert — Planora blush/peach elevated card */}
             {securityAlert && (
               <div
-                className={`rounded-2xl border p-3.5 flex flex-col gap-2 animate-pulse ${
+                className={`planora-card-elevated flex flex-col gap-2 animate-pulse ${
                   securityAlert.color === "rose"
-                    ? "border-rose-500/60 bg-rose-950/40 text-rose-200"
-                    : "border-purple-500/60 bg-purple-950/40 text-purple-200"
+                    ? "!bg-[#FEECEE] !border-[#FF1744]/30"
+                    : "!bg-[#FFF0E6] !border-[#FF5C00]/30"
                 }`}
               >
-                <div className="flex items-center gap-2 font-bold text-xs font-mono">
-                  <ShieldAlert className="h-4 w-4 text-rose-400" />
-                  <span>{securityAlert.tier}</span>
+                <div className="flex items-center gap-2 font-bold text-xs">
+                  <ShieldAlert className={`h-4 w-4 ${
+                    securityAlert.color === "rose" ? "text-[#FF1744]" : "text-[#FF5C00]"
+                  }`} />
+                  <span className={
+                    securityAlert.color === "rose" ? "text-[#FF1744]" : "text-[#FF5C00]"
+                  }>{securityAlert.tier}</span>
                 </div>
-                <p className="text-[11px] font-sans leading-relaxed">{securityAlert.message}</p>
+                <p className="text-[11px] text-[#2D3135] leading-relaxed">{securityAlert.message}</p>
               </div>
             )}
 
             {/* 4-Tier Security Gate Summary Card */}
-            <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-3.5 space-y-2 text-[11px] font-mono">
-              <span className="text-xs font-bold text-white uppercase tracking-wider block border-b border-white/5 pb-1.5">
+            <div className="planora-card space-y-2.5 text-[12px]">
+              <span className="text-[13px] font-bold text-[#1A1D1F] block border-b border-[#EDEFF2] pb-2">
                 4-Tier Zero-Trust Guardrails
               </span>
-              <div className="flex justify-between items-center text-slate-300">
-                <span>Tier 0: Multimodal Prompt Sanitizer:</span>
-                <span className="text-emerald-400 font-bold">ACTIVE</span>
+              <div className="flex justify-between items-center">
+                <span className="text-[#717579]">Tier 0: Multimodal Prompt Sanitizer:</span>
+                <span className="chip-success">ACTIVE</span>
               </div>
-              <div className="flex justify-between items-center text-slate-300">
-                <span>Tier 1: Bounded ERC-4337 Session Keys:</span>
-                <span className="text-emerald-400 font-bold">40% CAP</span>
+              <div className="flex justify-between items-center">
+                <span className="text-[#717579]">Tier 1: Bounded ERC-4337 Session Keys:</span>
+                <span className="chip-progress">40% CAP</span>
               </div>
-              <div className="flex justify-between items-center text-slate-300">
-                <span>Tier 2: NumPy Zero-LLM Risk Engine:</span>
-                <span className="text-cyan-400 font-bold">DSCR 1.68x</span>
+              <div className="flex justify-between items-center">
+                <span className="text-[#717579]">Tier 2: NumPy Zero-LLM Risk Engine:</span>
+                <span className="chip-info">DSCR 1.68x</span>
               </div>
-              <div className="flex justify-between items-center text-slate-300">
-                <span>Tier 3: KendraEscrow EIP-712 Quorum:</span>
-                <span className="text-emerald-400 font-bold">PARIS EVM</span>
+              <div className="flex justify-between items-center">
+                <span className="text-[#717579]">Tier 3: KendraEscrow EIP-712 Quorum:</span>
+                <span className="chip-success">PARIS EVM</span>
               </div>
             </div>
 
             {/* On-Chain Settlement Card */}
-            <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-3.5 space-y-2 text-[11px] font-mono">
-              <div className="flex items-center justify-between border-b border-white/5 pb-1.5">
-                <span className="text-xs font-bold text-white uppercase tracking-wider">
+            <div className="planora-card space-y-2.5 text-[12px]">
+              <div className="flex items-center justify-between border-b border-[#EDEFF2] pb-2">
+                <span className="text-[13px] font-bold text-[#1A1D1F]">
                   Direct B2B Escrow Settlement
                 </span>
-                <span className="text-[9px] text-emerald-400 font-bold bg-emerald-950/60 px-1.5 py-0.5 rounded border border-emerald-500/30">
+                <span className="chip-success text-[9px]">
                   Topic F (+5 Bonus)
                 </span>
               </div>
 
-              <div className="space-y-1 text-slate-300">
+              <div className="space-y-1.5">
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Loan Principal:</span>
-                  <span className="text-white font-bold">45,000.00 BDTc</span>
+                  <span className="text-[#717579]">Loan Principal:</span>
+                  <span className="text-[#1A1D1F] font-bold">45,000.00 BDTc</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Wholesaler MDR (1.5%):</span>
-                  <span className="text-purple-400 font-bold">-675.00 BDTc</span>
+                  <span className="text-[#717579]">Wholesaler MDR (1.5%):</span>
+                  <span className="text-[#FF1744] font-bold">-675.00 BDTc</span>
                 </div>
-                <div className="flex justify-between border-t border-white/5 pt-1">
-                  <span className="text-slate-400">Net Supplier Direct Payout:</span>
-                  <span className="text-emerald-400 font-bold">44,325.00 BDTc</span>
+                <div className="flex justify-between border-t border-[#EDEFF2] pt-1.5">
+                  <span className="text-[#717579]">Net Supplier Direct Payout:</span>
+                  <span className="text-[#00A35C] font-bold">44,325.00 BDTc</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Gross Borrower Repayment:</span>
-                  <span className="text-white font-bold">45,462.33 BDTc</span>
+                  <span className="text-[#717579]">Gross Borrower Repayment:</span>
+                  <span className="text-[#1A1D1F] font-bold">45,462.33 BDTc</span>
                 </div>
               </div>
 
-              {/* Blockscout Link */}
-              <div className="pt-2 border-t border-white/10 flex flex-col gap-1.5">
-                <span className="text-[10px] text-slate-400">Base Sepolia / FISCO BCOS Receipt:</span>
+              {/* Blockscout Link — Planora pill button */}
+              <div className="pt-2 border-t border-[#EDEFF2] flex flex-col gap-1.5">
+                <span className="text-[10px] text-[#717579]">Base Sepolia / FISCO BCOS Receipt:</span>
                 <a
                   href={
                     txResult?.explorerUrl ||
@@ -310,7 +316,7 @@ export default function HomePage() {
                   }
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between p-2 rounded-xl border border-indigo-500/30 bg-indigo-950/30 hover:bg-indigo-950/60 text-indigo-300 text-[10px] font-mono transition group"
+                  className="flex items-center justify-between p-2.5 rounded-2xl border border-[#EBF5FF] bg-[#EBF5FF] hover:bg-[#D6EBFF] text-[#0084FF] text-[10px] font-mono transition group"
                 >
                   <span className="truncate max-w-[210px]">
                     {txResult?.txHash || "0x23f5b7b576f863dd1dc2c7032a151363aa3d4ad9f1af91017502753aea21c5b9"}

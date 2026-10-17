@@ -1,0 +1,91 @@
+{
+  "benchmark_label": "Empirical Synthetic Karwan Bazar Monte Carlo Backtest (1,000 Kendras / 5,000 Merchants) - benchmarked against WeBank's published +12% FATE Hetero-LR AUC uplift.",
+  "scientific_citations": [
+    "WeBank FATE (Federated AI Technology Enabler) IEEE P3652.1 Published Benchmark (+12% AUC Uplift in Micro-Enterprise Underwriting)",
+    "Ghatak, M. (1999) 'Group Lending, Local Information and Peer Selection', Journal of Development Economics",
+    "Besley, T. and Coate, S. (1995) 'Group Lending, Repayment Incentives and Social Collateral', Journal of Development Economics",
+    "Stiglitz, J. E. (1990) 'Peer Monitoring and Credit Markets', World Bank Economic Review"
+  ],
+  "dataset_parameters": {
+    "kendras_count": 1000,
+    "merchants_count": 5000,
+    "train_merchants": 4000,
+    "test_merchants": 1000,
+    "ground_truth_test_defaults": 367,
+    "test_default_rate_pct": 36.7
+  },
+  "solo_mfs_baseline": {
+    "model_type": "Logistic Regression (Solo MFS Features X_A only)",
+    "roc_auc": 0.719,
+    "pr_auc": 0.5903,
+    "brier_score": 0.2018,
+    "portfolio_npl_default_rate_pct": 27.21,
+    "net_bank_loss_pct": 27.21,
+    "approval_rate_pct": 69.1
+  },
+  "kendrafi_fate_protocol": {
+    "model_type": "Logistic Regression (WeBank FATE X_A, X_B + Besley-Coate Peer Staking)",
+    "roc_auc": 0.8769,
+    "pr_auc": 0.8233,
+    "brier_score": 0.1338,
+    "raw_borrower_stress_rate_pct": 15.54,
+    "net_bank_loss_pct": 10.68,
+    "peer_stake_absorption_rate_pct": 31.31,
+    "approval_rate_pct": 63.7
+  },
+  "empirical_uplifts": {
+    "absolute_auc_increase": 0.1579,
+    "relative_auc_uplift_pct": 21.96,
+    "published_webank_target_pct": 12.0,
+    "meets_webank_target": true,
+    "net_bank_loss_reduction_pct": 60.76,
+    "brier_error_reduction_pct": 33.71
+  },
+  "feature_importance_ranking": [
+    {
+      "feature": "besley_coate_peer_stake_share",
+      "weight": -0.7325,
+      "abs_weight": 0.7325
+    },
+    {
+      "feature": "fate_supplier_kyb_consistency",
+      "weight": -0.4357,
+      "abs_weight": 0.4357
+    },
+    {
+      "feature": "spatiotemporal_entropy_hst",
+      "weight": -0.3064,
+      "abs_weight": 0.3064
+    },
+    {
+      "feature": "fate_invoice_volume_velocity",
+      "weight": -0.2779,
+      "abs_weight": 0.2779
+    },
+    {
+      "feature": "cashflow_cv_ratio",
+      "weight": 0.2451,
+      "abs_weight": 0.2451
+    },
+    {
+      "feature": "monsoon_flash_bailout_buffer",
+      "weight": -0.2451,
+      "abs_weight": 0.2451
+    },
+    {
+      "feature": "mfs_inflow_mean_bdt",
+      "weight": -0.0692,
+      "abs_weight": 0.0692
+    },
+    {
+      "feature": "dscr_projected_ratio",
+      "weight": -0.0517,
+      "abs_weight": 0.0517
+    },
+    {
+      "feature": "mfs_tx_count_30d",
+      "weight": 0.0442,
+      "abs_weight": 0.0442
+    }
+  ]
+}

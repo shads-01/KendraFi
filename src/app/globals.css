@@ -3,186 +3,323 @@
 @tailwind utilities;
 
 /* ═══════════════════════════════════════════════════════════════
-   KendraFi — Planora Light Design System (DESIGN.md)
-   Clean Enterprise Light Theme with Orange #FF5C00 Primary
+   KendraFi — Planora Enterprise Design System (DESIGN.md)
+   Clean Enterprise Theme with Orange #FF5C00 Primary & Lively Motion
    ═══════════════════════════════════════════════════════════════ */
 
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 :root {
   --canvas: #F4F5F7;
   --card: #FFFFFF;
-  --border: #EDEFF2;
-  --charcoal: #1A1D1F;
-  --body: #2D3135;
-  --muted: #717579;
+  --border: #E5E7EB;
+  --border-focus: #FF5C00;
+  --charcoal: #111827;
+  --body: #1F2937;
+  --muted: #4B5563;
+  --muted-light: #6B7280;
   --primary: #FF5C00;
-  --primary-hover: #E55200;
+  --primary-hover: #E05200;
   --primary-tint: #FFF0E6;
   --primary-tint-border: #FFD8BF;
-  --success: #00A35C;
-  --success-tint: #E8F8F0;
-  --attention: #FF1744;
-  --attention-tint: #FEECEE;
-  --info: #0084FF;
-  --info-tint: #EBF5FF;
+  --success: #059669;
+  --success-tint: #ECFDF5;
+  --attention: #DC2626;
+  --attention-tint: #FEF2F2;
+  --info: #0284C7;
+  --info-tint: #F0F9FF;
+  --purple: #7C3AED;
+  --purple-tint: #F5F3FF;
 }
 
 body {
   background-color: var(--canvas);
   color: var(--body);
-  font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ─── Custom Scrollbars (Light Theme) ──────────────────────── */
+/* ─── Custom Scrollbars (Clean Enterprise) ───────────────────── */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #F4F5F7;
+  background: #F3F4F6;
 }
 ::-webkit-scrollbar-thumb {
-  background: #D1D5DB;
+  background: #CBD5E1;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #9CA3AF;
+  background: #94A3B8;
 }
 
-/* ─── Planora Card Surfaces ────────────────────────────────── */
+/* ─── Enhanced Card Surfaces with 3D Depth ───────────────────── */
 .planora-card {
   background: #FFFFFF;
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 2px 12px -2px rgba(0, 0, 0, 0.04);
-  border: 1px solid #EDEFF2;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+  border: 1px solid #E5E7EB;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.planora-card-interactive {
+  background: #FFFFFF;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+  border: 1.5px solid #E5E7EB;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.planora-card-interactive:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.1), 0 4px 12px -2px rgba(255, 92, 0, 0.06);
+  border-color: #FFD8BF;
 }
 
 .planora-card-elevated {
   background: #FFFFFF;
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.08);
-  border: 1px solid transparent;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.1), 0 4px 12px -2px rgba(0, 0, 0, 0.04);
+  border: 1.5px solid transparent;
 }
 
-/* ─── Semantic Status Chip Utilities ───────────────────────── */
+/* ─── Larger, High-Contrast Semantic Chips ───────────────────── */
 .chip-success {
-  background: #E8F8F0;
-  color: #00A35C;
+  background: #ECFDF5;
+  color: #065F46;
   font-weight: 700;
-  font-size: 10px;
-  padding: 2px 10px;
+  font-size: 12px;
+  line-height: 1.2;
+  padding: 4px 12px;
   border-radius: 9999px;
+  border: 1px solid #A7F3D0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .chip-attention {
-  background: #FEECEE;
-  color: #FF1744;
+  background: #FEF2F2;
+  color: #991B1B;
   font-weight: 700;
-  font-size: 10px;
-  padding: 2px 10px;
+  font-size: 12px;
+  line-height: 1.2;
+  padding: 4px 12px;
   border-radius: 9999px;
+  border: 1px solid #FECACA;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .chip-progress {
   background: #FFF0E6;
-  color: #FF5C00;
+  color: #C2410C;
   font-weight: 700;
-  font-size: 10px;
-  padding: 2px 10px;
+  font-size: 12px;
+  line-height: 1.2;
+  padding: 4px 12px;
   border-radius: 9999px;
+  border: 1px solid #FFD8BF;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .chip-info {
-  background: #EBF5FF;
-  color: #0084FF;
+  background: #F0F9FF;
+  color: #0369A1;
   font-weight: 700;
-  font-size: 10px;
-  padding: 2px 10px;
+  font-size: 12px;
+  line-height: 1.2;
+  padding: 4px 12px;
   border-radius: 9999px;
+  border: 1px solid #BAE6FD;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chip-purple {
+  background: #F5F3FF;
+  color: #5B21B6;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 1.2;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  border: 1px solid #DDD6FE;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .chip-neutral {
-  background: #F4F5F7;
-  color: #717579;
+  background: #F3F4F6;
+  color: #374151;
   font-weight: 700;
-  font-size: 10px;
-  padding: 2px 10px;
+  font-size: 12px;
+  line-height: 1.2;
+  padding: 4px 12px;
   border-radius: 9999px;
+  border: 1px solid #E5E7EB;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
-/* ─── CTA Button Glow ──────────────────────────────────────── */
-.btn-cta {
-  background: #FF5C00;
+/* ─── Animated CTA Buttons with Shimmer & Pulse ──────────────── */
+.btn-animated-primary {
+  background: linear-gradient(135deg, #FF5C00 0%, #FF7A00 50%, #FF5C00 100%);
+  background-size: 200% 200%;
   color: #FFFFFF;
   font-weight: 700;
-  padding: 10px 20px;
-  border-radius: 9999px;
-  box-shadow: 0 4px 14px rgba(255, 92, 0, 0.3);
-  transition: all 0.2s ease;
-}
-.btn-cta:hover {
-  background: #E55200;
-  box-shadow: 0 6px 20px rgba(255, 92, 0, 0.4);
-}
-
-/* ─── Active Nav Pill ──────────────────────────────────────── */
-.nav-pill-active {
-  background: #FFF0E6;
-  color: #FF5C00;
-  font-weight: 700;
-  padding: 8px 14px;
-  border-radius: 12px;
-}
-
-/* ─── Progress Bar Tracks ──────────────────────────────────── */
-.progress-track {
-  height: 6px;
-  background: #EDEFF2;
-  border-radius: 9999px;
+  padding: 12px 26px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(255, 92, 0, 0.35);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
   overflow: hidden;
 }
+.btn-animated-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255, 92, 0, 0.45);
+  background-position: right center;
+}
+.btn-animated-primary:active {
+  transform: scale(0.97);
+}
 
-.progress-fill-orange {
-  height: 100%;
+.btn-animated-secondary {
+  background: #FFFFFF;
+  color: #1F2937;
+  font-weight: 700;
+  padding: 12px 24px;
+  border-radius: 16px;
+  border: 1.5px solid #E5E7EB;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-animated-secondary:hover {
+  background: #F9FAFB;
+  border-color: #D1D5DB;
+  transform: translateY(-1px);
+}
+.btn-animated-secondary:active {
+  transform: scale(0.97);
+}
+
+/* ─── Animated Keyframes ─────────────────────────────────────── */
+@keyframes pulseGlowOrange {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 92, 0, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(255, 92, 0, 0);
+  }
+}
+
+@keyframes pulseGlowGreen {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(5, 150, 105, 0);
+  }
+}
+
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes shimmerSlide {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes waveBarBounce {
+  0%, 100% {
+    transform: scaleY(0.3);
+  }
+  50% {
+    transform: scaleY(1.0);
+  }
+}
+
+@keyframes networkDataFlow {
+  0% {
+    stroke-dashoffset: 24;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-pulse-glow-orange {
+  animation: pulseGlowOrange 2.5s infinite;
+}
+
+.animate-pulse-glow-green {
+  animation: pulseGlowGreen 2.5s infinite;
+}
+
+.animate-float-slow {
+  animation: floatSlow 4s ease-in-out infinite;
+}
+
+.animate-data-flow {
+  stroke-dasharray: 6 6;
+  animation: networkDataFlow 1.2s linear infinite;
+}
+
+/* ─── Equalizer Waveform Bars ────────────────────────────────── */
+.wave-bar {
+  display: inline-block;
+  width: 4px;
   background: #FF5C00;
   border-radius: 9999px;
-  transition: width 0.5s ease;
+  transform-origin: bottom;
+  animation: waveBarBounce 1.2s ease-in-out infinite;
 }
 
-.progress-fill-green {
-  height: 100%;
-  background: #00A35C;
-  border-radius: 9999px;
-  transition: width 0.5s ease;
-}
-
-.progress-fill-blue {
-  height: 100%;
-  background: #0084FF;
-  border-radius: 9999px;
-  transition: width 0.5s ease;
-}
-
-/* ─── Phone Chassis (Light ceramic) ────────────────────────── */
+/* ─── Phone Chassis (Polished Ceramic) ───────────────────────── */
 .phone-chassis {
-  background: linear-gradient(135deg, #E8EAED 0%, #F1F3F5 50%, #DFE2E6 100%);
-  border-radius: 32px;
-  padding: 12px;
-  box-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  border: 1.5px solid #D1D5DB;
+  background: linear-gradient(145deg, #FFFFFF 0%, #F3F4F6 50%, #E5E7EB 100%);
+  border-radius: 36px;
+  padding: 14px;
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.8);
+  border: 2px solid #D1D5DB;
+  transition: all 0.3s ease;
 }
 
-/* ─── Subtle hover lift for cards ──────────────────────────── */
-.hover-lift {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.hover-lift:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.08);
+/* ─── View Switcher Segmented Pill ───────────────────────────── */
+.view-tab-active {
+  background: #FFFFFF;
+  color: #111827;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
 }

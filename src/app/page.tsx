@@ -1,10 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import JudgeCommandHeader from "@/components/JudgeCommandHeader";
+import JudgeCommandHeader, { type HeaderViewType } from "@/components/JudgeCommandHeader";
 import MerchantMobilePanel from "@/components/MerchantMobilePanel";
 import KendraArenaPanel from "@/components/KendraArenaPanel";
 import SecurityEscrowPanel from "@/components/SecurityEscrowPanel";
+import ProtocolLandingView from "@/components/ProtocolLandingView";
+import MonteCarloAnalyticsView from "@/components/MonteCarloAnalyticsView";
 import type {
   FSMState,
   TransactionMode,
@@ -15,6 +17,7 @@ import type {
 } from "@/types";
 
 export default function HomePage() {
+  const [activeView, setActiveView] = useState<HeaderViewType>("landing");
   const [fsmState, setFsmState] = useState<FSMState>("IDLE_MONITORING");
   const [txMode, setTxMode] = useState<TransactionMode>("LIVE_RPC_BROADCAST");
   const [latencyMs, setLatencyMs] = useState<number>(14.2);
@@ -118,6 +121,12 @@ export default function HomePage() {
     }
   };
 
+  // Launch scenario directly from landing page or anywhere else
+  const handleLaunchScenarioFromLanding = (scenario: ScenarioType) => {
+    setActiveView("command_center");
+    handleSelectScenario(scenario);
+  };
+
   // Trigger post-loan simulated 30-day MFS repayment sweep
   const handleTriggerRepaySweep = async () => {
     setIsExecuting(true);
@@ -177,7 +186,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-[#F4F5F7] flex flex-col">
-      {/* Top HUD Header */}
+      {/* Top HUD Header with Multi-View Switcher */}
       <JudgeCommandHeader
         fsmState={fsmState}
         txMode={txMode}
@@ -185,54 +194,76 @@ export default function HomePage() {
         zoomLevel={zoomLevel}
         onZoomChange={setZoomLevel}
         isExecuting={isExecuting}
+        activeView={activeView}
+        onViewChange={setActiveView}
       />
 
-      {/* Main 3-Panel Split-Screen Container with Dynamic Judge Zoom */}
-      <main
-        style={{ transform: `scale(${zoomLevel})`, transformOrigin: "top center" }}
-        className="flex-1 w-full max-w-[1720px] mx-auto p-5 transition-transform duration-300"
-      >
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-          {/* LEFT PANEL: Merchant Mobile & Scenarios (4 Cols) */}
-          <section className="lg:col-span-4 flex flex-col">
-            <MerchantMobilePanel
-              activeScenario={activeScenario}
-              onSelectScenario={handleSelectScenario}
-              onTriggerRepaySweep={handleTriggerRepaySweep}
-              isExecuting={isExecuting}
-              repaymentProgress={repaymentProgress}
-            />
-          </section>
+      {/* Main Content Area based on Active View */}
+      {activeView === "landing" && (
+        <main className="flex-1 w-full animate-fadeIn">
+          <ProtocolLandingView
+            onLaunchCommandCenter={() => setActiveView("command_center")}
+            onLaunchBacktest={() => setActiveView("backtest")}
+            onSelectScenarioAndLaunch={handleLaunchScenarioFromLanding}
+          />
+        </main>
+      )}
 
-          {/* CENTER PANEL: 5-Agent Pentagon Arena & ZK Solvency (5 Cols) */}
-          <section className="lg:col-span-5 flex flex-col">
-            <KendraArenaPanel
-              fsmState={fsmState}
-              cnpMessages={cnpMessages}
-              peerVotes={peerVotes}
-              zkProof={zkProof}
-              dscr={dscr}
-              grossRepaymentBdt={grossRepaymentBdt}
-              onTriggerBailout={handleTriggerBailout}
-              isExecuting={isExecuting}
-            />
-          </section>
+      {activeView === "backtest" && (
+        <main className="flex-1 w-full animate-fadeIn py-6">
+          <MonteCarloAnalyticsView
+            onBackToCommandCenter={() => setActiveView("command_center")}
+          />
+        </main>
+      )}
 
-          {/* RIGHT PANEL: Zero-Trust Security & On-Chain Settlement (3 Cols) */}
-          <section className="lg:col-span-3 flex flex-col">
-            <SecurityEscrowPanel
-              fsmState={fsmState}
-              activeScenario={activeScenario}
-              securityAlert={securityAlert}
-              txResult={txResult}
-              txMode={txMode}
-              quorumSignatures={quorumSignatures}
-              grossRepaymentBdt={grossRepaymentBdt}
-              dscr={dscr}
-            />
-          </section>
-        </div>
-      </main>
+      {activeView === "command_center" && (
+        <main
+          style={{ transform: `scale(${zoomLevel})`, transformOrigin: "top center" }}
+          className="flex-1 w-full max-w-[1720px] mx-auto p-4 sm:p-6 transition-transform duration-300 animate-fadeIn"
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+            {/* LEFT PANEL: Merchant Mobile & Scenarios (4 Cols) */}
+            <section className="lg:col-span-4 flex flex-col">
+              <MerchantMobilePanel
+                activeScenario={activeScenario}
+                onSelectScenario={handleSelectScenario}
+                onTriggerRepaySweep={handleTriggerRepaySweep}
+                isExecuting={isExecuting}
+                repaymentProgress={repaymentProgress}
+              />
+            </section>
+
+            {/* CENTER PANEL: 5-Agent Pentagon Arena & ZK Solvency (5 Cols) */}
+            <section className="lg:col-span-5 flex flex-col">
+              <KendraArenaPanel
+                fsmState={fsmState}
+                cnpMessages={cnpMessages}
+                peerVotes={peerVotes}
+                zkProof={zkProof}
+                dscr={dscr}
+                grossRepaymentBdt={grossRepaymentBdt}
+                onTriggerBailout={handleTriggerBailout}
+                isExecuting={isExecuting}
+              />
+            </section>
+
+            {/* RIGHT PANEL: Zero-Trust Security & On-Chain Settlement (3 Cols) */}
+            <section className="lg:col-span-3 flex flex-col">
+              <SecurityEscrowPanel
+                fsmState={fsmState}
+                activeScenario={activeScenario}
+                securityAlert={securityAlert}
+                txResult={txResult}
+                txMode={txMode}
+                quorumSignatures={quorumSignatures}
+                grossRepaymentBdt={grossRepaymentBdt}
+                dscr={dscr}
+              />
+            </section>
+          </div>
+        </main>
+      )}
     </div>
   );
 }

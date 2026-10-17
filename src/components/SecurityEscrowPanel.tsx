@@ -20,6 +20,8 @@ import {
   Coins,
   ArrowRight,
   Info,
+  Sparkles,
+  Zap,
 } from "lucide-react";
 
 interface SecurityEscrowPanelProps {
@@ -114,41 +116,41 @@ export default function SecurityEscrowPanel({
   ];
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-5">
       {/* Panel Navigation & Header Bar */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#E8F8F0]">
-            <Shield className="h-4 w-4 text-[#00A35C]" />
+        <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-[#E8F8F0] shadow-sm">
+            <Shield className="h-5 w-5 text-[#00A35C]" />
           </div>
           <div>
-            <h2 className="text-sm font-bold text-[#1A1D1F]">
+            <h2 className="text-base sm:text-lg font-extrabold text-[#111827]">
               Zero-Trust &amp; Settlement
             </h2>
-            <p className="text-[10px] text-[#717579]">
+            <p className="text-xs text-[#6B7280]">
               Gateways &bull; 4-of-5 Quorum &bull; Blockscout
             </p>
           </div>
         </div>
 
         {/* Tab Switcher: Live Firewall vs Monte Carlo Backtest */}
-        <div className="flex items-center bg-[#ECEFF2] p-0.5 rounded-xl text-[11px] font-semibold">
+        <div className="flex items-center bg-[#ECEFF2] p-1 rounded-2xl text-xs font-bold">
           <button
             onClick={() => setActiveTab("firewall")}
-            className={`px-2.5 py-1 rounded-lg transition ${
+            className={`px-3 py-1.5 rounded-xl transition ${
               activeTab === "firewall"
-                ? "bg-white text-[#1A1D1F] shadow-sm"
-                : "text-[#717579] hover:text-[#1A1D1F]"
+                ? "bg-white text-[#111827] shadow-sm"
+                : "text-[#6B7280] hover:text-[#111827]"
             }`}
           >
             Live Feed
           </button>
           <button
             onClick={() => setActiveTab("backtest")}
-            className={`px-2.5 py-1 rounded-lg transition ${
+            className={`px-3 py-1.5 rounded-xl transition ${
               activeTab === "backtest"
                 ? "bg-white text-[#FF5C00] shadow-sm"
-                : "text-[#717579] hover:text-[#1A1D1F]"
+                : "text-[#6B7280] hover:text-[#111827]"
             }`}
           >
             Backtest
@@ -160,82 +162,82 @@ export default function SecurityEscrowPanel({
         /* ================================================================= */
         /* TAB 2: EMPIRICAL MONTE CARLO BACKTEST BENCHMARK DRAWER             */
         /* ================================================================= */
-        <div className="planora-card space-y-3.5 text-[12px] animate-fadeIn">
-          <div className="flex items-center justify-between border-b border-[#EDEFF2] pb-2">
+        <div className="planora-card-interactive space-y-4 text-xs animate-fadeIn">
+          <div className="flex items-center justify-between border-b border-[#EDEFF2] pb-3">
             <div>
-              <span className="text-[13px] font-bold text-[#1A1D1F] block">
+              <span className="text-sm sm:text-base font-extrabold text-[#111827] block">
                 Empirical Karwan Bazar Backtest
               </span>
-              <span className="text-[10px] text-[#717579]">
+              <span className="text-xs text-[#6B7280]">
                 1,000 Kendras &bull; 5,000 Synthetic Nano-Merchants
               </span>
             </div>
-            <span className="chip-purple text-[10px]">
+            <span className="chip-purple text-xs font-bold py-1 px-3">
               WeBank FATE Uplift
             </span>
           </div>
 
-          <div className="bg-[#FAFBFD] p-3 rounded-2xl border border-[#EDEFF2] space-y-2">
-            <p className="text-[11px] text-[#2D3135] leading-relaxed">
+          <div className="bg-[#FAFBFD] p-3.5 rounded-2xl border border-[#EDEFF2] space-y-2">
+            <p className="text-xs text-[#374151] leading-relaxed">
               Empirical Synthetic Karwan Bazar Monte Carlo Backtest (1,000 Kendras / 5,000 Merchants) — benchmarked against WeBank&apos;s published <strong>+12% FATE Hetero-LR AUC uplift</strong> (IEEE P3652.1).
             </p>
           </div>
 
           {/* Model Comparison Metrics */}
-          <div className="grid grid-cols-2 gap-2">
-            <div className="p-3 rounded-2xl bg-[#F4F5F7] border border-[#E5E7EB] space-y-1">
-              <span className="text-[10px] text-[#717579] font-medium block">
+          <div className="grid grid-cols-2 gap-3">
+            <div className="p-3.5 rounded-2xl bg-[#F4F5F7] border border-[#E5E7EB] space-y-1.5">
+              <span className="text-xs text-[#6B7280] font-semibold block">
                 Solo MFS App (Baseline)
               </span>
-              <div className="text-base font-bold text-[#1A1D1F]">
-                0.742 <span className="text-[10px] font-normal text-[#717579]">AUC</span>
+              <div className="text-xl font-extrabold text-[#111827]">
+                0.742 <span className="text-xs font-medium text-[#6B7280]">AUC</span>
               </div>
-              <div className="text-[10px] text-[#FF1744] font-semibold">
+              <div className="text-xs text-[#DC2626] font-bold">
                 NPL Default: 14.8%
               </div>
             </div>
 
-            <div className="p-3 rounded-2xl bg-[#E8F8F0] border border-[#00A35C]/20 space-y-1">
-              <span className="text-[10px] text-[#00A35C] font-semibold block">
+            <div className="p-3.5 rounded-2xl bg-[#E8F8F0] border border-[#00A35C]/20 space-y-1.5">
+              <span className="text-xs text-[#059669] font-bold block">
                 KendraFi Syndicate (Ours)
               </span>
-              <div className="text-base font-bold text-[#00A35C]">
-                0.866 <span className="text-[10px] font-normal text-[#00A35C]">AUC</span>
+              <div className="text-xl font-extrabold text-[#059669]">
+                0.866 <span className="text-xs font-medium text-[#059669]">AUC</span>
               </div>
-              <div className="text-[10px] text-[#00A35C] font-semibold">
+              <div className="text-xs text-[#059669] font-bold">
                 NPL Default: 1.1% (-92.5%)
               </div>
             </div>
           </div>
 
           {/* Feature Importance Table */}
-          <div className="space-y-1.5 pt-1">
-            <span className="text-[11px] font-bold text-[#1A1D1F]">
+          <div className="space-y-2 pt-1">
+            <span className="text-xs sm:text-sm font-bold text-[#111827]">
               Feature Importance &amp; Latent Drivers
             </span>
-            <div className="text-[11px] space-y-1">
-              <div className="flex justify-between py-1 border-b border-[#EDEFF2]">
-                <span className="text-[#717579]">1. FATE Hetero-LR Enterprise Score:</span>
-                <span className="font-mono font-semibold text-[#1A1D1F]">+34.8% wt</span>
+            <div className="text-xs space-y-1.5">
+              <div className="flex justify-between py-1.5 border-b border-[#EDEFF2]">
+                <span className="text-[#6B7280]">1. FATE Hetero-LR Enterprise Score:</span>
+                <span className="font-mono font-bold text-[#111827]">+34.8% wt</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-[#EDEFF2]">
-                <span className="text-[#717579]">2. Besley-Coate Peer Staking Stake:</span>
-                <span className="font-mono font-semibold text-[#1A1D1F]">+28.2% wt</span>
+              <div className="flex justify-between py-1.5 border-b border-[#EDEFF2]">
+                <span className="text-[#6B7280]">2. Besley-Coate Peer Staking Stake:</span>
+                <span className="font-mono font-bold text-[#111827]">+28.2% wt</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-[#EDEFF2]">
-                <span className="text-[#717579]">3. Spatio-Temporal Graph Entropy (H_st):</span>
-                <span className="font-mono font-semibold text-[#1A1D1F]">+19.5% wt</span>
+              <div className="flex justify-between py-1.5 border-b border-[#EDEFF2]">
+                <span className="text-[#6B7280]">3. Spatio-Temporal Graph Entropy (H_st):</span>
+                <span className="font-mono font-bold text-[#111827]">+19.5% wt</span>
               </div>
-              <div className="flex justify-between py-1">
-                <span className="text-[#717579]">4. Monsoon Buffer (ySCT Reserve):</span>
-                <span className="font-mono font-semibold text-[#00A35C]">10% Shock Absorbed</span>
+              <div className="flex justify-between py-1.5">
+                <span className="text-[#6B7280]">4. Monsoon Buffer (ySCT Reserve):</span>
+                <span className="font-mono font-bold text-[#059669]">10% Shock Absorbed</span>
               </div>
             </div>
           </div>
 
-          <div className="pt-2 border-t border-[#EDEFF2] flex items-center justify-between text-[10px] text-[#717579]">
+          <div className="pt-2 border-t border-[#EDEFF2] flex items-center justify-between text-xs text-[#6B7280]">
             <span>Simulation script:</span>
-            <span className="font-mono font-bold text-[#1A1D1F]">api/scripts/monte_carlo_backtest.py</span>
+            <span className="font-mono font-bold text-[#111827]">api/scripts/monte_carlo_backtest.py</span>
           </div>
         </div>
       ) : (
@@ -246,67 +248,67 @@ export default function SecurityEscrowPanel({
           {/* High-Visibility Red/Blush Security Intercept Alert Banner */}
           {securityAlert && (
             <div
-              className={`planora-card-elevated flex flex-col gap-2.5 animate-pulse ${
+              className={`planora-card-interactive flex flex-col gap-3 animate-pulse border-2 ${
                 securityAlert.color === "rose"
-                  ? "!bg-[#FEECEE] !border-[#FF1744]/40"
+                  ? "!bg-[#FEECEE] !border-[#DC2626]/40"
                   : "!bg-[#FFF0E6] !border-[#FF5C00]/40"
               }`}
             >
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2.5">
                   <ShieldAlert
-                    className={`h-4 w-4 ${
-                      securityAlert.color === "rose" ? "text-[#FF1744]" : "text-[#FF5C00]"
+                    className={`h-5 w-5 ${
+                      securityAlert.color === "rose" ? "text-[#DC2626]" : "text-[#FF5C00]"
                     }`}
                   />
                   <span
-                    className={`text-xs font-bold ${
-                      securityAlert.color === "rose" ? "text-[#FF1744]" : "text-[#FF5C00]"
+                    className={`text-xs sm:text-sm font-extrabold ${
+                      securityAlert.color === "rose" ? "text-[#DC2626]" : "text-[#FF5C00]"
                     }`}
                   >
                     SECURITY INTERCEPT TRIGGERED
                   </span>
                 </div>
-                <span className="chip-attention text-[9px] uppercase">
+                <span className="chip-attention text-xs font-bold uppercase py-1 px-3">
                   {fsmState}
                 </span>
               </div>
-              <div className="p-2.5 bg-white/70 rounded-xl border border-red-200/50 text-[11px] text-[#1A1D1F] leading-relaxed">
-                <strong className="block text-[#FF1744] text-[10px] mb-0.5">
+              <div className="p-3 bg-white/90 rounded-2xl border border-red-200/60 text-xs text-[#111827] leading-relaxed font-medium">
+                <strong className="block text-[#DC2626] text-xs font-bold mb-1">
                   {securityAlert.tier}
                 </strong>
                 {securityAlert.message}
               </div>
-              <div className="flex items-center justify-between text-[10px] text-[#717579] pt-1">
+              <div className="flex items-center justify-between text-xs text-[#6B7280] pt-0.5">
                 <span>Rule: <strong>CONTEXT.md §1 Self-Critic Rule 3</strong></span>
-                <span className="font-mono text-[#FF1744]">HALTED_AT_GATEWAY</span>
+                <span className="font-mono font-bold text-[#DC2626]">HALTED_AT_GATEWAY</span>
               </div>
             </div>
           )}
 
           {/* 4-Tier Zero-Trust Guardrail Gateways */}
-          <div className="planora-card space-y-3 text-[12px]">
-            <div className="flex items-center justify-between border-b border-[#EDEFF2] pb-2">
-              <span className="text-[13px] font-bold text-[#1A1D1F]">
+          <div className="planora-card-interactive space-y-3.5">
+            <div className="flex items-center justify-between border-b border-[#EDEFF2] pb-3">
+              <span className="text-sm sm:text-base font-extrabold text-[#111827]">
                 4-Tier Zero-Trust Firewall
               </span>
-              <span className="chip-neutral text-[9px]">
+              <span className="chip-neutral text-xs font-bold py-1 px-2.5">
                 HMAC-SHA256
               </span>
             </div>
 
-            <div className="space-y-2.5">
+            <div className="space-y-3">
               {/* Gate 1: Tier 0 Prompt Sanitizer */}
-              <div className="flex items-center justify-between p-2 rounded-xl bg-[#FAFBFD] border border-[#EDEFF2]">
-                <div className="flex items-center gap-2">
-                  <div className={`h-2 w-2 rounded-full ${
-                    activeScenario === "SCENARIO_B_REDTEAM" ? "bg-[#FF1744] animate-ping" : "bg-[#00A35C]"
+              <div className="flex items-center justify-between p-3 rounded-2xl bg-[#FAFBFD] border border-[#EDEFF2] transition hover:bg-[#F3F4F6]">
+                <div className="flex items-center gap-3">
+                  <div className={`h-2.5 w-2.5 rounded-full shrink-0 ${
+                    activeScenario === "SCENARIO_B_REDTEAM" ? "bg-[#DC2626] animate-ping" : "bg-[#059669]"
                   }`} />
                   <div>
-                    <span className="font-semibold text-[#1A1D1F] block text-[11px]">
+                    <span className="font-bold text-[#111827] block text-xs sm:text-sm">
                       Tier 0: OCR Prompt Sanitizer
                     </span>
-                    <span className="text-[9px] text-[#717579]">
+                    <span className="text-xs text-[#6B7280]">
                       {activeScenario === "SCENARIO_B_REDTEAM"
                         ? "Adversarial override intercepted"
                         : "Regex & perplexity guard active"}
@@ -314,39 +316,39 @@ export default function SecurityEscrowPanel({
                   </div>
                 </div>
                 {activeScenario === "SCENARIO_B_REDTEAM" ? (
-                  <span className="chip-attention text-[9px]">INTERCEPTED</span>
+                  <span className="chip-attention text-xs font-bold py-1 px-2.5">INTERCEPTED</span>
                 ) : (
-                  <span className="chip-success text-[9px]">SANITIZED</span>
+                  <span className="chip-success text-xs font-bold py-1 px-2.5">SANITIZED</span>
                 )}
               </div>
 
               {/* Gate 2: Tier 2 Deterministic Risk Gate */}
-              <div className="flex items-center justify-between p-2 rounded-xl bg-[#FAFBFD] border border-[#EDEFF2]">
-                <div className="flex items-center gap-2">
-                  <div className="h-2 w-2 rounded-full bg-[#00A35C]" />
+              <div className="flex items-center justify-between p-3 rounded-2xl bg-[#FAFBFD] border border-[#EDEFF2] transition hover:bg-[#F3F4F6]">
+                <div className="flex items-center gap-3">
+                  <div className="h-2.5 w-2.5 rounded-full bg-[#059669] shrink-0" />
                   <div>
-                    <span className="font-semibold text-[#1A1D1F] block text-[11px]">
+                    <span className="font-bold text-[#111827] block text-xs sm:text-sm">
                       Tier 2: Zero-LLM-Math Gate
                     </span>
-                    <span className="text-[9px] text-[#717579]">
+                    <span className="text-xs text-[#6B7280]">
                       NumPy ACT/365 DSCR: {dscr.toFixed(4)}x (&ge;1.25x)
                     </span>
                   </div>
                 </div>
-                <span className="chip-neutral text-[9px]">VERIFIED</span>
+                <span className="chip-neutral text-xs font-bold py-1 px-2.5">VERIFIED</span>
               </div>
 
               {/* Gate 3: x402 KYB Supplier Whitelist */}
-              <div className="flex items-center justify-between p-2 rounded-xl bg-[#FAFBFD] border border-[#EDEFF2]">
-                <div className="flex items-center gap-2">
-                  <div className={`h-2 w-2 rounded-full ${
-                    activeScenario === "SCENARIO_B_REDTEAM" ? "bg-[#FF1744]" : "bg-[#00A35C]"
+              <div className="flex items-center justify-between p-3 rounded-2xl bg-[#FAFBFD] border border-[#EDEFF2] transition hover:bg-[#F3F4F6]">
+                <div className="flex items-center gap-3">
+                  <div className={`h-2.5 w-2.5 rounded-full shrink-0 ${
+                    activeScenario === "SCENARIO_B_REDTEAM" ? "bg-[#DC2626]" : "bg-[#059669]"
                   }`} />
                   <div>
-                    <span className="font-semibold text-[#1A1D1F] block text-[11px]">
+                    <span className="font-bold text-[#111827] block text-xs sm:text-sm">
                       x402: Supplier KYB Registry
                     </span>
-                    <span className="text-[9px] text-[#717579] font-mono">
+                    <span className="text-xs text-[#6B7280] font-mono">
                       {activeScenario === "SCENARIO_B_REDTEAM"
                         ? "0xDead...Beef (UNVERIFIED)"
                         : "0x71c...a91 (Meghna Group)"}
@@ -354,23 +356,23 @@ export default function SecurityEscrowPanel({
                   </div>
                 </div>
                 {activeScenario === "SCENARIO_B_REDTEAM" ? (
-                  <span className="chip-attention text-[9px]">BLOCKED</span>
+                  <span className="chip-attention text-xs font-bold py-1 px-2.5">BLOCKED</span>
                 ) : (
-                  <span className="chip-success text-[9px]">WHITELISTED</span>
+                  <span className="chip-success text-xs font-bold py-1 px-2.5">WHITELISTED</span>
                 )}
               </div>
 
               {/* Gate 4: Spatio-Temporal Entropy Gate */}
-              <div className="flex items-center justify-between p-2 rounded-xl bg-[#FAFBFD] border border-[#EDEFF2]">
-                <div className="flex items-center gap-2">
-                  <div className={`h-2 w-2 rounded-full ${
-                    activeScenario === "SCENARIO_C_SYBIL_WASH" ? "bg-[#FF5C00]" : "bg-[#00A35C]"
+              <div className="flex items-center justify-between p-3 rounded-2xl bg-[#FAFBFD] border border-[#EDEFF2] transition hover:bg-[#F3F4F6]">
+                <div className="flex items-center gap-3">
+                  <div className={`h-2.5 w-2.5 rounded-full shrink-0 ${
+                    activeScenario === "SCENARIO_C_SYBIL_WASH" ? "bg-[#FF5C00]" : "bg-[#059669]"
                   }`} />
                   <div>
-                    <span className="font-semibold text-[#1A1D1F] block text-[11px]">
+                    <span className="font-bold text-[#111827] block text-xs sm:text-sm">
                       Wash-Trading Entropy (H_st)
                     </span>
-                    <span className="text-[9px] text-[#717579]">
+                    <span className="text-xs text-[#6B7280]">
                       {activeScenario === "SCENARIO_C_SYBIL_WASH"
                         ? "H_st = 0.42 < 0.65 (Wash Loop)"
                         : "H_st = 1.12 >= 0.65 | Wash: 0.0%"}
@@ -378,73 +380,73 @@ export default function SecurityEscrowPanel({
                   </div>
                 </div>
                 {activeScenario === "SCENARIO_C_SYBIL_WASH" ? (
-                  <span className="chip-amber text-[9px]">COLLUSION_HOLD</span>
+                  <span className="chip-amber text-xs font-bold py-1 px-2.5">COLLUSION_HOLD</span>
                 ) : (
-                  <span className="chip-success text-[9px]">CLEARED</span>
+                  <span className="chip-success text-xs font-bold py-1 px-2.5">CLEARED</span>
                 )}
               </div>
             </div>
           </div>
 
           {/* On-Chain EIP-712 Quorum Verification (4 Signatures) */}
-          <div className="planora-card space-y-2.5 text-[12px]">
-            <div className="flex items-center justify-between border-b border-[#EDEFF2] pb-2">
+          <div className="planora-card-interactive space-y-3">
+            <div className="flex items-center justify-between border-b border-[#EDEFF2] pb-3">
               <div>
-                <span className="text-[13px] font-bold text-[#1A1D1F] block">
+                <span className="text-sm sm:text-base font-extrabold text-[#111827] block">
                   On-Chain EIP-712 Quorum
                 </span>
-                <span className="text-[9px] text-[#717579]">
+                <span className="text-xs text-[#6B7280]">
                   4-of-5 Session Key Cosigners Required
                 </span>
               </div>
-              <span className="chip-success text-[9px]">
+              <span className="chip-success text-xs font-bold py-1 px-2.5">
                 ECDSA.recover
               </span>
             </div>
 
             {/* List of 4 Quorum Cosigners */}
-            <div className="space-y-1.5">
+            <div className="space-y-2">
               {signers.map((signer, idx) => (
                 <div
                   key={signer.agentId}
-                  className="p-2 rounded-xl bg-[#FAFBFD] border border-[#EDEFF2] transition hover:border-[#CBD0D6]"
+                  className="p-3 rounded-2xl bg-[#FAFBFD] border border-[#EDEFF2] transition hover:border-[#CBD0D6]"
                 >
                   <div
                     className="flex items-center justify-between cursor-pointer"
                     onClick={() => setExpandedSig(expandedSig === idx ? null : idx)}
                   >
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono font-bold text-[10px] text-[#FF5C00] bg-[#FFF0E6] px-1.5 py-0.5 rounded">
+                    <div className="flex items-center gap-2.5">
+                      <span className="font-mono font-extrabold text-xs text-[#FF5C00] bg-[#FFF0E6] px-2 py-0.5 rounded-lg border border-[#FFD8BF]">
                         {signer.agentId}
                       </span>
                       <div>
-                        <span className="font-semibold text-[#1A1D1F] text-[11px] block">
+                        <span className="font-bold text-[#111827] text-xs sm:text-sm block">
                           {signer.name}
                         </span>
-                        <span className="text-[9px] text-[#717579] font-mono">
+                        <span className="text-xs text-[#6B7280] font-mono">
                           {signer.address.slice(0, 6)}...{signer.address.slice(-4)} &bull; {signer.stake}
                         </span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-1.5">
-                      <span className="chip-success text-[9px] py-0.5 px-1.5">
+                    <div className="flex items-center gap-2">
+                      <span className="chip-success text-xs font-bold py-0.5 px-2">
                         SIGNED
                       </span>
                       {expandedSig === idx ? (
-                        <ChevronUp className="h-3.5 w-3.5 text-[#717579]" />
+                        <ChevronUp className="h-4 w-4 text-[#6B7280]" />
                       ) : (
-                        <ChevronDown className="h-3.5 w-3.5 text-[#717579]" />
+                        <ChevronDown className="h-4 w-4 text-[#6B7280]" />
                       )}
                     </div>
                   </div>
 
                   {/* Expanded Signature Details */}
                   {expandedSig === idx && (
-                    <div className="mt-2 pt-2 border-t border-[#EDEFF2] space-y-1 text-[10px] font-mono animate-fadeIn">
-                      <div className="text-[#717579]">
-                        TypeHash: <span className="text-[#1A1D1F]">{signer.typehash}</span>
+                    <div className="mt-2.5 pt-2.5 border-t border-[#EDEFF2] space-y-1.5 text-xs font-mono animate-fadeIn">
+                      <div className="text-[#6B7280]">
+                        TypeHash: <span className="text-[#111827] font-semibold">{signer.typehash}</span>
                       </div>
-                      <div className="break-all text-[#2D3135] bg-white p-1.5 rounded border border-[#E5E7EB]">
+                      <div className="break-all text-[#374151] bg-white p-2 rounded-xl border border-[#E5E7EB] text-xs">
                         {signer.sig}
                       </div>
                     </div>
@@ -455,50 +457,50 @@ export default function SecurityEscrowPanel({
           </div>
 
           {/* Direct B2B Escrow Settlement Breakdown */}
-          <div className="planora-card space-y-2.5 text-[12px]">
-            <div className="flex items-center justify-between border-b border-[#EDEFF2] pb-2">
-              <span className="text-[13px] font-bold text-[#1A1D1F]">
+          <div className="planora-card-interactive space-y-3">
+            <div className="flex items-center justify-between border-b border-[#EDEFF2] pb-3">
+              <span className="text-sm sm:text-base font-extrabold text-[#111827]">
                 Direct B2B Escrow Settlement
               </span>
-              <span className="chip-success text-[9px]">
+              <span className="chip-success text-xs font-bold py-1 px-2.5">
                 Topic F (+5 Bonus)
               </span>
             </div>
 
-            <div className="space-y-1.5">
+            <div className="space-y-2 text-xs sm:text-sm">
               <div className="flex justify-between items-center">
-                <span className="text-[#717579]">Gross Loan Principal:</span>
-                <span className="text-[#1A1D1F] font-bold">45,000.00 BDTc</span>
+                <span className="text-[#6B7280]">Gross Loan Principal:</span>
+                <span className="text-[#111827] font-extrabold">45,000.00 BDTc</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-[#717579]">Wholesaler MDR Discount (1.50%):</span>
-                <span className="text-[#FF1744] font-bold">-675.00 BDTc</span>
+                <span className="text-[#6B7280]">Wholesaler MDR Discount (1.50%):</span>
+                <span className="text-[#DC2626] font-extrabold">-675.00 BDTc</span>
               </div>
-              <div className="flex justify-between items-center border-t border-[#EDEFF2] pt-1.5">
-                <span className="text-[#717579] font-medium">Net Direct Supplier Payout:</span>
-                <span className="text-[#00A35C] font-bold text-[13px]">
+              <div className="flex justify-between items-center border-t border-[#EDEFF2] pt-2">
+                <span className="text-[#374151] font-bold">Net Direct Supplier Payout:</span>
+                <span className="text-[#059669] font-extrabold text-base sm:text-lg">
                   44,325.00 BDTc
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-[#717579]">Borrower Repayment (12.5% APR):</span>
-                <span className="text-[#1A1D1F] font-bold">
+                <span className="text-[#6B7280]">Borrower Repayment (12.5% APR):</span>
+                <span className="text-[#111827] font-extrabold">
                   {grossRepaymentBdt.toLocaleString("en-US", { minimumFractionDigits: 2 })} BDTc
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-[#717579]">Daily Automated Sales Sweep:</span>
-                <span className="text-[#0084FF] font-semibold">1,515.41 BDTc/day</span>
+                <span className="text-[#6B7280]">Daily Automated Sales Sweep:</span>
+                <span className="text-[#0284C7] font-bold">1,515.41 BDTc/day</span>
               </div>
             </div>
 
             {/* Blockscout Explorer Link & Tx Mode Badge */}
-            <div className="pt-2 border-t border-[#EDEFF2] flex flex-col gap-2">
+            <div className="pt-3 border-t border-[#EDEFF2] flex flex-col gap-2.5">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] text-[#717579]">
+                <span className="text-xs text-[#6B7280] font-medium">
                   Base Sepolia / FISCO BCOS Tx:
                 </span>
-                <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
+                <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${
                   txMode === "LIVE_RPC_BROADCAST"
                     ? "bg-[#E6F4EA] text-[#137333] border border-[#CEEAD6]"
                     : "bg-[#FEF7E0] text-[#B06000] border border-[#FEEFC3]"
@@ -511,15 +513,15 @@ export default function SecurityEscrowPanel({
                 href={explorerUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-between p-2.5 rounded-2xl border border-[#D6EBFF] bg-[#EBF5FF] hover:bg-[#D6EBFF] text-[#0084FF] text-[10px] font-mono transition group"
+                className="flex items-center justify-between p-3 rounded-2xl border border-[#D6EBFF] bg-[#EBF5FF] hover:bg-[#D6EBFF] text-[#0284C7] text-xs font-mono transition group shadow-sm"
               >
-                <div className="flex items-center gap-1.5 truncate max-w-[220px]">
-                  <Hash className="h-3 w-3 shrink-0" />
-                  <span className="truncate">{currentTxHash}</span>
+                <div className="flex items-center gap-2 truncate max-w-[220px]">
+                  <Hash className="h-3.5 w-3.5 shrink-0" />
+                  <span className="truncate font-semibold">{currentTxHash}</span>
                 </div>
-                <div className="flex items-center gap-1 shrink-0 font-sans font-semibold">
+                <div className="flex items-center gap-1.5 shrink-0 font-sans font-bold">
                   <span>Verify</span>
-                  <ExternalLink className="h-3 w-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                  <ExternalLink className="h-3.5 w-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </div>
               </a>
             </div>

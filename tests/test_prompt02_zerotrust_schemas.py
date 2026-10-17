@@ -14,6 +14,8 @@ import hmac
 import json
 import time
 import subprocess
+import shutil
+import sys
 import pytest
 from pydantic import ValidationError
 from web3 import Web3
@@ -153,18 +155,14 @@ def test_cross_runtime_hmac_node_to_python():
     Execute Node.js script using src/lib/zerotrust.ts to sign a payload,
     then verify the signature and timestamp in Python using api/core/zerotrust_guard.py.
     """
-    node_script = """
-    const { signZeroTrustPayload } = require('./src/lib/zerotrust.ts');
-    const payload = { test: "cross_runtime_interop", amount: 45000 };
-    const signed = signZeroTrustPayload(payload);
-    console.log(JSON.stringify(signed));
-    """
-    # Use ts-node or run via npx tsx / node -r ts-node/register
+    node_script = "const { signZeroTrustPayload } = require('./src/lib/zerotrust.ts'); const payload = { test: 'cross_runtime_interop', amount: 45000 }; const signed = signZeroTrustPayload(payload); console.log(JSON.stringify(signed));"
+    npx_bin = shutil.which("npx") or "npx"
     res = subprocess.run(
-        ["npx", "--yes", "tsx", "-e", node_script],
+        [npx_bin, "--yes", "tsx", "-e", node_script],
         capture_output=True,
         text=True,
         check=True,
+        shell=(sys.platform == "win32"),
     )
     data = json.loads(res.stdout.strip())
     secret = get_hmac_secret()
@@ -186,26 +184,22 @@ def test_cross_runtime_hmac_python_to_node():
     """
     Python computes HMAC-SHA256 signature, then Node.js verifies it via verifyZeroTrustPayload.
     """
+    import base64
     secret = get_hmac_secret()
     timestamp = f"{time.time():.3f}"
     payload = json.dumps({"agent": "AGT-01", "action": "ESIGN_PROPOSAL"})
     signature = compute_hmac_signature(secret, timestamp, payload)
 
-    node_verify_script = f"""
-    const {{ verifyZeroTrustPayload }} = require('./src/lib/zerotrust.ts');
-    const result = verifyZeroTrustPayload('{signature}', '{timestamp}', {json.dumps(payload)});
-    if (!result.valid) {{
-        console.error('Node verification failed:', result.error);
-        process.exit(1);
-    }}
-    console.log('NODE_VERIFIED_OK');
-    """
+    b64_payload = base64.b64encode(payload.encode("utf-8")).decode("ascii")
+    node_verify_script = f"const {{ verifyZeroTrustPayload }} = require('./src/lib/zerotrust.ts'); const payload = Buffer.from('{b64_payload}', 'base64').toString('utf8'); const result = verifyZeroTrustPayload('{signature}', '{timestamp}', payload); if (!result.valid) {{ console.error('Node verification failed:', result.error); process.exit(1); }} console.log('NODE_VERIFIED_OK');"
 
+    npx_bin = shutil.which("npx") or "npx"
     res = subprocess.run(
-        ["npx", "--yes", "tsx", "-e", node_verify_script],
+        [npx_bin, "--yes", "tsx", "-e", node_verify_script],
         capture_output=True,
         text=True,
         check=True,
+        shell=(sys.platform == "win32"),
     )
     assert "NODE_VERIFIED_OK" in res.stdout
 

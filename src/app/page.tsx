@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import JudgeCommandHeader from "@/components/JudgeCommandHeader";
 import MerchantMobilePanel from "@/components/MerchantMobilePanel";
 import KendraArenaPanel from "@/components/KendraArenaPanel";
+import SecurityEscrowPanel from "@/components/SecurityEscrowPanel";
 import type {
   FSMState,
   TransactionMode,
@@ -12,7 +13,6 @@ import type {
   PeerAgentVote,
   ZKCommitmentProof,
 } from "@/types";
-import { ShieldAlert, ExternalLink, CheckCircle2, Lock, Cpu, Server } from "lucide-react";
 
 export default function HomePage() {
   const [fsmState, setFsmState] = useState<FSMState>("IDLE_MONITORING");
@@ -26,6 +26,7 @@ export default function HomePage() {
   const [cnpMessages, setCnpMessages] = useState<CNPWallMessage[]>([]);
   const [peerVotes, setPeerVotes] = useState<PeerAgentVote[]>([]);
   const [zkProof, setZkProof] = useState<ZKCommitmentProof | null>(null);
+  const [quorumSignatures, setQuorumSignatures] = useState<string[]>([]);
   const [dscr, setDscr] = useState<number>(1.68);
   const [grossRepaymentBdt, setGrossRepaymentBdt] = useState<number>(45462.33);
   const [repaymentProgress, setRepaymentProgress] = useState<{
@@ -95,6 +96,7 @@ export default function HomePage() {
         if (data.zk_proof) setZkProof(data.zk_proof);
         if (data.dscr) setDscr(data.dscr);
         if (data.gross_repayment_bdt) setGrossRepaymentBdt(data.gross_repayment_bdt);
+        if (data.quorum_signatures) setQuorumSignatures(data.quorum_signatures);
         if (data.tx_result) {
           setTxResult({
             txHash: data.tx_result.tx_hash,
@@ -217,114 +219,17 @@ export default function HomePage() {
           </section>
 
           {/* RIGHT PANEL: Zero-Trust Security & On-Chain Settlement (3 Cols) */}
-          <section className="lg:col-span-3 flex flex-col gap-4">
-            <div className="flex items-center justify-between pb-2">
-              <div className="flex items-center gap-2">
-                <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#E8F8F0]">
-                  <Lock className="h-4 w-4 text-[#00A35C]" />
-                </div>
-                <h2 className="text-sm font-bold text-[#1A1D1F]">
-                  Security &amp; Settlement
-                </h2>
-              </div>
-              <span className="chip-info text-[10px]">
-                Prompt 10 Ready
-              </span>
-            </div>
-
-            {/* High-Visibility Security Intercept Alert — Planora blush/peach elevated card */}
-            {securityAlert && (
-              <div
-                className={`planora-card-elevated flex flex-col gap-2 animate-pulse ${
-                  securityAlert.color === "rose"
-                    ? "!bg-[#FEECEE] !border-[#FF1744]/30"
-                    : "!bg-[#FFF0E6] !border-[#FF5C00]/30"
-                }`}
-              >
-                <div className="flex items-center gap-2 font-bold text-xs">
-                  <ShieldAlert className={`h-4 w-4 ${
-                    securityAlert.color === "rose" ? "text-[#FF1744]" : "text-[#FF5C00]"
-                  }`} />
-                  <span className={
-                    securityAlert.color === "rose" ? "text-[#FF1744]" : "text-[#FF5C00]"
-                  }>{securityAlert.tier}</span>
-                </div>
-                <p className="text-[11px] text-[#2D3135] leading-relaxed">{securityAlert.message}</p>
-              </div>
-            )}
-
-            {/* 4-Tier Security Gate Summary Card */}
-            <div className="planora-card space-y-2.5 text-[12px]">
-              <span className="text-[13px] font-bold text-[#1A1D1F] block border-b border-[#EDEFF2] pb-2">
-                4-Tier Zero-Trust Guardrails
-              </span>
-              <div className="flex justify-between items-center">
-                <span className="text-[#717579]">Tier 0: Multimodal Prompt Sanitizer:</span>
-                <span className="chip-success">ACTIVE</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-[#717579]">Tier 1: Bounded ERC-4337 Session Keys:</span>
-                <span className="chip-progress">40% CAP</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-[#717579]">Tier 2: NumPy Zero-LLM Risk Engine:</span>
-                <span className="chip-info">DSCR 1.68x</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-[#717579]">Tier 3: KendraEscrow EIP-712 Quorum:</span>
-                <span className="chip-success">PARIS EVM</span>
-              </div>
-            </div>
-
-            {/* On-Chain Settlement Card */}
-            <div className="planora-card space-y-2.5 text-[12px]">
-              <div className="flex items-center justify-between border-b border-[#EDEFF2] pb-2">
-                <span className="text-[13px] font-bold text-[#1A1D1F]">
-                  Direct B2B Escrow Settlement
-                </span>
-                <span className="chip-success text-[9px]">
-                  Topic F (+5 Bonus)
-                </span>
-              </div>
-
-              <div className="space-y-1.5">
-                <div className="flex justify-between">
-                  <span className="text-[#717579]">Loan Principal:</span>
-                  <span className="text-[#1A1D1F] font-bold">45,000.00 BDTc</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-[#717579]">Wholesaler MDR (1.5%):</span>
-                  <span className="text-[#FF1744] font-bold">-675.00 BDTc</span>
-                </div>
-                <div className="flex justify-between border-t border-[#EDEFF2] pt-1.5">
-                  <span className="text-[#717579]">Net Supplier Direct Payout:</span>
-                  <span className="text-[#00A35C] font-bold">44,325.00 BDTc</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-[#717579]">Gross Borrower Repayment:</span>
-                  <span className="text-[#1A1D1F] font-bold">45,462.33 BDTc</span>
-                </div>
-              </div>
-
-              {/* Blockscout Link — Planora pill button */}
-              <div className="pt-2 border-t border-[#EDEFF2] flex flex-col gap-1.5">
-                <span className="text-[10px] text-[#717579]">Base Sepolia / FISCO BCOS Receipt:</span>
-                <a
-                  href={
-                    txResult?.explorerUrl ||
-                    "https://base-sepolia.blockscout.com/tx/0x23f5b7b576f863dd1dc2c7032a151363aa3d4ad9f1af91017502753aea21c5b9"
-                  }
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-between p-2.5 rounded-2xl border border-[#EBF5FF] bg-[#EBF5FF] hover:bg-[#D6EBFF] text-[#0084FF] text-[10px] font-mono transition group"
-                >
-                  <span className="truncate max-w-[210px]">
-                    {txResult?.txHash || "0x23f5b7b576f863dd1dc2c7032a151363aa3d4ad9f1af91017502753aea21c5b9"}
-                  </span>
-                  <ExternalLink className="h-3.5 w-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </a>
-              </div>
-            </div>
+          <section className="lg:col-span-3 flex flex-col">
+            <SecurityEscrowPanel
+              fsmState={fsmState}
+              activeScenario={activeScenario}
+              securityAlert={securityAlert}
+              txResult={txResult}
+              txMode={txMode}
+              quorumSignatures={quorumSignatures}
+              grossRepaymentBdt={grossRepaymentBdt}
+              dscr={dscr}
+            />
           </section>
         </div>
       </main>

@@ -101,11 +101,21 @@ To provide mathematical and empirical validation for the multi-agent syndicate m
 
 ---
 
-## 6. Team Lead Engineering Roles
+## 6. Multi-View UI Architecture & Design System (Lead 4)
+
+KendraFi features an enterprise light design system (`DESIGN.md`) inspired by Planora, equipped with big legible typography (minimum 12px `text-xs font-bold`), lively keyframe micro-animations, and a 3-way top-level view router:
+1. **`🌟 Overview` (Protocol Landing Page):** High-converting overview featuring hero badge, live metrics ticker, 3-scenario launchpad, Dual Problem Visualizer (Dhaka street markets vs. WeBank cold-start data wall), 5 autonomous agent persona cards, and 5-layer ABCD architecture breakdown.
+2. **`⚡ Command Center` (Operational Cockpit):** 3-panel split-screen judge dashboard with ceramic smartphone chassis, bouncing voice waveform bars, 5-agent arena with dynamic SVG data cables (`animate-data-flow`), 4-tier zero-trust firewall, and 4-of-5 on-chain EIP-712 quorum feed.
+3. **`📊 Backtest Analytics` (Monte Carlo Dashboard):** Full-screen analytical view of the 1,000 Kendras / 5,000 merchants empirical backtest, highlighting +21.96% ROC-AUC lift, -60.76% default loss reduction, and scikit-learn feature importance weights.
+
+---
+
+## 7. Team Lead Engineering Roles
 
 - **Lead 1 (Smart Contracts & AA):** Solidity 0.8.20 (`paris` EVM), Base Sepolia/FISCO BCOS relayers, on-chain EIP-712 verification.
 - **Lead 2 (Multi-Agent FSM & LangGraph):** 5-state FSM, 3-round Contract Net Protocol, JSON trace exporters.
 - **Lead 3 (Quantitative Risk & ZK):** NumPy ACT/365 risk engine, `secp256k1` Pedersen range proofs, WeBank FATE scorer.
-- **Lead 4 (Judge Command Center UI):** Next.js 15 App Router, Planora light design system, `SecurityEscrowPanel.tsx`, 5-Node Pentagon Arena.
+- **Lead 4 (Judge Command Center UI):** Next.js 15 App Router, Planora light design system, animated buttons, multi-view router (`ProtocolLandingView`, `KendraArenaPanel`, `SecurityEscrowPanel`, `MonteCarloAnalyticsView`).
 - **Lead 5 (Security Auditor & Submission Director):** Zero-Trust HMAC gateway, Supabase RLS isolation, audit logs, Monte Carlo backtester, and pitch deliverables.
+
 

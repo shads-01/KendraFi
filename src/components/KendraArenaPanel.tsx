@@ -16,6 +16,8 @@ import {
   Cpu,
   Fingerprint,
   Info,
+  Radio,
+  Zap,
 } from "lucide-react";
 import type {
   CNPWallMessage,
@@ -46,6 +48,9 @@ const AGENT_NODES = [
     buffer: 55000,
     reliability: 0.985,
     wallet: "0x14dC...9955",
+    color: "#FF5C00",
+    bg: "bg-[#FFF0E6]",
+    borderColor: "border-[#FF5C00]",
   },
   {
     id: "AGT-02",
@@ -56,6 +61,9 @@ const AGENT_NODES = [
     buffer: 48000,
     reliability: 0.97,
     wallet: "0x82D0...0B42",
+    color: "#0284C7",
+    bg: "bg-[#F0F9FF]",
+    borderColor: "border-[#0284C7]",
   },
   {
     id: "AGT-03",
@@ -66,6 +74,9 @@ const AGENT_NODES = [
     buffer: 34642.85,
     reliability: 0.96,
     wallet: "0x93E0...0C18",
+    color: "#7C3AED",
+    bg: "bg-[#F5F3FF]",
+    borderColor: "border-[#7C3AED]",
   },
   {
     id: "AGT-05",
@@ -76,6 +87,9 @@ const AGENT_NODES = [
     buffer: 12000,
     reliability: 0.89,
     wallet: "0xDead...Beef",
+    color: "#DC2626",
+    bg: "bg-[#FEF2F2]",
+    borderColor: "border-[#DC2626]",
   },
   {
     id: "AGT-04",
@@ -86,6 +100,9 @@ const AGENT_NODES = [
     buffer: 85000,
     reliability: 0.992,
     wallet: "0xA4F0...0D77",
+    color: "#059669",
+    bg: "bg-[#ECFDF5]",
+    borderColor: "border-[#059669]",
   },
 ];
 
@@ -101,6 +118,7 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<"pentagon" | "cnp" | "zk">("pentagon");
   const [showFullCommitment, setShowFullCommitment] = useState(false);
+  const [hoveredAgent, setHoveredAgent] = useState<string | null>(null);
 
   // Default fallback values if backend hasn't populated yet
   const displayDscr = dscr || 1.68;
@@ -112,33 +130,39 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
   const fateScore = zkProof?.fate_survival_prob_p ?? 0.985;
 
   const tabItems = [
-    { key: "pentagon" as const, label: "Pentagon" },
-    { key: "cnp" as const, label: `CNP Log (${cnpMessages.length})` },
-    { key: "zk" as const, label: "ZK Solvency" },
+    { key: "pentagon" as const, label: "5-Node Topology" },
+    { key: "cnp" as const, label: `CNP Rounds (${cnpMessages.length})` },
+    { key: "zk" as const, label: "ZK Solvency Proof" },
   ];
 
   return (
-    <div className="flex flex-col gap-4 w-full">
-      {/* Panel Title Bar */}
-      <div className="flex items-center justify-between pb-2">
-        <div className="flex items-center gap-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#FFF0E6]">
-            <Users className="h-4 w-4 text-[#FF5C00]" />
+    <div className="flex flex-col gap-5 w-full">
+      {/* Panel Header */}
+      <div className="flex items-center justify-between pb-1">
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#FFF0E6] text-[#FF5C00] shadow-xs">
+            <Users className="h-5 w-5" />
           </div>
-          <h2 className="text-sm font-bold text-[#1A1D1F]">
-            5-Agent Pentagon & Multi-Round CNP Arena
-          </h2>
+          <div>
+            <h2 className="text-base font-extrabold text-[#111827]">
+              Kendra Arena Multi-Agent Pentagon
+            </h2>
+            <p className="text-xs text-[#6B7280]">
+              Decentralized Contract Net Protocol (CNP) &bull; Nash Equilibrium Staking
+            </p>
+          </div>
         </div>
-        {/* Tab Switcher — Planora peach active pill */}
-        <div className="flex items-center gap-1 bg-[#F4F5F7] rounded-full p-0.5 border border-[#EDEFF2]">
+
+        {/* Tab Switcher */}
+        <div className="flex items-center p-1 rounded-xl bg-[#F3F4F6] border border-[#E5E7EB]">
           {tabItems.map((tab) => (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`px-3 py-1 rounded-full text-[11px] font-medium transition ${
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition ${
                 activeTab === tab.key
-                  ? "bg-[#FFF0E6] text-[#FF5C00] font-bold"
-                  : "text-[#717579] hover:text-[#1A1D1F]"
+                  ? "bg-white text-[#FF5C00] shadow-xs"
+                  : "text-[#6B7280] hover:text-[#111827]"
               }`}
             >
               {tab.label}
@@ -147,46 +171,41 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
         </div>
       </div>
 
-      {/* Main Pentagon Network Arena Visualizer — Light canvas with white nodes */}
-      <div className="relative planora-card flex flex-col items-center justify-center min-h-[340px] overflow-hidden">
-        {/* Subtle Warm Ambient Glows */}
-        <div className="absolute -top-16 -left-16 h-48 w-48 rounded-full bg-[#FF5C00]/5 blur-3xl pointer-events-none"></div>
-        <div className="absolute -bottom-16 -right-16 h-48 w-48 rounded-full bg-[#0084FF]/5 blur-3xl pointer-events-none"></div>
+      {/* Main Pentagon Network Arena Visualizer */}
+      <div className="relative planora-card flex flex-col items-center justify-center min-h-[380px] overflow-hidden bg-gradient-to-b from-white via-white to-[#FAFBFD]">
+        {/* Ambient Halo Glows */}
+        <div className="absolute -top-16 -left-16 h-56 w-56 rounded-full bg-[#FF5C00]/10 blur-3xl pointer-events-none"></div>
+        <div className="absolute -bottom-16 -right-16 h-56 w-56 rounded-full bg-[#0284C7]/10 blur-3xl pointer-events-none"></div>
 
         {/* SVG Network Canvas Connecting the 5 Nodes */}
-        <div className="relative w-full max-w-[420px] aspect-square flex items-center justify-center">
+        <div className="relative w-full max-w-[460px] aspect-square flex items-center justify-center">
           <svg className="absolute inset-0 h-full w-full pointer-events-none" viewBox="0 0 100 100">
-            {/* Pentagon Edge Lines */}
+            {/* Pentagon Edge Lines with Animated Data Flow */}
             <polygon
               points="50,14 86,40 72,84 28,84 14,40"
-              fill="rgba(255, 92, 0, 0.03)"
+              fill="rgba(255, 92, 0, 0.04)"
               stroke="#FF5C00"
-              strokeWidth="0.8"
-              strokeDasharray="3,3"
-              opacity="0.4"
+              strokeWidth="1.2"
+              className="animate-data-flow"
+              opacity="0.75"
             />
             {/* Cross-Syndicate Peer Chords */}
-            <line x1="50" y1="14" x2="72" y2="84" stroke="#EDEFF2" strokeWidth="0.8" />
-            <line x1="50" y1="14" x2="28" y2="84" stroke="#EDEFF2" strokeWidth="0.8" />
-            <line x1="14" y1="40" x2="86" y2="40" stroke="#EDEFF2" strokeWidth="0.8" />
-            <line x1="14" y1="40" x2="72" y2="84" stroke="#EDEFF2" strokeWidth="0.8" />
-            <line x1="86" y1="40" x2="28" y2="84" stroke="#EDEFF2" strokeWidth="0.8" />
+            <line x1="50" y1="14" x2="72" y2="84" stroke="#E5E7EB" strokeWidth="1" strokeDasharray="3 3" />
+            <line x1="50" y1="14" x2="28" y2="84" stroke="#E5E7EB" strokeWidth="1" strokeDasharray="3 3" />
+            <line x1="14" y1="40" x2="86" y2="40" stroke="#E5E7EB" strokeWidth="1" strokeDasharray="3 3" />
+            <line x1="14" y1="40" x2="72" y2="84" stroke="#E5E7EB" strokeWidth="1" strokeDasharray="3 3" />
+            <line x1="86" y1="40" x2="28" y2="84" stroke="#E5E7EB" strokeWidth="1" strokeDasharray="3 3" />
 
-            {/* Dynamic Active CNP Negotiation Glow Line */}
+            {/* Glowing Active Communication Lines */}
             {isExecuting && (
-              <line
-                x1="50"
-                y1="14"
-                x2="14"
-                y2="40"
-                stroke="#FF5C00"
-                strokeWidth="2"
-                className="animate-pulse"
-              />
+              <>
+                <line x1="50" y1="14" x2="14" y2="40" stroke="#FF5C00" strokeWidth="2.5" className="animate-pulse" />
+                <line x1="14" y1="40" x2="86" y2="40" stroke="#059669" strokeWidth="2" className="animate-pulse" />
+              </>
             )}
           </svg>
 
-          {/* 5 Interactive Agent Nodes — Crisp white nodes */}
+          {/* 5 Interactive Agent Nodes */}
           {AGENT_NODES.map((agent) => {
             const isBorrower = agent.id === "AGT-01";
             const isAbstained = agent.id === "AGT-05";
@@ -196,39 +215,53 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
               <div
                 key={agent.id}
                 style={{ left: `${agent.coords.x}%`, top: `${agent.coords.y}%` }}
-                className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group cursor-pointer"
+                onMouseEnter={() => setHoveredAgent(agent.id)}
+                onMouseLeave={() => setHoveredAgent(null)}
+                className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group cursor-pointer z-10"
               >
-                {/* Node Orb — White card surface with semantic border */}
+                {/* Node Orb with Pulsing Halo */}
                 <div
-                  className={`relative flex h-12 w-12 items-center justify-center rounded-2xl border-2 transition-transform duration-300 group-hover:scale-110 ${
+                  className={`relative flex h-14 w-14 items-center justify-center rounded-2xl border-2 transition-all duration-300 shadow-md group-hover:scale-115 ${
                     isBorrower
-                      ? "bg-white border-[#FF5C00] shadow-[0_4px_14px_rgba(255,92,0,0.15)]"
+                      ? "bg-white border-[#FF5C00] shadow-orange-500/20 ring-4 ring-[#FF5C00]/20"
                       : isAbstained
-                      ? "bg-[#F4F5F7] border-[#EDEFF2] opacity-60 hover:opacity-100"
-                      : "bg-white border-[#00A35C] shadow-[0_4px_14px_rgba(0,163,92,0.1)]"
+                      ? "bg-[#F3F4F6] border-[#E5E7EB] opacity-70 group-hover:opacity-100"
+                      : "bg-white border-[#059669] shadow-emerald-500/20 ring-4 ring-[#059669]/15"
                   }`}
                 >
-                  <span className={`text-[10px] font-bold font-mono ${
-                    isBorrower ? "text-[#FF5C00]" : isAbstained ? "text-[#717579]" : "text-[#00A35C]"
-                  }`}>{agent.id}</span>
-                  {/* Status Indicator Dot */}
+                  <span className={`text-xs font-extrabold font-mono ${
+                    isBorrower ? "text-[#FF5C00]" : isAbstained ? "text-[#6B7280]" : "text-[#059669]"
+                  }`}>
+                    {agent.id}
+                  </span>
+
+                  {/* Pulsing Status Dot */}
                   <span
-                    className={`absolute -top-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white ${
+                    className={`absolute -top-1 -right-1 h-3.5 w-3.5 rounded-full border-2 border-white ${
                       isBorrower
-                        ? "bg-[#FF5C00] animate-pulse"
+                        ? "bg-[#FF5C00] animate-ping"
                         : isAbstained
-                        ? "bg-[#EDEFF2]"
-                        : "bg-[#00A35C]"
+                        ? "bg-[#D1D5DB]"
+                        : "bg-[#059669]"
+                    }`}
+                  ></span>
+                  <span
+                    className={`absolute -top-1 -right-1 h-3.5 w-3.5 rounded-full border-2 border-white ${
+                      isBorrower
+                        ? "bg-[#FF5C00]"
+                        : isAbstained
+                        ? "bg-[#9CA3AF]"
+                        : "bg-[#059669]"
                     }`}
                   ></span>
                 </div>
 
-                {/* Node Label Card */}
-                <div className="mt-1.5 flex flex-col items-center bg-white px-2.5 py-1 rounded-xl border border-[#EDEFF2] shadow-card pointer-events-none text-center">
-                  <span className="text-[10px] font-bold text-[#1A1D1F] whitespace-nowrap">
+                {/* Node Info Label Card */}
+                <div className="mt-2 flex flex-col items-center bg-white px-3 py-1.5 rounded-xl border border-[#E5E7EB] shadow-md group-hover:shadow-lg transition-all text-center">
+                  <span className="text-xs font-extrabold text-[#111827] whitespace-nowrap">
                     {agent.name}
                   </span>
-                  <span className="text-[8px] font-mono text-[#717579] whitespace-nowrap">
+                  <span className="text-[10px] font-mono font-bold text-[#6B7280] whitespace-nowrap pt-0.5">
                     {isBorrower
                       ? "Borrower (DSCR 1.68x)"
                       : isNasrin
@@ -242,51 +275,52 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
             );
           })}
 
-          {/* Central Quorum Status Hub — Elevated floating card */}
-          <div className="flex flex-col items-center justify-center bg-white rounded-2xl border border-[#EDEFF2] p-3 shadow-card-elevated text-center max-w-[140px]">
-            <span className="text-[9px] font-mono text-[#717579] uppercase tracking-widest">
+          {/* Central Quorum Status Hub */}
+          <div className="flex flex-col items-center justify-center bg-white/95 backdrop-blur-md rounded-2xl border-2 border-[#A7F3D0] p-4 shadow-xl text-center max-w-[170px] z-20">
+            <span className="text-[10px] font-mono font-bold text-[#6B7280] uppercase tracking-widest">
               Syndicate Quorum
             </span>
-            <span className="text-sm font-bold text-[#00A35C] font-mono mt-0.5">
+            <span className="text-base font-extrabold text-[#059669] font-mono mt-0.5">
               4-of-5 Cosigned
             </span>
-            <span className="text-[9px] font-mono text-[#1A1D1F] mt-1">
+            <span className="text-xs font-mono font-bold text-[#111827] mt-1 bg-[#ECFDF5] px-2 py-0.5 rounded-full border border-[#A7F3D0]">
               {displayR1.toLocaleString()} BDT (100%)
             </span>
           </div>
         </div>
 
-        {/* Tab Sub-View: Multi-Round CNP Negotiation Feed — Planora timeline style */}
+        {/* Tab Sub-View: Multi-Round CNP Negotiation Feed */}
         {activeTab === "cnp" && (
-          <div className="w-full mt-3 rounded-2xl border border-[#EDEFF2] bg-[#F4F5F7] p-3 max-h-56 overflow-y-auto space-y-2">
-            <div className="flex items-center justify-between border-b border-[#EDEFF2] pb-1.5">
-              <span className="text-[11px] font-bold text-[#FF5C00]">
+          <div className="w-full mt-4 rounded-2xl border border-[#E5E7EB] bg-[#FAFBFD] p-4 max-h-64 overflow-y-auto space-y-2.5 animate-fadeIn">
+            <div className="flex items-center justify-between border-b border-[#E5E7EB] pb-2">
+              <span className="text-xs font-bold text-[#FF5C00] flex items-center gap-1.5">
+                <Zap className="h-4 w-4" />
                 Live 3-Round Contract Net Protocol (CNP) Timeline
               </span>
-              <span className="text-[9px] font-mono text-[#717579]">Nash Equilibrium Loop</span>
+              <span className="text-xs font-mono text-[#6B7280]">Nash Equilibrium Cleared</span>
             </div>
             {cnpMessages.length === 0 ? (
-              <p className="text-[10px] text-[#717579] italic text-center py-2">
-                Click [Scenario A: Valid Rice Restock] to trigger the 3-round P2P negotiation loop.
+              <p className="text-xs text-[#6B7280] italic text-center py-4">
+                Click [Scenario A: Valid Restock] to trigger the multi-agent negotiation loop.
               </p>
             ) : (
               cnpMessages.map((msg, idx) => (
                 <div
                   key={idx}
-                  className="rounded-xl border border-[#EDEFF2] bg-white p-2.5 text-[10px] font-mono space-y-0.5 shadow-card"
+                  className="rounded-xl border border-[#E5E7EB] bg-white p-3 text-xs font-mono space-y-1 shadow-sm"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-[#1A1D1F] flex items-center gap-1.5">
-                      <span className="px-1.5 py-0.5 rounded-full bg-[#FFF0E6] text-[#FF5C00] border border-[#FFD8BF] text-[9px] font-bold">
-                        R{msg.round_num}
+                    <span className="font-bold text-[#111827] flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded-full bg-[#FFF0E6] text-[#FF5C00] border border-[#FFD8BF] text-xs font-extrabold">
+                        Round {msg.round_num}
                       </span>
-                      {msg.sender_agent} · {msg.message_type}
+                      <span>{msg.sender_agent} &bull; {msg.message_type}</span>
                     </span>
-                    <span className="text-[#00A35C] font-bold">
+                    <span className="text-[#059669] font-extrabold text-xs">
                       {(msg.proposed_alpha * 100).toFixed(1)}% @ {msg.proposed_yield_apr_bps} bps
                     </span>
                   </div>
-                  <p className="text-[#717579] text-[10px] leading-relaxed">{msg.detail}</p>
+                  <p className="text-[#4B5563] text-xs leading-relaxed">{msg.detail}</p>
                 </div>
               ))
             )}
@@ -294,161 +328,165 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
         )}
       </div>
 
-      {/* Elliptic-Curve (secp256k1) ZK Solvency & WeBank FATE Card */}
-      <div className="planora-card flex flex-col gap-3">
-        <div className="flex items-center justify-between border-b border-[#EDEFF2] pb-2">
-          <div className="flex items-center gap-1.5">
-            <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-[#EBF5FF]">
-              <Fingerprint className="h-3.5 w-3.5 text-[#0084FF]" />
+      {/* Layer-4 secp256k1 ZK Solvency & WeBank FATE Card */}
+      <div className="planora-card flex flex-col gap-4">
+        <div className="flex items-center justify-between border-b border-[#E5E7EB] pb-3">
+          <div className="flex items-center gap-2">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#F0F9FF] text-[#0284C7]">
+              <Fingerprint className="h-4 w-4" />
             </div>
-            <h3 className="text-[13px] font-bold text-[#1A1D1F]">
-              Layer-4 Cryptographic ZK Solvency & WeBank FATE Scorer
+            <h3 className="text-sm sm:text-base font-bold text-[#111827]">
+              Layer-4 Cryptographic ZK Solvency &amp; WeBank FATE Scorer
             </h3>
           </div>
-          <span className="chip-info text-[10px]">
-            secp256k1 CDS94 Range Proof
+          <span className="chip-info text-xs font-bold">
+            secp256k1 CDS94 Proof
           </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-[11px]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm">
           {/* Pedersen Commitment Point */}
-          <div className="rounded-2xl border border-[#EDEFF2] bg-[#F4F5F7] p-3 space-y-1.5">
-            <div className="flex items-center justify-between text-[#717579] text-[10px]">
-              <span>Pedersen Curve Commitment (C_1):</span>
+          <div className="rounded-2xl border border-[#E5E7EB] bg-[#FAFBFD] p-4 space-y-2">
+            <div className="flex items-center justify-between text-[#6B7280] text-xs">
+              <span className="font-semibold">Pedersen Curve Commitment (C₁):</span>
               <button
                 onClick={() => setShowFullCommitment(!showFullCommitment)}
-                className="text-[#0084FF] hover:underline flex items-center gap-1 text-[9px] font-medium"
+                className="text-[#0284C7] hover:underline flex items-center gap-1 text-xs font-bold"
               >
-                <Eye className="h-3 w-3" />
-                {showFullCommitment ? "Short" : "66-Hex"}
+                <Eye className="h-3.5 w-3.5" />
+                {showFullCommitment ? "Short View" : "Full 66-Hex"}
               </button>
             </div>
-            <p className="font-bold text-[#0084FF] text-[10px] break-all font-mono">
+            <p className="font-extrabold text-[#0284C7] text-xs sm:text-sm break-all font-mono bg-white p-2.5 rounded-xl border border-[#E5E7EB]">
               {showFullCommitment ? commitmentFull : commitmentDisplay}
             </p>
-            <p className="text-[9px] text-[#717579]">
-              C_1 = v·G + r_1·H (v = 76,376 BDT, T = 56,828 BDT)
+            <p className="text-xs text-[#6B7280]">
+              C₁ = v&bull;G + r₁&bull;H (v = 76,376 BDT, T = 56,828 BDT)
             </p>
           </div>
 
           {/* Range Proof & FATE Score */}
-          <div className="rounded-2xl border border-[#EDEFF2] bg-[#F4F5F7] p-3 space-y-1.5">
+          <div className="rounded-2xl border border-[#E5E7EB] bg-[#FAFBFD] p-4 space-y-2.5">
             <div className="flex items-center justify-between">
-              <span className="text-[#717579] text-[10px]">DSCR Solvency Verification:</span>
-              <span className="chip-success text-[9px]">16-Bit VERIFIED</span>
+              <span className="text-[#6B7280] text-xs font-semibold">DSCR Solvency Verification:</span>
+              <span className="chip-success text-xs font-bold">16-Bit VERIFIED</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-[#1A1D1F] font-bold">DSCR = {displayDscr.toFixed(4)}x</span>
-              <span className="text-[10px] text-[#00A35C] font-mono font-bold">Δv = 19,548 ∈ [0, 2¹⁶-1]</span>
+              <span className="text-[#111827] font-extrabold text-sm sm:text-base">DSCR = {displayDscr.toFixed(4)}x</span>
+              <span className="text-xs text-[#059669] font-mono font-bold bg-[#ECFDF5] px-2 py-0.5 rounded-full border border-[#A7F3D0]">
+                &Delta;v = 19,548 &isin; [0, 2¹⁶-1]
+              </span>
             </div>
-            <div className="flex items-center justify-between pt-1.5 border-t border-[#EDEFF2]">
-              <span className="text-[#717579] text-[10px]">WeBank FATE Hetero-LR Score:</span>
-              <span className="text-[#FF5C00] font-bold font-mono">p_1 = {(fateScore * 100).toFixed(1)}%</span>
+            <div className="flex items-center justify-between pt-2 border-t border-[#E5E7EB]">
+              <span className="text-[#6B7280] text-xs font-semibold">WeBank FATE Hetero-LR Score:</span>
+              <span className="text-[#FF5C00] font-extrabold text-sm sm:text-base font-mono">
+                p₁ = {(fateScore * 100).toFixed(1)}%
+              </span>
             </div>
           </div>
         </div>
 
         {/* Zero-Trust RLS Privacy Isolation Badge */}
-        <div className="rounded-full border border-[#EBF5FF] bg-[#EBF5FF] px-4 py-2 flex items-center justify-between text-[10px] font-mono text-[#0084FF]">
-          <span>Raw MFS Cash Flows & Family Subsistence:</span>
-          <span className="font-bold bg-white px-2.5 py-0.5 rounded-full border border-[#EDEFF2] text-[#1A1D1F]">
-            [ZERO-TRUST RLS ISOLATED — SERVER/EDGE ONLY]
+        <div className="rounded-2xl border border-[#BAE6FD] bg-[#F0F9FF] px-4 py-3 flex items-center justify-between text-xs font-mono text-[#0369A1] flex-wrap gap-2">
+          <span className="font-semibold">Raw MFS Cash Flows &amp; Family Subsistence:</span>
+          <span className="font-extrabold bg-white px-3 py-1 rounded-full border border-[#BAE6FD] text-[#111827]">
+            [ZERO-TRUST RLS ISOLATED &mdash; SERVER/EDGE ONLY]
           </span>
         </div>
       </div>
 
-      {/* Besley-Coate Nash Equilibrium Table — Clean modern white table */}
-      <div className="planora-card flex flex-col gap-3">
-        <div className="flex items-center justify-between border-b border-[#EDEFF2] pb-2">
-          <div className="flex items-center gap-1.5">
-            <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-[#E8F8F0]">
-              <Shield className="h-3.5 w-3.5 text-[#00A35C]" />
+      {/* Besley-Coate Nash Equilibrium Table */}
+      <div className="planora-card flex flex-col gap-4">
+        <div className="flex items-center justify-between border-b border-[#E5E7EB] pb-3">
+          <div className="flex items-center gap-2">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#ECFDF5] text-[#059669]">
+              <Shield className="h-4 w-4" />
             </div>
-            <h3 className="text-[13px] font-bold text-[#1A1D1F]">
+            <h3 className="text-sm sm:text-base font-bold text-[#111827]">
               Besley-Coate (1995) Nash Equilibrium Staking Table
             </h3>
           </div>
-          <span className="text-[10px] font-mono text-[#717579] bg-[#F4F5F7] px-2.5 py-1 rounded-full">
+          <span className="text-xs font-mono font-bold text-[#111827] bg-[#F3F4F6] px-3 py-1 rounded-full border border-[#E5E7EB]">
             100.0% Coverage ({displayR1.toLocaleString()} BDT)
           </span>
         </div>
 
-        {/* Dynamic Table — #EDEFF2 dividers, bold black stakes, pastel signed chips */}
+        {/* Dynamic Table */}
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-[12px]">
+          <table className="w-full text-left text-xs sm:text-sm">
             <thead>
-              <tr className="border-b border-[#EDEFF2] text-[#717579] text-[10px] font-medium">
-                <th className="py-2 px-2.5">Node</th>
-                <th className="py-2 px-2.5">Merchant Name</th>
-                <th className="py-2 px-2.5 text-right">Share (α_j*)</th>
-                <th className="py-2 px-2.5 text-right">Stake (BDT)</th>
-                <th className="py-2 px-2.5 text-right">Utility (E[U_j])</th>
-                <th className="py-2 px-2.5 text-center">Status</th>
+              <tr className="border-b border-[#E5E7EB] text-[#6B7280] text-xs font-semibold uppercase tracking-wider">
+                <th className="py-2.5 px-3">Node</th>
+                <th className="py-2.5 px-3">Merchant Name</th>
+                <th className="py-2.5 px-3 text-right">Share (&alpha;_j*)</th>
+                <th className="py-2.5 px-3 text-right">Stake (BDT)</th>
+                <th className="py-2.5 px-3 text-right">Utility (E[U_j])</th>
+                <th className="py-2.5 px-3 text-center">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#EDEFF2]">
+            <tbody className="divide-y divide-[#E5E7EB]">
               {/* AGT-04 */}
-              <tr className="hover:bg-[#F4F5F7] transition">
-                <td className="py-2.5 px-2.5 font-bold text-[#1A1D1F] font-mono">AGT-04</td>
-                <td className="py-2.5 px-2.5 text-[#2D3135]">Nasrin Pharmacy</td>
-                <td className="py-2.5 px-2.5 text-right text-[#FF5C00] font-bold">40.0% (Cap)</td>
-                <td className="py-2.5 px-2.5 text-right text-[#1A1D1F] font-bold">18,184.93 BDT</td>
-                <td className="py-2.5 px-2.5 text-right text-[#00A35C] font-bold">+169.85 BDT</td>
-                <td className="py-2.5 px-2.5 text-center">
-                  <span className="chip-success">
+              <tr className="hover:bg-[#FAFBFD] transition">
+                <td className="py-3 px-3 font-extrabold text-[#111827] font-mono">AGT-04</td>
+                <td className="py-3 px-3 font-semibold text-[#1F2937]">Nasrin Pharmacy</td>
+                <td className="py-3 px-3 text-right text-[#FF5C00] font-extrabold">40.0% (Cap)</td>
+                <td className="py-3 px-3 text-right text-[#111827] font-extrabold">18,184.93 BDT</td>
+                <td className="py-3 px-3 text-right text-[#059669] font-extrabold">+169.85 BDT</td>
+                <td className="py-3 px-3 text-center">
+                  <span className="chip-success text-xs font-bold">
                     SIGNED (EIP-712)
                   </span>
                 </td>
               </tr>
               {/* AGT-02 */}
-              <tr className="hover:bg-[#F4F5F7] transition">
-                <td className="py-2.5 px-2.5 font-bold text-[#1A1D1F] font-mono">AGT-02</td>
-                <td className="py-2.5 px-2.5 text-[#2D3135]">Fatema Textiles</td>
-                <td className="py-2.5 px-2.5 text-right text-[#FF5C00] font-bold">35.0%</td>
-                <td className="py-2.5 px-2.5 text-right text-[#1A1D1F] font-bold">15,911.82 BDT</td>
-                <td className="py-2.5 px-2.5 text-right text-[#00A35C] font-bold">+64.12 BDT</td>
-                <td className="py-2.5 px-2.5 text-center">
-                  <span className="chip-success">
+              <tr className="hover:bg-[#FAFBFD] transition">
+                <td className="py-3 px-3 font-extrabold text-[#111827] font-mono">AGT-02</td>
+                <td className="py-3 px-3 font-semibold text-[#1F2937]">Fatema Textiles</td>
+                <td className="py-3 px-3 text-right text-[#FF5C00] font-extrabold">35.0%</td>
+                <td className="py-3 px-3 text-right text-[#111827] font-extrabold">15,911.82 BDT</td>
+                <td className="py-3 px-3 text-right text-[#059669] font-extrabold">+64.12 BDT</td>
+                <td className="py-3 px-3 text-center">
+                  <span className="chip-success text-xs font-bold">
                     SIGNED (EIP-712)
                   </span>
                 </td>
               </tr>
               {/* AGT-03 */}
-              <tr className="hover:bg-[#F4F5F7] transition">
-                <td className="py-2.5 px-2.5 font-bold text-[#1A1D1F] font-mono">AGT-03</td>
-                <td className="py-2.5 px-2.5 text-[#2D3135]">Kamal Agro</td>
-                <td className="py-2.5 px-2.5 text-right text-[#FF5C00] font-bold">25.0%</td>
-                <td className="py-2.5 px-2.5 text-right text-[#1A1D1F] font-bold">11,365.58 BDT</td>
-                <td className="py-2.5 px-2.5 text-right text-[#00A35C] font-bold">+51.40 BDT</td>
-                <td className="py-2.5 px-2.5 text-center">
-                  <span className="chip-success">
+              <tr className="hover:bg-[#FAFBFD] transition">
+                <td className="py-3 px-3 font-extrabold text-[#111827] font-mono">AGT-03</td>
+                <td className="py-3 px-3 font-semibold text-[#1F2937]">Kamal Agro</td>
+                <td className="py-3 px-3 text-right text-[#FF5C00] font-extrabold">25.0%</td>
+                <td className="py-3 px-3 text-right text-[#111827] font-extrabold">11,365.58 BDT</td>
+                <td className="py-3 px-3 text-right text-[#059669] font-extrabold">+51.40 BDT</td>
+                <td className="py-3 px-3 text-center">
+                  <span className="chip-success text-xs font-bold">
                     SIGNED (EIP-712)
                   </span>
                 </td>
               </tr>
               {/* AGT-05 */}
-              <tr className="hover:bg-[#F4F5F7] transition opacity-60">
-                <td className="py-2.5 px-2.5 font-bold text-[#717579] font-mono">AGT-05</td>
-                <td className="py-2.5 px-2.5 text-[#717579]">Sohel Electronics</td>
-                <td className="py-2.5 px-2.5 text-right text-[#717579]">0.0%</td>
-                <td className="py-2.5 px-2.5 text-right text-[#717579]">0.00 BDT</td>
-                <td className="py-2.5 px-2.5 text-right text-[#FF1744]">-142.60 BDT</td>
-                <td className="py-2.5 px-2.5 text-center">
-                  <span className="chip-neutral">
+              <tr className="hover:bg-[#FAFBFD] transition opacity-70">
+                <td className="py-3 px-3 font-extrabold text-[#6B7280] font-mono">AGT-05</td>
+                <td className="py-3 px-3 text-[#6B7280]">Sohel Electronics</td>
+                <td className="py-3 px-3 text-right text-[#6B7280]">0.0%</td>
+                <td className="py-3 px-3 text-right text-[#6B7280]">0.00 BDT</td>
+                <td className="py-3 px-3 text-right text-[#DC2626] font-bold">-142.60 BDT</td>
+                <td className="py-3 px-3 text-center">
+                  <span className="chip-neutral text-xs">
                     ABSTAINED (CV&gt;0.55)
                   </span>
                 </td>
               </tr>
               {/* Total Row */}
-              <tr className="font-bold border-t-2 border-[#EDEFF2] bg-[#F4F5F7]">
-                <td colSpan={2} className="py-2.5 px-2.5 text-[#1A1D1F]">
+              <tr className="font-extrabold border-t-2 border-[#E5E7EB] bg-[#F3F4F6] text-xs sm:text-sm">
+                <td colSpan={2} className="py-3 px-3 text-[#111827]">
                   Total Syndicate Liability Locked:
                 </td>
-                <td className="py-2.5 px-2.5 text-right text-[#00A35C]">100.0%</td>
-                <td className="py-2.5 px-2.5 text-right text-[#1A1D1F]">{displayR1.toLocaleString()} BDT</td>
-                <td className="py-2.5 px-2.5 text-right text-[#00A35C]">+285.37 BDT</td>
-                <td className="py-2.5 px-2.5 text-center">
-                  <span className="chip-success">4-of-5 QUORUM</span>
+                <td className="py-3 px-3 text-right text-[#059669]">100.0%</td>
+                <td className="py-3 px-3 text-right text-[#111827]">{displayR1.toLocaleString()} BDT</td>
+                <td className="py-3 px-3 text-right text-[#059669]">+285.37 BDT</td>
+                <td className="py-3 px-3 text-center">
+                  <span className="chip-success text-xs font-bold">4-of-5 QUORUM</span>
                 </td>
               </tr>
             </tbody>
@@ -456,17 +494,17 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
         </div>
 
         {/* Monsoon Shock & Flash Bailout Button */}
-        <div className="pt-2 flex items-center justify-between border-t border-[#EDEFF2] flex-wrap gap-2">
-          <p className="text-[10px] text-[#717579] max-w-sm">
+        <div className="pt-3 flex items-center justify-between border-t border-[#E5E7EB] flex-wrap gap-3">
+          <p className="text-xs text-[#6B7280] max-w-md leading-relaxed">
             Exogenous Covariant Shock Discrimination: market-wide drop drops credit stress without slashing social collateral.
           </p>
           <button
             onClick={onTriggerBailout}
             disabled={isExecuting}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#FF5C00] hover:bg-[#E55200] text-white font-bold text-[11px] transition shadow-cta"
+            className="btn-animated-primary text-xs sm:text-sm px-5 py-2.5 font-bold"
           >
-            <CloudLightning className="h-3.5 w-3.5" />
-            <span>Simulate Monsoon Shock → Flash Bailout</span>
+            <CloudLightning className="h-4 w-4" />
+            <span>Simulate Monsoon Shock &rarr; Flash Bailout</span>
           </button>
         </div>
       </div>

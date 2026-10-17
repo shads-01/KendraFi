@@ -1,179 +1,140 @@
 # DESIGN.md — KendraFi UI Design System & Visual Specification Guide
 
 > **MANDATORY DIRECTIVE FOR ALL AI AGENTS & DEVELOPERS:**  
-> Whenever any agent or developer performs tasks related to the KendraFi frontend or user interface, you **MUST** strictly follow the exact design properties, tokens, color codes, typography, layout rules, and component styles specified in this document. **Zero arbitrary styling or dark-theme drift is permitted.**
+> Whenever any agent or developer performs tasks related to the KendraFi frontend or user interface, you **MUST** strictly follow the exact design properties, tokens, color codes, typography, layout rules, animations, and multi-view structure specified in this document. **Zero arbitrary styling, micro unreadable fonts (<12px), or dark-theme drift is permitted.**
 
 ---
 
 ## 1. Design Inspiration & Core Philosophy
 
-The KendraFi visual system is inspired by the **Planora Productivity & Banking Dashboard** design language (by Agensip on EpicPxls). It embodies:
-- **Clean Enterprise Light Theme:** Soft neutral canvas (`#F4F5F7`), crisp elevated white cards (`#FFFFFF`), generous white space, and zero visual clutter.
-- **Warm Energetic Primary Accent:** Signature vibrant **Orange (`#FF5C00`)** used for primary calls-to-action, brand identity, active navigation states, and key highlights.
-- **Pastel Semantic Feedback Tints:** Multi-tier status badges combining vivid foreground text with 10%–15% opacity pastel background tints (Green for verified/completed, Red for attention/blocked, Blue for information/blockchain, Orange/Peach for in-progress/active).
-- **Smooth Organic Geometry:** Curated border radii ranging from `rounded-2xl` (16px) for cards to `rounded-full` (pill shape) for interactive buttons, chips, and input bars.
-- **Soft Layered Elevation:** Multi-depth drop shadows (`0 4px 20px -2px rgba(0, 0, 0, 0.05)`) with elevated floating highlight cards.
+The KendraFi visual system is inspired by the **Planora Productivity & Banking Dashboard** design language (by Agensip on EpicPxls) fused with high-velocity FinTech ergonomics. It embodies:
+- **Clean Enterprise Light Canvas:** Soft neutral backdrop (`#F4F5F7`), crisp elevated white cards (`#FFFFFF`), generous white space, and zero visual clutter.
+- **Warm Energetic Primary Accent:** Signature vibrant **Orange (`#FF5C00`)** used for primary calls-to-action, brand identity, active navigation states, and interactive highlights.
+- **Big, High-Legibility Typography:** Readable at a distance for hackathon judges and executive presentations. No unreadable micro text (minimum 12px `text-xs` for chips/badges, standard `text-sm` to `text-base` for body, `text-xl` to `text-3xl` for metrics and titles).
+- **Lively Micro-Animations & Dynamic Feedback:** Shimmering gradient buttons (`.btn-animated-primary`), pulsing agent nodes, bouncing voice note equalizer bars, flowing SVG data packet cables (`animate-data-flow`), and interactive card hover lifts (`.planora-card-interactive`).
+- **Pastel Semantic Feedback Tints:** Multi-tier status badges combining vivid foreground text with 10%–15% opacity pastel background tints (Emerald for verified/completed, Crimson for attention/blocked, Electric Blue for blockchain/zk, Sunset Peach for in-progress/active).
+- **Multi-View Architecture:** Seamless switching between **Overview (Landing Page)**, **Command Center (Operational Dashboard)**, and **Backtest Analytics (Empirical Monte Carlo View)**.
 
 ---
 
-## 2. Typography System
+## 2. Typography System & Sizing Scale
 
-### 2.1 Font Family
-- **Primary Font:** **`Noto Sans`** (Google Fonts)
-- **Fallback Stack:** `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif`
+### 2.1 Font Family Stack
+- **Primary Brand & Display:** **`Plus Jakarta Sans`** (Google Fonts)
+- **Body & Secondary:** **`Noto Sans`**, `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`
 - **Monospace (for Wallet Addresses, Hashes & Code):** `'JetBrains Mono', 'Fira Code', monospace`
 
 ```css
-font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+font-family: 'Plus Jakarta Sans', 'Noto Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 ```
 
-### 2.2 Font Weights & Usage Hierarchy
-| Weight | Numeric Value | Usage Context |
-| :--- | :--- | :--- |
-| **Regular** | `400` | Body text, descriptions, table cell subtext, secondary metadata, captions. |
-| **Medium** | `500` | Navigation items, filter toggles, input placeholders, status chips, table headers. |
-| **Bold** | `700` | Main headings, metric KPI values, card titles, button labels, key amounts. |
+### 2.2 Strict Typography Sizing Scale (No Micro-Fonts)
+| Role | Tailwind Classes | Pixel Equivalent | Usage Context |
+| :--- | :--- | :--- | :--- |
+| **Hero / Main Title** | `text-3xl sm:text-4xl font-extrabold` | 30px – 36px | Landing page hero header, main KPI stats |
+| **Section Header** | `text-xl sm:text-2xl font-extrabold` | 20px – 24px | Top navbar brand, section headers, view banners |
+| **Card Header** | `text-base sm:text-lg font-bold` | 16px – 18px | Panel titles, modal headings, prominent amounts |
+| **Standard Body / Primary Label**| `text-sm sm:text-base font-semibold` | 14px – 16px | Card titles, scenario cards, signer names |
+| **Secondary Body / Description** | `text-xs sm:text-sm text-[#4B5563]` | 12px – 14px | Explanations, parameters, scenario details |
+| **Chips / Badges / Captions** | `text-xs font-bold py-1 px-3` | 12px (Strict Minimum)| Status pills, tags, addresses, hash truncated labels |
 
-### 2.3 Type Scale
-- **Display / Welcome Heading:** `26px – 28px` | `font-bold` | `#1A1D1F`
-- **Card / Section Header:** `16px – 18px` | `font-bold` | `#1A1D1F`
-- **Primary Metric / Stat:** `30px – 36px` | `font-bold` | `#1A1D1F`
-- **Sub-Metric / Highlight Amount:** `18px – 20px` | `font-bold` | `#FF5C00` or `#00A35C`
-- **Body Text:** `13px – 14px` | `font-normal` | `#2D3135`
-- **Secondary / Muted Text:** `11px – 12px` | `font-normal` | `#717579`
-- **Badge / Chip Text:** `10px – 11px` | `font-medium` or `font-bold`
+> ⚠️ **RULE:** Never use `text-[9px]`, `text-[10px]`, or `text-[11px]`. All chips and labels must be at least `text-xs` (12px) with `font-bold` or `font-semibold` to guarantee legibility on projectors, mobile, and desktop.
 
 ---
 
 ## 3. Color Palette & Style Tokens
 
-### 3.1 Primary Brand & Accent Colors (Exact Specification)
+### 3.1 Primary Brand & Accent Colors
 
-| Color Name | Hex Code | Tailwind / Token | Usage |
+| Color Name | Hex Code | Tailwind Token | Usage |
 | :--- | :--- | :--- | :--- |
-| **Orange (Primary)** | `#FF5C00` | `bg-[#FF5C00]`, `text-[#FF5C00]` | Brand mark, primary CTA buttons (`+ Add Task`, `Execute`), active nav pills, progress bar fills. |
-| **Orange Hover** | `#E55200` | `hover:bg-[#E55200]` | Primary button hover state. |
+| **Orange (Primary)** | `#FF5C00` | `bg-[#FF5C00]`, `text-[#FF5C00]` | Brand mark, primary CTA buttons (`.btn-animated-primary`), active nav pills, progress bar fills. |
+| **Orange Hover** | `#E05200` | `hover:bg-[#E05200]` | Primary button hover state. |
 | **Orange Tint / Peach** | `#FFF0E6` | `bg-[#FFF0E6]`, `border-[#FFD8BF]` | Active tab background, selected scenario pill, warm highlight card background. |
-| **Red (Attention / Alert)** | `#FF1744` / `#EF4444` | `text-[#FF1744]`, `bg-[#EF4444]` | Overdue status, Red-Team security intercept alert, unverified counterparty badges. |
-| **Red Tint / Blush** | `#FEECEE` | `bg-[#FEECEE]`, `text-[#FF1744]` | "Attention" chips, threat badges, alert containers. |
-| **Green (Success / Quorum)**| `#00A35C` / `#10B981` | `text-[#00A35C]`, `bg-[#00A35C]` | Completed tasks, DSCR solvency pass, on-chain EIP-712 quorum verified. |
-| **Green Tint / Mint** | `#E8F8F0` | `bg-[#E8F8F0]`, `text-[#00A35C]` | Growth chips (`↑ 12%`), verified supplier badges, positive utility chips. |
-| **Blue (Info / Web3)** | `#0084FF` / `#2563EB` | `text-[#0084FF]`, `bg-[#0084FF]` | Timeline bars, blockchain transaction hashes, Blockscout links. |
-| **Blue Tint / Sky** | `#EBF5FF` | `bg-[#EBF5FF]`, `text-[#0084FF]` | Info tags, low priority badges, contract address chips. |
-| **Black / Charcoal** | `#1A1D1F` | `text-[#1A1D1F]` | Primary headings, prominent stat numbers, card titles. |
+| **Red (Attention / Alert)** | `#DC2626` / `#FF1744` | `text-[#DC2626]`, `bg-[#DC2626]` | Overdue status, Red-Team security intercept alert, unverified counterparty badges. |
+| **Red Tint / Blush** | `#FEECEE` | `bg-[#FEECEE]`, `text-[#DC2626]` | Attention chips, threat badges, alert containers. |
+| **Green (Success / Quorum)**| `#059669` / `#00A35C` | `text-[#059669]`, `bg-[#059669]` | Completed tasks, DSCR solvency pass, on-chain EIP-712 quorum verified. |
+| **Green Tint / Mint** | `#E8F8F0` | `bg-[#E8F8F0]`, `text-[#059669]` | Growth chips (`↑ 12%`), verified supplier badges, positive utility chips. |
+| **Blue (Info / Web3)** | `#0284C7` / `#0084FF` | `text-[#0284C7]`, `bg-[#0284C7]` | Timeline bars, blockchain transaction hashes, Blockscout links. |
+| **Blue Tint / Sky** | `#EBF5FF` | `bg-[#EBF5FF]`, `text-[#0284C7]` | Info tags, low priority badges, contract address chips. |
+| **Dark Charcoal / Text** | `#111827` | `text-[#111827]` | Primary headings, prominent stat numbers, card titles. |
 | **White (Card Surface)** | `#FFFFFF` | `bg-[#FFFFFF]` | Main card backgrounds, modal dialogs, elevated containers. |
 | **Canvas Background** | `#F4F5F7` | `bg-[#F4F5F7]` | Overall application page background. |
-| **Sidebar Surface** | `#FFFFFF` or `#F8F9FA` | `bg-white` | Left navigation container. |
-| **Border / Divider** | `#EDEFF2` | `border-[#EDEFF2]` | Subtle 1px structural separation. |
-| **Muted Text / Slate** | `#717579` | `text-[#717579]` | Captions, timestamps, secondary labels. |
+| **Border / Divider** | `#E5E7EB` / `#EDEFF2`| `border-[#E5E7EB]` | Clean 1px structural separation. |
+| **Muted Slate Text** | `#6B7280` / `#4B5563`| `text-[#6B7280]` | Captions, timestamps, secondary labels. |
 
 ---
 
-## 4. Component Design Tokens & Layout Rules
+## 4. Animation System & Keyframe Tokens
 
-### 4.1 Card & Surface Elevation
-- **Standard Card:**
-  ```html
-  <div class="bg-white rounded-2xl p-5 shadow-[0_2px_12px_-2px_rgba(0,0,0,0.04)] border border-[#EDEFF2]">
-  ```
-- **Floating / Highlight Card (Elevated Stat / Overdue Callout):**
-  ```html
-  <div class="bg-white rounded-2xl p-5 shadow-[0_12px_32px_-4px_rgba(0,0,0,0.08)] border border-transparent">
-  ```
-- **Sidebar Navigation Card:**
-  ```html
-  <aside class="bg-white rounded-3xl p-5 shadow-[0_2px_16px_rgba(0,0,0,0.03)] border border-[#EDEFF2]">
-  ```
+KendraFi features a modern micro-animation engine built directly into `src/app/globals.css`:
 
-### 4.2 Buttons
-- **Primary CTA Button:**
-  - Shape: Fully rounded pill (`rounded-full`) or `rounded-xl`
-  - Style: Solid Orange (`bg-[#FF5C00]`), text pure white, `font-bold`, with subtle shadow:
-  ```html
-  <button class="bg-[#FF5C00] hover:bg-[#E55200] text-white font-bold px-5 py-2.5 rounded-full shadow-[0_4px_14px_rgba(255,92,0,0.3)] transition-all flex items-center gap-2">
-  ```
-- **Secondary / Filter Button:**
-  - Shape: `rounded-full` or `rounded-xl`
-  - Style: Clean white background, subtle border `#EDEFF2`, dark text `#1A1D1F`, hover `#F8F9FA`.
-- **Active Navigation / Tab Pill:**
-  - Shape: `rounded-xl` or `rounded-full`
-  - Style: Soft Peach background (`bg-[#FFF0E6]`), vibrant Orange text (`text-[#FF5C00]`), `font-bold`.
-  ```html
-  <div class="bg-[#FFF0E6] text-[#FF5C00] font-bold px-3.5 py-2 rounded-xl flex items-center gap-2.5">
-  ```
-
-### 4.3 Semantic Status Chips & Badges
-All status chips MUST use the pill form (`rounded-full`, `px-2.5 py-1 text-[11px] font-bold`) pairing the bright foreground color with its pastel background tint:
-- **Success / Verified:** `bg-[#E8F8F0] text-[#00A35C]` (e.g. `16-Bit Range Proof VERIFIED`, `SIGNED`)
-- **Attention / Blocked:** `bg-[#FEECEE] text-[#FF1744]` (e.g. `Attention: Prompt Injection Detected`)
-- **In-Progress / Staked:** `bg-[#FFF0E6] text-[#FF5C00]` (e.g. `40.0% Locked`, `On progress`)
-- **Info / Low Priority:** `bg-[#EBF5FF] text-[#0084FF]` (e.g. `Base Sepolia Live`, `Low priority`)
-- **Neutral / Abstained:** `bg-[#F4F5F7] text-[#717579]` (e.g. `Abstained (CV > 0.55)`)
-
-### 4.4 Progress Bars & Sliders
-- **Track:** Height 6px – 8px, `bg-[#EDEFF2]`, `rounded-full`.
-- **Fill:** Solid `#FF5C00` (Orange), `#00A35C` (Green), or `#0084FF` (Blue) with `rounded-full`.
-
-### 4.5 Timeline & Gantt Bars (Planora Style)
-- Rounded pill horizontal bars (`rounded-full` or `rounded-lg`) spanning project milestones with assigned avatar circles aligned to the right edge.
-- Coral / Orange / Green / Blue segment colors indicating status.
-- Vertical orange indicator line (`border-l-2 border-[#FF5C00]`) marking the active checkpoint.
+### 4.1 Keyframes & Classes
+- **Button Shimmer & Lift (`.btn-animated-primary`):**
+  - Vibrant gradient from `#FF5C00` to `#E05200`.
+  - Floating shadow: `shadow-[0_4px_16px_rgba(255,92,0,0.25)]`.
+  - Hover state: `-translate-y-0.5 shadow-[0_8px_24px_rgba(255,92,0,0.35)]`.
+  - Continuous animated sheen sweep via `::after` gradient transform.
+- **Card Interactive Lift (`.planora-card-interactive`):**
+  - Crisp white background, `rounded-2xl`, border `#E5E7EB`.
+  - Hover state: `-translate-y-1 border-[#FFD8BF] shadow-[0_12px_28px_-6px_rgba(0,0,0,0.08)]`.
+- **SVG Data Packet Flow (`.animate-data-flow`):**
+  - Dashed SVG stroke moving dynamically along agent connection chords (`stroke-dashoffset: 40`).
+- **Bangla Voice Equalizer Bounce (`.animate-wave-bar`):**
+  - Alternating height bounce (`waveBarBounce`) scaled across 16 voice bars with staggered animation delays (0.1s to 0.7s).
+- **Pulsing Agent Halos (`animate-pulse-glow-orange` & `animate-pulse-glow-green`):**
+  - Multi-stage box-shadow diffusion giving active agents a breathing, living aura.
+- **Ceramic Phone Chassis (`.phone-chassis`):**
+  - Multi-layer bezel with realistic camera notch, ear speaker pill, and depth shadow `shadow-[0_20px_50px_-10px_rgba(0,0,0,0.12)]`.
 
 ---
 
-## 5. Application to KendraFi (*Weiyedai-Global*) 3-Panel Architecture
+## 5. Multi-View Architecture
 
-When applying the Planora design system to KendraFi, maintain all reconciled financial numbers and security logic while updating the visual theme:
+KendraFi provides three top-level views managed by `activeView` in `src/app/page.tsx` and toggled via `JudgeCommandHeader`:
 
-### 5.1 Top Navigation & HUD Header
-- **Background:** Crisp White (`#FFFFFF`) with subtle bottom border (`#EDEFF2`).
-- **Brand:** KendraFi logo with stylized interlocking orange nodes mark.
-- **Title:** "KendraFi" (`text-[#1A1D1F] font-bold`) + "Weiyedai-Global · 微业贷全球化" (`text-[#717579] font-medium`).
-- **Status Pills:** Planora-style pastel pill badges for FSM State (`bg-[#E8F8F0] text-[#00A35C]`), Latency counter (`bg-[#F4F5F7] text-[#1A1D1F]`), and Tx Mode (`bg-[#EBF5FF] text-[#0084FF]`).
-- **Judge Zoom Bar:** Segmented pill controls (1x, 1.25x, 1.5x, 2x, 2.5x) using peach active indicator (`bg-[#FFF0E6] text-[#FF5C00]`).
+### 5.1 View 1: Overview (`"landing"`) — High-Impact Protocol Landing Page
+- **Component:** `src/components/ProtocolLandingView.tsx`
+- **Features:**
+  1. **Hero Badge:** "2026 Shenzhen FinTechathon • Top-Tier Weiyedai Global Submission"
+  2. **Hero Header & Value Prop:** Large high-contrast heading, clear subheader, and dual CTAs ("Launch Command Center" and "Explore Monte Carlo Backtest").
+  3. **Live Protocol Metrics Ticker:** 6 metric cards (45,000 BDT facility, 12.50% APR, 1.6800x DSCR, 100% Staked, 1.50% Wholesaler MDR, +21.96% FATE AUC Uplift).
+  4. **Interactive Scenario Launchpad:** 3 scenario cards with direct "Run Scenario" actions that instantly switch the app into the Command Center and trigger the scenario.
+  5. **Dual Problem Visualizer:** "The Informal Merchant Trap" (24-27% predatory APR, cash-only) vs "The KendraFi Solution" (12.50% APR, zero-trust EIP-712 settlement).
+  6. **5 Autonomous Agent Persona Cards:** Interactive grid featuring Rahim Store, Nasrin Pharmacy, Fatema Textiles, Kamal Agro, and Sohel Electronics with live balances and roles.
+  7. **5-Layer ABCD Architecture Grid:** Visual mapping of Tier 0 Perception, Tier 1 CNP Arena, Tier 2 Risk Gate, Tier 3 ZK-Solvency, and Tier 4 Blockscout Settlement.
 
-### 5.2 Left Panel: Merchant Smartphone & Unit Economics
-- **Chassis:** Clean modern smartphone frame in light silver/ceramic finish with pure white screen.
-- **Bangla Voice Note:** Peach container (`bg-[#FFF0E6] border border-[#FFD8BF]`), vibrant Orange waveform bars (`bg-[#FF5C00]`), play button in solid orange.
-- **Invoice Card:** Clean white card with soft shadow, `#EDEFF2` border, and green verified badge (`bg-[#E8F8F0] text-[#00A35C]`).
-- **4 Scenario Action Buttons:** Formatted as Planora-style task cards with priority badges (Scenario A = Green/Peach, Scenario B = Red attention chip, Scenario C = Purple/Amber chip, Repay Sweep = Solid Orange CTA).
-- **20/80 Joint-Lending Card:** Clean white card with large bold numbers (`12.50% APR`), breakdown rows with light borders, and distinct $1.50\%$ Wholesaler MDR callout.
+### 5.2 View 2: Command Center (`"command_center"`) — Live 3-Panel Cockpit
+- **Components:**
+  - Left Panel: `MerchantMobilePanel.tsx` (Ceramic smartphone with voice restock note, invoice OCR, scenario triggers, 20/80 joint lending economics).
+  - Center Panel: `KendraArenaPanel.tsx` (5-agent pentagon arena with animated SVG chords, 3-round CNP negotiation timeline, ZK solvency proof card, Nash Equilibrium table).
+  - Right Panel: `SecurityEscrowPanel.tsx` (4-tier zero-trust firewall, EIP-712 quorum session keys, direct B2B escrow breakdown, Blockscout verification link).
 
-### 5.3 Center Panel: 5-Agent Pentagon Arena & ZK Solvency
-- **Pentagon Topology:** Light canvas background with crisp white agent nodes, orange/purple connection chords, and pulse animations.
-- **CNP Negotiation Feed:** Styled like Planora's "Project Timeline" with round-by-round Gantt pill bars showing bids, caps, and step-ups.
-- **ZK Solvency Card:** White card with blue/purple cryptographic badges, commitment point hex, and 16-bit CDS94 verified badge (`bg-[#E8F8F0] text-[#00A35C]`).
-- **Besley-Coate Nash Table:** Clean modern white table with `#EDEFF2` dividers, bold black stakes, and pastel signed chips.
-
-### 5.4 Right Panel: Security Intercepts & On-Chain Settlement
-- **Red-Team Alert:** Floating attention card with blush pink background (`bg-[#FEECEE]`), bold red alert header (`text-[#FF1744]`), and clean explanation.
-- **Direct B2B Escrow Breakdown:** Clean white summary card with bold figures ($45,000.00$ principal, $-675.00$ MDR, **$44,325.00\text{ BDTc}$** net supplier payout, **$45,462.33\text{ BDTc}$** gross repayment).
-- **Blockscout Explorer Button:** Clean pill button linking to live Base Sepolia testnet transaction.
-
----
-
-## 6. Mathematical & Functional Invariants (Zero Drift Allowed)
-
-Regardless of visual styling changes, the following values **MUST REMAIN EXACT**:
-- Loan Principal: `45,000.00 BDT`
-- Tenor: `30 days` ACT/365
-- Borrower Effective APR: `12.50% APR` ($8.50\% + 0.40\% + 1.40\% + 2.20\%$)
-- Gross Repayment ($R_1$): `45,462.33 BDT`
-- Daily MFS Sweep: `1,515.41 BDT/day`
-- Wholesaler MDR (1.50% flat): `675.00 BDT`
-- Net Direct Supplier Payout: `44,325.00 BDTc`
-- Rahim Store DSCR: `1.6800x` ($\ge 1.25$)
-- Besley-Coate Stakes: `AGT-04` = 40.0% (`18,184.93 BDT`), `AGT-02` = 35.0% (`15,911.82 BDT`), `AGT-03` = 25.0% (`11,365.58 BDT`), `AGT-05` = 0.0% (`0.00 BDT` - Abstained)
-- Total Staked: `45,462.33 BDT` (100.0% coverage)
-- FATE Score ($p_1$): `98.5%`
+### 5.3 View 3: Backtest Analytics (`"backtest"`) — Empirical Monte Carlo Dashboard
+- **Component:** `src/components/MonteCarloAnalyticsView.tsx`
+- **Features:**
+  1. Full-screen empirical simulation analysis of 1,000 Kendras / 5,000 synthetic merchants.
+  2. 4 Primary KPI cards: +21.96% AUC lift (0.866 vs 0.742 baseline), -60.76% default reduction (1.1% vs 14.8%), $18.42M BDT simulated volume, 0.00% collusion escape.
+  3. WeBank FATE Hetero-LR benchmark comparison (IEEE P3652.1 citation).
+  4. Feature importance ranking bar chart (Besley-Coate Peer Staking, FATE Supplier KYB, Graph Collusion Entropy, Invoice Velocity).
+  5. Quick action CTA to return directly to the live Command Center.
 
 ---
 
-## 7. Compliance Checklist for Future AI Agent Tasks
+## 6. Mathematical Invariants & Reconciled Numbers
 
-Before concluding any frontend coding task, any AI agent MUST verify:
-- [ ] Typography uses Google Font **`Noto Sans`** (Regular, Medium, Bold) instead of browser defaults.
-- [ ] Theme uses the clean light palette: canvas `#F4F5F7`, cards `#FFFFFF`, primary CTA `#FF5C00`.
-- [ ] Status badges use the pastel-tinted pill design (`bg-[#E8F8F0] text-[#00A35C]`, `bg-[#FEECEE] text-[#FF1744]`, `bg-[#FFF0E6] text-[#FF5C00]`).
-- [ ] Cards have generous border-radius (`rounded-2xl` or `rounded-3xl`) with soft shadows (`shadow-[0_2px_12px_-2px_rgba(0,0,0,0.04)]`).
-- [ ] All 5 competition math invariants match `CONTEXT.md` exactly.
+All numbers across all views must strictly reconcile to the core protocol economics:
+- **Loan Principal:** `45,000.00 BDT` ($400 USD, 30-day tenor)
+- **Borrower Interest Rate:** `12.50% APR` (ACT/365: `462.33 BDT` total interest)
+- **Gross Repayment Amount:** `45,462.33 BDT`
+- **Daily Automated Sales Sweep:** `1,515.41 BDT/day` over 30 days
+- **Wholesaler MDR Rebate (Meghna Group):** `1.50% flat` (`-675.00 BDT`)
+- **Net Direct Supplier Payout:** `44,325.00 BDT`
+- **Borrower DSCR:** `1.6800x` (Threshold $\ge 1.25\text{x}$)
+- **Besley-Coate Peer Guarantees (100% total):**
+  - Nasrin Pharmacy (AGT-04): 40.0% (`18,184.93 BDT`)
+  - Fatema Textiles (AGT-02): 35.0% (`15,911.82 BDT`)
+  - Kamal Agro (AGT-03): 25.0% (`11,365.58 BDT`)
+  - Sohel Electronics (AGT-05): 0.0% (Abstained, CV = 0.62)
+- **WeBank FATE Enterprise Score:** `98.5%` ($p_1 = 0.985$)
+- **WeBank FATE Hetero-LR AUC Lift:** `+21.96%` ($0.866$ vs $0.742$)

@@ -127,10 +127,11 @@ export const JudgeCommandHeader: React.FC<JudgeCommandHeaderProps> = ({
         {/* Center View Switcher: Landing vs Command Center vs Analytics */}
         <div className="flex items-center p-1 rounded-2xl bg-[#F3F4F6] border border-[#E5E7EB]">
           <button
+            id="nav-tab-overview"
             onClick={() => onViewChange("landing")}
             className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition ${
               activeView === "landing"
-                ? "bg-white text-[#111827] shadow-sm"
+                ? "bg-white text-[#111827] shadow-sm border border-[#E5E7EB]"
                 : "text-[#6B7280] hover:text-[#111827]"
             }`}
           >
@@ -139,10 +140,11 @@ export const JudgeCommandHeader: React.FC<JudgeCommandHeaderProps> = ({
           </button>
 
           <button
+            id="nav-tab-command-center"
             onClick={() => onViewChange("command_center")}
             className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition ${
               activeView === "command_center"
-                ? "bg-white text-[#FF5C00] shadow-sm"
+                ? "bg-white text-[#FF5C00] shadow-sm border border-[#E5E7EB]"
                 : "text-[#6B7280] hover:text-[#111827]"
             }`}
           >
@@ -151,14 +153,15 @@ export const JudgeCommandHeader: React.FC<JudgeCommandHeaderProps> = ({
           </button>
 
           <button
+            id="nav-tab-analytics"
             onClick={() => onViewChange("backtest")}
             className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition ${
               activeView === "backtest"
-                ? "bg-white text-[#0284C7] shadow-sm"
+                ? "bg-white text-[#0284C7] shadow-sm border border-[#E5E7EB]"
                 : "text-[#6B7280] hover:text-[#111827]"
             }`}
           >
-            <BarChart3 className="h-4 w-4" />
+            <BarChart3 className="h-4 w-4 text-[#0284C7]" />
             <span>Analytics</span>
           </button>
         </div>

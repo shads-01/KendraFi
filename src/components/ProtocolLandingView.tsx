@@ -23,6 +23,9 @@ import {
   Building2,
   Store,
   BadgeCheck,
+  Bell,
+  Search,
+  LayoutDashboard,
 } from "lucide-react";
 import type { ScenarioType } from "@/types";
 
@@ -173,6 +176,7 @@ export default function ProtocolLandingView({
         {/* Action Buttons */}
         <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
           <button
+            id="hero-btn-launch-cockpit"
             onClick={onLaunchCommandCenter}
             className="btn-animated-primary text-base sm:text-lg px-8 py-4 font-bold shadow-lg"
           >
@@ -182,6 +186,7 @@ export default function ProtocolLandingView({
           </button>
 
           <button
+            id="hero-btn-launch-backtest"
             onClick={onLaunchBacktest}
             className="btn-animated-secondary text-base sm:text-lg px-7 py-4 font-bold"
           >
@@ -207,7 +212,245 @@ export default function ProtocolLandingView({
             Base Sepolia &amp; FISCO BCOS Quorum
           </span>
         </div>
+
+        {/* ═══════════════════════════════════════════════════════════════ */}
+        {/* HERO DASHBOARD MOCKUP SHOWCASE (WITH FLOATING ACCENT BADGES)   */}
+        {/* ═══════════════════════════════════════════════════════════════ */}
+        <div className="relative w-full max-w-5xl mx-auto my-6">
+          {/* Floating Accent Card: Top-Right (ZK Solvency Score) */}
+          <div className="absolute -top-6 -right-2 sm:-right-8 z-30 planora-card p-3 sm:p-4 rounded-2xl shadow-xl flex items-center gap-3 animate-float-slow border-2 border-[#A7F3D0] bg-white">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#ECFDF5] text-[#059669]">
+              <FileCheck2 className="h-5 w-5" />
+            </div>
+            <div>
+              <span className="text-[11px] font-bold text-[#6B7280] uppercase tracking-wider block">
+                ZK Solvency Score
+              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-sm sm:text-base font-extrabold text-[#059669]">
+                  98.5 / 100
+                </span>
+                <span className="chip-success text-[10px] py-0.5 px-2">
+                  16-Bit Verified
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Floating Accent Card: Bottom-Left (New Quorum Cosigner) */}
+          <div className="absolute -bottom-6 -left-2 sm:-left-8 z-30 planora-card p-3 sm:p-4 rounded-2xl shadow-xl flex items-center gap-3 animate-float-delayed border-2 border-[#FFD8BF] bg-white">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#FFF0E6] text-[#FF5C00]">
+              <Sparkles className="h-5 w-5" />
+            </div>
+            <div>
+              <span className="text-[11px] font-bold text-[#6B7280] uppercase tracking-wider block">
+                New Syndicate Quorum
+              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-xs sm:text-sm font-bold text-[#111827]">
+                  Nasrin Pharmacy Cosigned
+                </span>
+                <span className="chip-progress text-[10px] py-0.5 px-2">
+                  40.0% Stake
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Browser Mockup Window Chassis */}
+          <div className="browser-window-mockup overflow-hidden bg-white text-left">
+            {/* Mockup Window Titlebar with macOS Traffic Lights & Address Bar */}
+            <div className="flex items-center justify-between px-4 sm:px-6 py-3 border-b border-[#E5E7EB] bg-[#FAFBFD]">
+              <div className="flex items-center gap-2">
+                <span className="h-3 w-3 rounded-full bg-[#FF5F56] inline-block shadow-sm"></span>
+                <span className="h-3 w-3 rounded-full bg-[#FFBD2E] inline-block shadow-sm"></span>
+                <span className="h-3 w-3 rounded-full bg-[#27C93F] inline-block shadow-sm"></span>
+              </div>
+
+              {/* Address Bar */}
+              <div className="flex items-center gap-2 bg-[#F3F4F6] text-[#6B7280] text-xs font-mono px-4 sm:px-6 py-1.5 rounded-full border border-[#E5E7EB] shadow-inner max-w-sm sm:max-w-md w-full justify-center">
+                <Lock className="h-3 w-3 text-[#059669]" />
+                <span className="truncate">kendrafi.network/dhaka/kendra-01/dashboard</span>
+              </div>
+
+              <div className="flex items-center gap-1.5 text-xs text-[#9CA3AF] hidden sm:flex">
+                <span className="h-2 w-2 rounded-full bg-[#059669]"></span>
+                <span className="font-semibold text-[#059669]">Live Testnet</span>
+              </div>
+            </div>
+
+            {/* Mockup Window Inner Content Area */}
+            <div className="grid grid-cols-1 md:grid-cols-12 min-h-[420px] bg-[#FAFBFD]">
+              {/* Mockup Left Navigation Sidebar */}
+              <aside className="md:col-span-3 p-4 border-r border-[#E5E7EB] bg-white hidden md:flex flex-col justify-between">
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2.5 px-2 py-1">
+                    <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-[#FF5C00] to-[#E05200] flex items-center justify-center text-white shadow-sm">
+                      <Cpu className="h-4 w-4" />
+                    </div>
+                    <span className="font-extrabold text-base text-[#111827]">KendraFi</span>
+                  </div>
+
+                  <nav className="space-y-1 text-xs font-bold">
+                    <div className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-[#E8F8F0] text-[#059669] shadow-sm">
+                      <LayoutDashboard className="h-4 w-4" />
+                      <span>Dashboard</span>
+                    </div>
+                    <div
+                      onClick={onLaunchCommandCenter}
+                      className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-[#6B7280] hover:text-[#111827] hover:bg-[#F3F4F6] transition cursor-pointer"
+                    >
+                      <Store className="h-4 w-4" />
+                      <span>Browse Loans</span>
+                    </div>
+                    <div
+                      onClick={onLaunchCommandCenter}
+                      className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-[#6B7280] hover:text-[#111827] hover:bg-[#F3F4F6] transition cursor-pointer"
+                    >
+                      <Users className="h-4 w-4" />
+                      <span>Agent Arena</span>
+                    </div>
+                    <div
+                      onClick={onLaunchCommandCenter}
+                      className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-[#6B7280] hover:text-[#111827] hover:bg-[#F3F4F6] transition cursor-pointer"
+                    >
+                      <ShieldCheck className="h-4 w-4" />
+                      <span>ZK Privacy</span>
+                    </div>
+                    <div
+                      onClick={onLaunchCommandCenter}
+                      className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-[#6B7280] hover:text-[#111827] hover:bg-[#F3F4F6] transition cursor-pointer"
+                    >
+                      <Lock className="h-4 w-4" />
+                      <span>Risk Gateways</span>
+                    </div>
+                  </nav>
+                </div>
+
+                {/* Bottom Quick Action */}
+                <button
+                  onClick={onLaunchCommandCenter}
+                  className="btn-animated-primary text-xs py-2.5 px-3 w-full font-bold flex items-center justify-center gap-1.5"
+                >
+                  <span>Launch Cockpit</span>
+                  <ChevronRight className="h-3.5 w-3.5" />
+                </button>
+              </aside>
+
+              {/* Mockup Main Dashboard Canvas */}
+              <div className="md:col-span-9 p-5 sm:p-6 space-y-5 bg-[#FAFBFD]">
+                {/* Mockup Header Welcome & User Profile */}
+                <div className="flex items-center justify-between flex-wrap gap-3">
+                  <div>
+                    <h3 className="text-lg sm:text-xl font-extrabold text-[#111827]">
+                      Welcome back, Rahim Store
+                    </h3>
+                    <p className="text-xs text-[#6B7280]">
+                      Karwan Bazar Rice &amp; Grocery &bull; Active Borrower Node (AGT-01)
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <div className="relative p-2 rounded-xl bg-white border border-[#E5E7EB] text-[#6B7280] shadow-sm">
+                      <Bell className="h-4 w-4" />
+                      <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-[#FF5C00]"></span>
+                    </div>
+                    <div className="h-8 w-8 rounded-full bg-[#E8F8F0] border-2 border-[#059669] flex items-center justify-center text-xs font-bold text-[#059669] shadow-sm">
+                      RS
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3 KPI Metric Cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="p-3.5 rounded-2xl bg-white border border-[#E5E7EB] shadow-sm space-y-1">
+                    <span className="text-[11px] font-semibold text-[#6B7280] block">Active Facility</span>
+                    <div className="text-xl font-extrabold text-[#111827]">45,000 BDT</div>
+                    <span className="text-[10px] text-[#6B7280]">30-Day Tenor @ 12.5%</span>
+                  </div>
+                  <div className="p-3.5 rounded-2xl bg-white border border-[#E5E7EB] shadow-sm space-y-1">
+                    <span className="text-[11px] font-semibold text-[#6B7280] block">Cosigned Quorum</span>
+                    <div className="text-xl font-extrabold text-[#059669]">4-of-5 Signed</div>
+                    <span className="text-[10px] text-[#059669] font-semibold">100.0% Coverage Locked</span>
+                  </div>
+                  <div className="p-3.5 rounded-2xl bg-white border border-[#E5E7EB] shadow-sm space-y-1">
+                    <span className="text-[11px] font-semibold text-[#6B7280] block">Solvency Score</span>
+                    <div className="text-xl font-extrabold text-[#FF5C00]">1.6800x</div>
+                    <span className="text-[10px] text-[#FF5C00] font-semibold">98.5% FATE Hetero-LR</span>
+                  </div>
+                </div>
+
+                {/* Recommended Restock Syndicates & Co-Guarantors Section */}
+                <div className="space-y-3 pt-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs sm:text-sm font-bold text-[#111827]">
+                      Recommended Restock Facilities &amp; Co-Guarantors
+                    </span>
+                    <span
+                      className="text-xs font-semibold text-[#FF5C00] hover:underline cursor-pointer"
+                      onClick={onLaunchCommandCenter}
+                    >
+                      View All &rarr;
+                    </span>
+                  </div>
+
+                  {/* List Item 1: Fully Loaded Card */}
+                  <div
+                    onClick={onLaunchCommandCenter}
+                    className="p-3.5 rounded-2xl bg-white border border-[#E5E7EB] shadow-sm flex items-center justify-between gap-3 hover:border-[#CBD5E1] transition cursor-pointer group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-xl bg-[#E8F8F0] text-[#059669] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                        <Store className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <span className="text-xs sm:text-sm font-bold text-[#111827] block">
+                          50 Sacks Miniket Rice &bull; Meghna Group Wholesale
+                        </span>
+                        <span className="text-[11px] text-[#6B7280]">
+                          Karwan Bazar &bull; 30-Day Tenor &bull; 1.50% Wholesaler MDR
+                        </span>
+                      </div>
+                    </div>
+                    <span className="chip-success text-xs shrink-0 font-bold py-1 px-3">
+                      98.5% match
+                    </span>
+                  </div>
+
+                  {/* List Item 2: Loading State with Skeleton Loader Bars */}
+                  <div className="p-3.5 rounded-2xl bg-white border border-[#E5E7EB] shadow-sm flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3 w-full">
+                      <div className="h-10 w-10 rounded-xl bg-[#FFF0E6] text-[#FF5C00] flex items-center justify-center shrink-0">
+                        <Users className="h-5 w-5" />
+                      </div>
+                      <div className="space-y-1.5 w-full max-w-xs">
+                        <div className="skeleton-shimmer h-3.5 w-48 rounded"></div>
+                        <div className="skeleton-shimmer h-2.5 w-32 rounded"></div>
+                      </div>
+                    </div>
+                    <span className="chip-progress text-xs shrink-0 font-bold py-1 px-3">
+                      87.0% match
+                    </span>
+                  </div>
+
+                  {/* List Item 3: Full Skeleton Placeholder (Matching the User's Screenshot) */}
+                  <div className="p-3.5 rounded-2xl bg-white/70 border border-[#E5E7EB] shadow-sm flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3 w-full">
+                      <div className="skeleton-shimmer h-10 w-10 rounded-xl shrink-0"></div>
+                      <div className="space-y-1.5 w-full max-w-sm">
+                        <div className="skeleton-shimmer h-3.5 w-56 rounded"></div>
+                        <div className="skeleton-shimmer h-2.5 w-36 rounded"></div>
+                      </div>
+                    </div>
+                    <div className="skeleton-shimmer h-7 w-20 rounded-full shrink-0"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
+
 
       {/* ═══════════════════════════════════════════════════════════════ */}
       {/* PROTOCOL METRICS TICKER                                       */}

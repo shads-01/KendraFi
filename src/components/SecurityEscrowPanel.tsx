@@ -43,6 +43,7 @@ interface SecurityEscrowPanelProps {
   quorumSignatures?: string[];
   grossRepaymentBdt?: number;
   dscr?: number;
+  isExecuting?: boolean;
 }
 
 export default function SecurityEscrowPanel({
@@ -54,6 +55,7 @@ export default function SecurityEscrowPanel({
   quorumSignatures = [],
   grossRepaymentBdt = 45462.33,
   dscr = 1.68,
+  isExecuting = false,
 }: SecurityEscrowPanelProps) {
   const [activeTab, setActiveTab] = useState<"firewall" | "backtest">("firewall");
   const [expandedSig, setExpandedSig] = useState<number | null>(null);
@@ -297,95 +299,112 @@ export default function SecurityEscrowPanel({
               </span>
             </div>
 
-            <div className="space-y-3">
-              {/* Gate 1: Tier 0 Prompt Sanitizer */}
-              <div className="flex items-center justify-between p-3 rounded-2xl bg-[#FAFBFD] border border-[#EDEFF2] transition hover:bg-[#F3F4F6]">
-                <div className="flex items-center gap-3">
-                  <div className={`h-2.5 w-2.5 rounded-full shrink-0 ${
-                    activeScenario === "SCENARIO_B_REDTEAM" ? "bg-[#DC2626] animate-ping" : "bg-[#059669]"
-                  }`} />
-                  <div>
-                    <span className="font-bold text-[#111827] block text-xs sm:text-sm">
-                      Tier 0: OCR Prompt Sanitizer
-                    </span>
-                    <span className="text-xs text-[#6B7280]">
-                      {activeScenario === "SCENARIO_B_REDTEAM"
-                        ? "Adversarial override intercepted"
-                        : "Regex & perplexity guard active"}
-                    </span>
+            {isExecuting ? (
+              <div className="space-y-3 py-1">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="flex items-center justify-between p-3 rounded-2xl bg-[#FAFBFD] border border-[#EDEFF2]">
+                    <div className="flex items-center gap-3 w-full">
+                      <div className="skeleton-shimmer h-2.5 w-2.5 rounded-full shrink-0"></div>
+                      <div className="space-y-1.5 w-full max-w-xs">
+                        <div className="skeleton-shimmer h-3.5 w-36 rounded"></div>
+                        <div className="skeleton-shimmer h-2.5 w-24 rounded"></div>
+                      </div>
+                    </div>
+                    <div className="skeleton-shimmer h-6 w-16 rounded-full shrink-0"></div>
                   </div>
-                </div>
-                {activeScenario === "SCENARIO_B_REDTEAM" ? (
-                  <span className="chip-attention text-xs font-bold py-1 px-2.5">INTERCEPTED</span>
-                ) : (
-                  <span className="chip-success text-xs font-bold py-1 px-2.5">SANITIZED</span>
-                )}
+                ))}
               </div>
+            ) : (
+              <div className="space-y-3">
+                {/* Gate 1: Tier 0 Prompt Sanitizer */}
+                <div className="flex items-center justify-between p-3 rounded-2xl bg-[#FAFBFD] border border-[#EDEFF2] transition hover:bg-[#F3F4F6]">
+                  <div className="flex items-center gap-3">
+                    <div className={`h-2.5 w-2.5 rounded-full shrink-0 ${
+                      activeScenario === "SCENARIO_B_REDTEAM" ? "bg-[#DC2626] animate-ping" : "bg-[#059669]"
+                    }`} />
+                    <div>
+                      <span className="font-bold text-[#111827] block text-xs sm:text-sm">
+                        Tier 0: OCR Prompt Sanitizer
+                      </span>
+                      <span className="text-xs text-[#6B7280]">
+                        {activeScenario === "SCENARIO_B_REDTEAM"
+                          ? "Adversarial override intercepted"
+                          : "Regex & perplexity guard active"}
+                      </span>
+                    </div>
+                  </div>
+                  {activeScenario === "SCENARIO_B_REDTEAM" ? (
+                    <span className="chip-attention text-xs font-bold py-1 px-2.5">INTERCEPTED</span>
+                  ) : (
+                    <span className="chip-success text-xs font-bold py-1 px-2.5">SANITIZED</span>
+                  )}
+                </div>
 
-              {/* Gate 2: Tier 2 Deterministic Risk Gate */}
-              <div className="flex items-center justify-between p-3 rounded-2xl bg-[#FAFBFD] border border-[#EDEFF2] transition hover:bg-[#F3F4F6]">
-                <div className="flex items-center gap-3">
-                  <div className="h-2.5 w-2.5 rounded-full bg-[#059669] shrink-0" />
-                  <div>
-                    <span className="font-bold text-[#111827] block text-xs sm:text-sm">
-                      Tier 2: Zero-LLM-Math Gate
-                    </span>
-                    <span className="text-xs text-[#6B7280]">
-                      NumPy ACT/365 DSCR: {dscr.toFixed(4)}x (&ge;1.25x)
-                    </span>
+                {/* Gate 2: Tier 2 Deterministic Risk Gate */}
+                <div className="flex items-center justify-between p-3 rounded-2xl bg-[#FAFBFD] border border-[#EDEFF2] transition hover:bg-[#F3F4F6]">
+                  <div className="flex items-center gap-3">
+                    <div className="h-2.5 w-2.5 rounded-full bg-[#059669] shrink-0" />
+                    <div>
+                      <span className="font-bold text-[#111827] block text-xs sm:text-sm">
+                        Tier 2: Zero-LLM-Math Gate
+                      </span>
+                      <span className="text-xs text-[#6B7280]">
+                        NumPy ACT/365 DSCR: {dscr.toFixed(4)}x (&ge;1.25x)
+                      </span>
+                    </div>
                   </div>
+                  <span className="chip-neutral text-xs font-bold py-1 px-2.5">VERIFIED</span>
                 </div>
-                <span className="chip-neutral text-xs font-bold py-1 px-2.5">VERIFIED</span>
-              </div>
 
-              {/* Gate 3: x402 KYB Supplier Whitelist */}
-              <div className="flex items-center justify-between p-3 rounded-2xl bg-[#FAFBFD] border border-[#EDEFF2] transition hover:bg-[#F3F4F6]">
-                <div className="flex items-center gap-3">
-                  <div className={`h-2.5 w-2.5 rounded-full shrink-0 ${
-                    activeScenario === "SCENARIO_B_REDTEAM" ? "bg-[#DC2626]" : "bg-[#059669]"
-                  }`} />
-                  <div>
-                    <span className="font-bold text-[#111827] block text-xs sm:text-sm">
-                      x402: Supplier KYB Registry
-                    </span>
-                    <span className="text-xs text-[#6B7280] font-mono">
-                      {activeScenario === "SCENARIO_B_REDTEAM"
-                        ? "0xDead...Beef (UNVERIFIED)"
-                        : "0x71c...a91 (Meghna Group)"}
-                    </span>
+                {/* Gate 3: x402 KYB Supplier Whitelist */}
+                <div className="flex items-center justify-between p-3 rounded-2xl bg-[#FAFBFD] border border-[#EDEFF2] transition hover:bg-[#F3F4F6]">
+                  <div className="flex items-center gap-3">
+                    <div className={`h-2.5 w-2.5 rounded-full shrink-0 ${
+                      activeScenario === "SCENARIO_B_REDTEAM" ? "bg-[#DC2626]" : "bg-[#059669]"
+                    }`} />
+                    <div>
+                      <span className="font-bold text-[#111827] block text-xs sm:text-sm">
+                        x402: Supplier KYB Registry
+                      </span>
+                      <span className="text-xs text-[#6B7280] font-mono">
+                        {activeScenario === "SCENARIO_B_REDTEAM"
+                          ? "0xDead...Beef (UNVERIFIED)"
+                          : "0x71c...a91 (Meghna Group)"}
+                      </span>
+                    </div>
                   </div>
+                  {activeScenario === "SCENARIO_B_REDTEAM" ? (
+                    <span className="chip-attention text-xs font-bold py-1 px-2.5">BLOCKED</span>
+                  ) : (
+                    <span className="chip-success text-xs font-bold py-1 px-2.5">WHITELISTED</span>
+                  )}
                 </div>
-                {activeScenario === "SCENARIO_B_REDTEAM" ? (
-                  <span className="chip-attention text-xs font-bold py-1 px-2.5">BLOCKED</span>
-                ) : (
-                  <span className="chip-success text-xs font-bold py-1 px-2.5">WHITELISTED</span>
-                )}
-              </div>
 
-              {/* Gate 4: Spatio-Temporal Entropy Gate */}
-              <div className="flex items-center justify-between p-3 rounded-2xl bg-[#FAFBFD] border border-[#EDEFF2] transition hover:bg-[#F3F4F6]">
-                <div className="flex items-center gap-3">
-                  <div className={`h-2.5 w-2.5 rounded-full shrink-0 ${
-                    activeScenario === "SCENARIO_C_SYBIL_WASH" ? "bg-[#FF5C00]" : "bg-[#059669]"
-                  }`} />
-                  <div>
-                    <span className="font-bold text-[#111827] block text-xs sm:text-sm">
-                      Wash-Trading Entropy (H_st)
-                    </span>
-                    <span className="text-xs text-[#6B7280]">
-                      {activeScenario === "SCENARIO_C_SYBIL_WASH"
-                        ? "H_st = 0.42 < 0.65 (Wash Loop)"
-                        : "H_st = 1.12 >= 0.65 | Wash: 0.0%"}
-                    </span>
+                {/* Gate 4: Spatio-Temporal Entropy Gate */}
+                <div className="flex items-center justify-between p-3 rounded-2xl bg-[#FAFBFD] border border-[#EDEFF2] transition hover:bg-[#F3F4F6]">
+                  <div className="flex items-center gap-3">
+                    <div className={`h-2.5 w-2.5 rounded-full shrink-0 ${
+                      activeScenario === "SCENARIO_C_SYBIL_WASH" ? "bg-[#FF5C00]" : "bg-[#059669]"
+                    }`} />
+                    <div>
+                      <span className="font-bold text-[#111827] block text-xs sm:text-sm">
+                        Wash-Trading Entropy (H_st)
+                      </span>
+                      <span className="text-xs text-[#6B7280]">
+                        {activeScenario === "SCENARIO_C_SYBIL_WASH"
+                          ? "H_st = 0.42 < 0.65 (Wash Loop)"
+                          : "H_st = 1.12 >= 0.65 | Wash: 0.0%"}
+                      </span>
+                    </div>
                   </div>
+                  {activeScenario === "SCENARIO_C_SYBIL_WASH" ? (
+                    <span className="chip-amber text-xs font-bold py-1 px-2.5">COLLUSION_HOLD</span>
+                  ) : (
+                    <span className="chip-success text-xs font-bold py-1 px-2.5">CLEARED</span>
+                  )}
                 </div>
-                {activeScenario === "SCENARIO_C_SYBIL_WASH" ? (
-                  <span className="chip-amber text-xs font-bold py-1 px-2.5">COLLUSION_HOLD</span>
-                ) : (
-                  <span className="chip-success text-xs font-bold py-1 px-2.5">CLEARED</span>
-                )}
               </div>
-            </div>
+            )}
           </div>
 
           {/* On-Chain EIP-712 Quorum Verification (4 Signatures) */}
@@ -404,8 +423,25 @@ export default function SecurityEscrowPanel({
               </span>
             </div>
 
-            {/* List of 4 Quorum Cosigners */}
-            <div className="space-y-2">
+            {/* List of 4 Quorum Cosigners with Skeleton Loader */}
+            {isExecuting ? (
+              <div className="space-y-2 py-1">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="p-3 rounded-2xl bg-[#FAFBFD] border border-[#EDEFF2] flex items-center justify-between">
+                    <div className="flex items-center gap-2.5 w-full">
+                      <div className="skeleton-shimmer h-6 w-12 rounded-lg shrink-0"></div>
+                      <div className="space-y-1.5 w-full max-w-xs">
+                        <div className="skeleton-shimmer h-3.5 w-32 rounded"></div>
+                        <div className="skeleton-shimmer h-2.5 w-44 rounded"></div>
+                      </div>
+                    </div>
+                    <div className="skeleton-shimmer h-5 w-14 rounded-full shrink-0"></div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-2">
+
               {signers.map((signer, idx) => (
                 <div
                   key={signer.agentId}
@@ -454,7 +490,8 @@ export default function SecurityEscrowPanel({
                 </div>
               ))}
             </div>
-          </div>
+          )}
+        </div>
 
           {/* Direct B2B Escrow Settlement Breakdown */}
           <div className="planora-card-interactive space-y-3">

@@ -104,9 +104,21 @@ To provide mathematical and empirical validation for the multi-agent syndicate m
 ## 6. Multi-View UI Architecture & Design System (Lead 4)
 
 KendraFi features an enterprise light design system (`DESIGN.md`) inspired by Planora, equipped with big legible typography (minimum 12px `text-xs font-bold`), lively keyframe micro-animations, and a 3-way top-level view router:
-1. **`🌟 Overview` (Protocol Landing Page):** High-converting overview featuring hero badge, live metrics ticker, 3-scenario launchpad, Dual Problem Visualizer (Dhaka street markets vs. WeBank cold-start data wall), 5 autonomous agent persona cards, and 5-layer ABCD architecture breakdown.
+1. **`🌟 Overview` (Protocol Landing Page):** High-converting overview featuring:
+   - **Floating Browser Mockup Hero (`.browser-window-mockup`):** macOS traffic lights, internal mini-sidebar, Rahim Store greeting, 3 KPI metric cards, recommended restock facilities with shimmering skeleton discovery rows, and exterior floating badges (`ZK Solvency 98.5/100`, `Nasrin Pharmacy 40.0% Stake`).
+   - Live metrics ticker (45,000 BDT facility, 12.50% APR, 1.6800x DSCR, 100% Staked, 1.50% Wholesaler MDR, +21.96% FATE AUC Uplift).
+   - 3-scenario launchpad with 1-click execution.
+   - Dual Problem Visualizer (Dhaka street markets vs. WeBank cold-start data wall).
+   - 5 autonomous agent persona cards.
+   - 5-layer ABCD architecture breakdown.
 2. **`⚡ Command Center` (Operational Cockpit):** 3-panel split-screen judge dashboard with ceramic smartphone chassis, bouncing voice waveform bars, 5-agent arena with dynamic SVG data cables (`animate-data-flow`), 4-tier zero-trust firewall, and 4-of-5 on-chain EIP-712 quorum feed.
-3. **`📊 Backtest Analytics` (Monte Carlo Dashboard):** Full-screen analytical view of the 1,000 Kendras / 5,000 merchants empirical backtest, highlighting +21.96% ROC-AUC lift, -60.76% default loss reduction, and scikit-learn feature importance weights.
+   - **Reactive Skeleton Loaders:** Shimmering skeleton states (`.skeleton-shimmer`) for invoice OCR, audio waveform, CNP messages, ZK commitment card, and 4-tier firewall verification when `isExecuting` is active.
+   - **Clean Pagination:** Contract Net Protocol (CNP) multi-round timeline pagination + Besley-Coate Nash Equilibrium multi-page table toggle (`P1`, `P2`).
+3. **`📊 Backtest Analytics` (Monte Carlo Dashboard):** Full-screen analytical view of the 1,000 Kendras / 5,000 merchants empirical backtest:
+   - **Animated ROC-AUC & Precision-Recall Dual Visualizer:** Interactive SVG chart illustrating KendraFi (0.8769 AUC) vs Solo MFS baseline (0.7190 AUC) with shaded +21.96% WeBank FATE Lift area.
+   - **Interactive Threshold Slider:** $\tau \in [0.10, 0.85]$ slider with live-moving operating point cursor and real-time sensitivity, specificity, precision, and F1 calculations.
+   - **Paginated Feature Importance List:** 2-page pagination showing top quantitative drivers.
+   - **Paginated Synthetic Kendra Cohort Table:** Live dataset explorer browsing across 1,000 Kendras with page 1 and page 2 controls.
 
 ---
 

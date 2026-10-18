@@ -259,6 +259,7 @@ export default function HomePage() {
                 quorumSignatures={quorumSignatures}
                 grossRepaymentBdt={grossRepaymentBdt}
                 dscr={dscr}
+                isExecuting={isExecuting}
               />
             </section>
           </div>

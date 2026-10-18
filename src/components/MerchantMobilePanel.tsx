@@ -278,15 +278,22 @@ export const MerchantMobilePanel: React.FC<MerchantMobilePanelProps> = ({
               </div>
             </div>
 
-            {/* Transcription */}
-            <div className="space-y-1.5 text-xs">
-              <p className="text-[#111827] font-medium italic text-xs leading-relaxed">
-                &ldquo;{persona.audioTextBn}&rdquo;
-              </p>
-              <p className="text-[11px] text-[#6B7280] font-mono leading-tight">
-                <strong>EN:</strong> {persona.audioTextEn}
-              </p>
-            </div>
+            {/* Transcription with Skeleton Loader */}
+            {isExecuting ? (
+              <div className="space-y-2 py-1">
+                <div className="skeleton-shimmer h-3 w-full"></div>
+                <div className="skeleton-shimmer h-3 w-4/5"></div>
+              </div>
+            ) : (
+              <div className="space-y-1.5 text-xs">
+                <p className="text-[#111827] font-medium italic text-xs leading-relaxed">
+                  &ldquo;{persona.audioTextBn}&rdquo;
+                </p>
+                <p className="text-[11px] text-[#6B7280] font-mono leading-tight">
+                  <strong>EN:</strong> {persona.audioTextEn}
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Stamped Wholesale Invoice OCR Card */}
@@ -301,27 +308,49 @@ export const MerchantMobilePanel: React.FC<MerchantMobilePanelProps> = ({
               </span>
             </div>
 
-            <div className="space-y-2 text-xs">
-              <div className="flex justify-between items-center">
-                <span className="text-[#6B7280]">Supplier:</span>
-                <span className="text-[#111827] font-bold">{persona.invoice.supplier}</span>
+            {isExecuting ? (
+              <div className="space-y-2.5 py-1">
+                <div className="flex justify-between items-center">
+                  <div className="skeleton-shimmer h-3 w-20"></div>
+                  <div className="skeleton-shimmer h-3.5 w-36"></div>
+                </div>
+                <div className="flex justify-between items-center">
+                  <div className="skeleton-shimmer h-3 w-28"></div>
+                  <div className="skeleton-shimmer h-3 w-40"></div>
+                </div>
+                <div className="flex justify-between items-center">
+                  <div className="skeleton-shimmer h-3 w-24"></div>
+                  <div className="skeleton-shimmer h-3 w-32"></div>
+                </div>
+                <div className="flex justify-between items-center border-t border-[#E5E7EB] pt-2">
+                  <div className="skeleton-shimmer h-3.5 w-24"></div>
+                  <div className="skeleton-shimmer h-4 w-32"></div>
+                </div>
               </div>
-              <div className="flex justify-between items-center">
-                <span className="text-[#6B7280]">Wholesaler Wallet:</span>
-                <span className="text-[#0284C7] font-mono text-[11px] font-semibold truncate max-w-[200px]" title={persona.invoice.wallet}>
-                  {persona.invoice.wallet}
-                </span>
+            ) : (
+              <div className="space-y-2 text-xs">
+                <div className="flex justify-between items-center">
+                  <span className="text-[#6B7280]">Supplier:</span>
+                  <span className="text-[#111827] font-bold">{persona.invoice.supplier}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-[#6B7280]">Wholesaler Wallet:</span>
+                  <span className="text-[#0284C7] font-mono text-[11px] font-semibold truncate max-w-[200px]" title={persona.invoice.wallet}>
+                    {persona.invoice.wallet}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-[#6B7280]">Restock Items:</span>
+                  <span className="text-[#111827] font-medium text-right truncate max-w-[200px]">{persona.invoice.items}</span>
+                </div>
+                <div className="flex justify-between items-center border-t border-[#E5E7EB] pt-1.5">
+                  <span className="text-[#6B7280] font-bold">Amount &amp; Tenor:</span>
+                  <span className="text-[#059669] font-extrabold text-sm">{persona.invoice.amount} ({persona.invoice.tenor})</span>
+                </div>
               </div>
-              <div className="flex justify-between items-center">
-                <span className="text-[#6B7280]">Restock Items:</span>
-                <span className="text-[#111827] font-medium text-right truncate max-w-[200px]">{persona.invoice.items}</span>
-              </div>
-              <div className="flex justify-between items-center border-t border-[#E5E7EB] pt-1.5">
-                <span className="text-[#6B7280] font-bold">Amount &amp; Tenor:</span>
-                <span className="text-[#059669] font-extrabold text-sm">{persona.invoice.amount} ({persona.invoice.tenor})</span>
-              </div>
-            </div>
+            )}
           </div>
+
 
           {/* Post-Loan Repayment Sweep Indicator */}
           {repaymentProgress && (

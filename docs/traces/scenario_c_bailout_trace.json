@@ -28,12 +28,12 @@
     "reason": "SYBIL_WASH_COLLUSION_HOLD"
   },
   "bailout_result": {
-    "tx_hash": "0x1753ddd7ef7ed224f4aa7aee5571fe7c77e140ecef0c7d63325f126f0aecb35a",
+    "tx_hash": "0x8d40ed5b4ad2b3ad25cec0bfc66b989f45aa82ca86f250772a9d0ab0b4fa0fe9",
     "tx_mode": "LIVE_RPC_BROADCAST",
     "status": "SUCCESS",
-    "block_number": 48203920,
+    "block_number": 48267059,
     "gas_used": 22440,
-    "explorer_url": "https://base-sepolia.blockscout.com/tx/0x1753ddd7ef7ed224f4aa7aee5571fe7c77e140ecef0c7d63325f126f0aecb35a",
+    "explorer_url": "https://base-sepolia.blockscout.com/tx/0x8d40ed5b4ad2b3ad25cec0bfc66b989f45aa82ca86f250772a9d0ab0b4fa0fe9",
     "invoice_id": "0x41b13ee4866834a574e17b1d574cc08f19899abd59ea6e27633c97c1997df412",
     "bailout_reason": "COVARIANT_MONSOON_FLOODING_EXOGENOUS_SHOCK"
   },

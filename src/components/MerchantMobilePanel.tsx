@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Smartphone,
   Mic,
@@ -18,6 +18,7 @@ import {
   ShieldAlert,
   Sparkles,
   RefreshCw,
+  Volume2,
 } from "lucide-react";
 import type { ScenarioType } from "@/types";
 
@@ -37,6 +38,9 @@ export const MerchantMobilePanel: React.FC<MerchantMobilePanelProps> = ({
   repaymentProgress,
 }) => {
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [ttsLanguage, setTtsLanguage] = useState<"bn" | "en">("bn");
+  const [hasBengaliVoice, setHasBengaliVoice] = useState(false);
+  const audioContextRef = useRef<AudioContext | null>(null);
 
   // Dynamic persona based on scenario
   const isScenarioB = activeScenario === "SCENARIO_B_REDTEAM";
@@ -93,6 +97,154 @@ export const MerchantMobilePanel: React.FC<MerchantMobilePanelProps> = ({
           statusLabel: "KYB VERIFIED",
         },
       };
+
+  // Detect available voices on mount and voice change
+  useEffect(() => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+
+    const checkVoices = () => {
+      const voices = window.speechSynthesis.getVoices();
+      const hasBn = voices.some(
+        (v) =>
+          v.lang.toLowerCase().startsWith("bn") ||
+          v.name.toLowerCase().includes("bangla") ||
+          v.name.toLowerCase().includes("bengali")
+      );
+      setHasBengaliVoice(hasBn);
+    };
+
+    checkVoices();
+    window.speechSynthesis.onvoiceschanged = checkVoices;
+
+    return () => {
+      if (typeof window !== "undefined" && "speechSynthesis" in window) {
+        window.speechSynthesis.onvoiceschanged = null;
+      }
+    };
+  }, []);
+
+  // Cancel ongoing speech when scenario changes
+  useEffect(() => {
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+    }
+    setIsPlayingAudio(false);
+  }, [activeScenario]);
+
+  // Cancel speech on unmount
+  useEffect(() => {
+    return () => {
+      if (typeof window !== "undefined" && "speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
+
+  // Web Audio acoustic chime for tangible auditory feedback
+  const playAudioBeep = (freqStart = 520, freqEnd = 680, duration = 0.12) => {
+    try {
+      const AudioCtx =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      if (!AudioCtx) return;
+      if (!audioContextRef.current || audioContextRef.current.state === "closed") {
+        audioContextRef.current = new AudioCtx();
+      }
+      const ctx = audioContextRef.current;
+      if (ctx.state === "suspended") {
+        ctx.resume();
+      }
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freqStart, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(freqEnd, ctx.currentTime + duration);
+
+      gain.gain.setValueAtTime(0.08, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start();
+      osc.stop(ctx.currentTime + duration);
+    } catch {
+      // AudioContext policy suppression fallback
+    }
+  };
+
+  const handleToggleAudio = () => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) {
+      alert("Web Speech API is not supported in this browser.");
+      return;
+    }
+
+    if (isPlayingAudio) {
+      window.speechSynthesis.cancel();
+      setIsPlayingAudio(false);
+      playAudioBeep(440, 260, 0.1);
+      return;
+    }
+
+    // Stop any stale speech
+    window.speechSynthesis.cancel();
+    playAudioBeep(520, 780, 0.14);
+
+    const textToSpeak = ttsLanguage === "bn" ? persona.audioTextBn : persona.audioTextEn;
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+
+    const voices = window.speechSynthesis.getVoices();
+    if (ttsLanguage === "bn") {
+      const bnVoice = voices.find(
+        (v) =>
+          v.lang.toLowerCase().startsWith("bn") ||
+          v.name.toLowerCase().includes("bangla") ||
+          v.name.toLowerCase().includes("bengali")
+      );
+      if (bnVoice) {
+        utterance.voice = bnVoice;
+        utterance.lang = bnVoice.lang;
+      } else {
+        utterance.lang = "bn-BD";
+      }
+      utterance.rate = 0.92;
+      utterance.pitch = 1.0;
+    } else {
+      const enVoice =
+        voices.find(
+          (v) =>
+            v.lang.toLowerCase().startsWith("en") &&
+            (v.lang.includes("US") || v.lang.includes("GB") || v.lang.includes("IN"))
+        ) || voices.find((v) => v.lang.toLowerCase().startsWith("en"));
+      if (enVoice) {
+        utterance.voice = enVoice;
+        utterance.lang = enVoice.lang;
+      } else {
+        utterance.lang = "en-US";
+      }
+      utterance.rate = 1.0;
+      utterance.pitch = 1.0;
+    }
+
+    utterance.volume = 1.0;
+
+    utterance.onstart = () => {
+      setIsPlayingAudio(true);
+    };
+
+    utterance.onend = () => {
+      setIsPlayingAudio(false);
+    };
+
+    utterance.onerror = (e) => {
+      console.warn("TTS utterance error/interrupted:", e);
+      setIsPlayingAudio(false);
+    };
+
+    window.speechSynthesis.speak(utterance);
+    setIsPlayingAudio(true);
+  };
 
   return (
     <div className="flex flex-col gap-5 w-full">
@@ -243,23 +395,70 @@ export const MerchantMobilePanel: React.FC<MerchantMobilePanelProps> = ({
             </span>
           </div>
 
-          {/* Bangla Voice Note Box */}
+          {/* Bangla Voice Note Box (TTS) */}
           <div className="rounded-2xl border-2 border-[#FFD8BF] bg-[#FFF0E6] p-4 flex flex-col gap-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-[#FF5C00]">
                 <Mic className="h-4 w-4 text-[#FF5C00]" />
                 <span>Bangla Voice Restock Note</span>
               </div>
-              <span className="text-xs font-mono font-bold text-[#FF5C00] bg-white px-2 py-0.5 rounded-full border border-[#FFD8BF]">
-                0:24
-              </span>
+              <div className="flex items-center gap-1.5">
+                {/* Language Switcher BN / EN */}
+                <div className="flex items-center rounded-lg bg-white border border-[#FFD8BF] p-0.5 text-[11px] font-bold shadow-2xs">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (isPlayingAudio && typeof window !== "undefined" && "speechSynthesis" in window) {
+                        window.speechSynthesis.cancel();
+                      }
+                      setIsPlayingAudio(false);
+                      setTtsLanguage("bn");
+                    }}
+                    className={`px-2 py-0.5 rounded-md transition ${
+                      ttsLanguage === "bn"
+                        ? "bg-[#FF5C00] text-white shadow-xs"
+                        : "text-[#6B7280] hover:text-[#111827]"
+                    }`}
+                    title={hasBengaliVoice ? "Bangla Voice (Installed)" : "Bangla Speech (System Synth)"}
+                  >
+                    BN {hasBengaliVoice ? "✓" : ""}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (isPlayingAudio && typeof window !== "undefined" && "speechSynthesis" in window) {
+                        window.speechSynthesis.cancel();
+                      }
+                      setIsPlayingAudio(false);
+                      setTtsLanguage("en");
+                    }}
+                    className={`px-2 py-0.5 rounded-md transition ${
+                      ttsLanguage === "en"
+                        ? "bg-[#FF5C00] text-white shadow-xs"
+                        : "text-[#6B7280] hover:text-[#111827]"
+                    }`}
+                    title="English Voice Synthesis"
+                  >
+                    EN
+                  </button>
+                </div>
+                <span className="text-xs font-mono font-bold text-[#FF5C00] bg-white px-2 py-0.5 rounded-full border border-[#FFD8BF]">
+                  0:24
+                </span>
+              </div>
             </div>
 
             {/* Audio Waveform Graphic with Animated Bars */}
-            <div className="flex items-center gap-2 py-2 px-3 bg-white rounded-xl border border-[#FFD8BF]">
+            <div className="flex items-center gap-2.5 py-2 px-3 bg-white rounded-xl border border-[#FFD8BF]">
               <button
-                onClick={() => setIsPlayingAudio(!isPlayingAudio)}
-                className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FF5C00] text-white hover:bg-[#E05200] active:scale-95 transition shadow-sm shrink-0"
+                type="button"
+                onClick={handleToggleAudio}
+                title={isPlayingAudio ? "Stop Audio Playback" : `Listen to ${ttsLanguage === "bn" ? "Bangla" : "English"} Voice Restock Note`}
+                className={`flex h-8 w-8 items-center justify-center rounded-full text-white active:scale-95 transition shadow-sm shrink-0 ${
+                  isPlayingAudio ? "bg-[#DC2626] hover:bg-[#B91C1C]" : "bg-[#FF5C00] hover:bg-[#E05200]"
+                }`}
               >
                 {isPlayingAudio ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4 ml-0.5" />}
               </button>
@@ -276,9 +475,21 @@ export const MerchantMobilePanel: React.FC<MerchantMobilePanelProps> = ({
                   )
                 )}
               </div>
+              <div className="flex items-center gap-1 text-[11px] font-mono font-semibold shrink-0">
+                <Volume2 className={`h-3.5 w-3.5 ${isPlayingAudio ? "animate-bounce text-[#FF5C00]" : "text-[#9CA3AF]"}`} />
+                <span className={isPlayingAudio ? "text-[#FF5C00] font-bold" : "text-[#6B7280]"}>
+                  {isPlayingAudio
+                    ? ttsLanguage === "bn"
+                      ? "বলা হচ্ছে..."
+                      : "Speaking..."
+                    : ttsLanguage === "bn"
+                    ? "শুনুন"
+                    : "Listen"}
+                </span>
+              </div>
             </div>
 
-            {/* Transcription with Skeleton Loader */}
+            {/* Transcription with Skeleton Loader & Active Speech Indicator */}
             {isExecuting ? (
               <div className="space-y-2 py-1">
                 <div className="skeleton-shimmer h-3 w-full"></div>
@@ -286,10 +497,22 @@ export const MerchantMobilePanel: React.FC<MerchantMobilePanelProps> = ({
               </div>
             ) : (
               <div className="space-y-1.5 text-xs">
-                <p className="text-[#111827] font-medium italic text-xs leading-relaxed">
+                <p
+                  className={`leading-relaxed transition-colors ${
+                    isPlayingAudio && ttsLanguage === "bn"
+                      ? "text-[#FF5C00] font-bold bg-[#FFE8D6] p-1.5 rounded-lg border border-[#FFD8BF]"
+                      : "text-[#111827] font-medium italic"
+                  }`}
+                >
                   &ldquo;{persona.audioTextBn}&rdquo;
                 </p>
-                <p className="text-[11px] text-[#6B7280] font-mono leading-tight">
+                <p
+                  className={`text-[11px] font-mono leading-tight transition-colors ${
+                    isPlayingAudio && ttsLanguage === "en"
+                      ? "text-[#FF5C00] font-bold bg-[#FFE8D6] p-1 rounded border border-[#FFD8BF]"
+                      : "text-[#6B7280]"
+                  }`}
+                >
                   <strong>EN:</strong> {persona.audioTextEn}
                 </p>
               </div>

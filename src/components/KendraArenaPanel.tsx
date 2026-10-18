@@ -18,6 +18,9 @@ import {
   Info,
   Radio,
   Zap,
+  ChevronLeft,
+  ChevronRight,
+  Filter,
 } from "lucide-react";
 import type {
   CNPWallMessage,
@@ -120,6 +123,11 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
   const [showFullCommitment, setShowFullCommitment] = useState(false);
   const [hoveredAgent, setHoveredAgent] = useState<string | null>(null);
 
+  // Pagination & Filter States
+  const [cnpRoundFilter, setCnpRoundFilter] = useState<"all" | 1 | 2 | 3>("all");
+  const [cnpPage, setCnpPage] = useState<number>(1);
+  const [nashPage, setNashPage] = useState<number>(1);
+
   // Default fallback values if backend hasn't populated yet
   const displayDscr = dscr || 1.68;
   const displayR1 = grossRepaymentBdt || 45462.33;
@@ -134,6 +142,27 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
     { key: "cnp" as const, label: `CNP Rounds (${cnpMessages.length})` },
     { key: "zk" as const, label: "ZK Solvency Proof" },
   ];
+
+  // CNP Filter & Pagination
+  const filteredCnpMessages = cnpRoundFilter === "all"
+    ? cnpMessages
+    : cnpMessages.filter((m) => m.round_num === cnpRoundFilter);
+
+  const cnpPerPage = 2;
+  const totalCnpPages = Math.max(1, Math.ceil(filteredCnpMessages.length / cnpPerPage));
+  const displayedCnpMessages = filteredCnpMessages.slice((cnpPage - 1) * cnpPerPage, cnpPage * cnpPerPage);
+
+  // Nash Equilibrium Table Rows
+  const nashRows = [
+    { id: "AGT-04", name: "Nasrin Pharmacy", share: "40.0% (Cap)", stake: "18,184.93 BDT", utility: "+169.85 BDT", status: "SIGNED (EIP-712)", statusChip: "chip-success" },
+    { id: "AGT-02", name: "Fatema Textiles", share: "35.0%", stake: "15,911.82 BDT", utility: "+64.12 BDT", status: "SIGNED (EIP-712)", statusChip: "chip-success" },
+    { id: "AGT-03", name: "Kamal Agro", share: "25.0%", stake: "11,365.58 BDT", utility: "+51.40 BDT", status: "SIGNED (EIP-712)", statusChip: "chip-success" },
+    { id: "AGT-05", name: "Sohel Electronics", share: "0.0%", stake: "0.00 BDT", utility: "-142.60 BDT", status: "ABSTAINED (CV>0.55)", statusChip: "chip-neutral", isAbstained: true },
+  ];
+
+  const nashPerPage = 3;
+  const totalNashPages = Math.ceil(nashRows.length / nashPerPage);
+  const displayedNashRows = nashPage === 1 ? nashRows.slice(0, 3) : nashRows.slice(3);
 
   return (
     <div className="flex flex-col gap-5 w-full">
@@ -291,42 +320,118 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
 
         {/* Tab Sub-View: Multi-Round CNP Negotiation Feed */}
         {activeTab === "cnp" && (
-          <div className="w-full mt-4 rounded-2xl border border-[#E5E7EB] bg-[#FAFBFD] p-4 max-h-64 overflow-y-auto space-y-2.5 animate-fadeIn">
-            <div className="flex items-center justify-between border-b border-[#E5E7EB] pb-2">
+          <div className="w-full mt-4 rounded-2xl border border-[#E5E7EB] bg-[#FAFBFD] p-4 space-y-3 animate-fadeIn">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#E5E7EB] pb-2.5">
               <span className="text-xs font-bold text-[#FF5C00] flex items-center gap-1.5">
                 <Zap className="h-4 w-4" />
                 Live 3-Round Contract Net Protocol (CNP) Timeline
               </span>
-              <span className="text-xs font-mono text-[#6B7280]">Nash Equilibrium Cleared</span>
+
+              {/* Round Filters */}
+              <div className="flex items-center gap-1 bg-[#F3F4F6] p-1 rounded-xl text-xs font-bold">
+                {(["all", 1, 2, 3] as const).map((r) => (
+                  <button
+                    key={r}
+                    onClick={() => {
+                      setCnpRoundFilter(r);
+                      setCnpPage(1);
+                    }}
+                    className={`px-2.5 py-1 rounded-lg transition ${
+                      cnpRoundFilter === r
+                        ? "bg-white text-[#FF5C00] shadow-xs"
+                        : "text-[#6B7280] hover:text-[#111827]"
+                    }`}
+                  >
+                    {r === "all" ? "All Rounds" : `R${r}`}
+                  </button>
+                ))}
+              </div>
             </div>
-            {cnpMessages.length === 0 ? (
+
+            {/* Skeleton Loading State or Message Feed */}
+            {isExecuting ? (
+              <div className="space-y-2.5 py-1">
+                <div className="rounded-xl border border-[#E5E7EB] bg-white p-3 space-y-2">
+                  <div className="flex justify-between items-center">
+                    <div className="skeleton-shimmer h-4 w-32"></div>
+                    <div className="skeleton-shimmer h-4 w-24"></div>
+                  </div>
+                  <div className="skeleton-shimmer h-3 w-full"></div>
+                  <div className="skeleton-shimmer h-3 w-2/3"></div>
+                </div>
+                <div className="rounded-xl border border-[#E5E7EB] bg-white p-3 space-y-2">
+                  <div className="flex justify-between items-center">
+                    <div className="skeleton-shimmer h-4 w-28"></div>
+                    <div className="skeleton-shimmer h-4 w-20"></div>
+                  </div>
+                  <div className="skeleton-shimmer h-3 w-full"></div>
+                </div>
+              </div>
+            ) : filteredCnpMessages.length === 0 ? (
               <p className="text-xs text-[#6B7280] italic text-center py-4">
                 Click [Scenario A: Valid Restock] to trigger the multi-agent negotiation loop.
               </p>
             ) : (
-              cnpMessages.map((msg, idx) => (
-                <div
-                  key={idx}
-                  className="rounded-xl border border-[#E5E7EB] bg-white p-3 text-xs font-mono space-y-1 shadow-sm"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-[#111827] flex items-center gap-2">
-                      <span className="px-2 py-0.5 rounded-full bg-[#FFF0E6] text-[#FF5C00] border border-[#FFD8BF] text-xs font-extrabold">
-                        Round {msg.round_num}
+              <div className="space-y-2.5">
+                {displayedCnpMessages.map((msg, idx) => (
+                  <div
+                    key={idx}
+                    className="rounded-xl border border-[#E5E7EB] bg-white p-3 text-xs font-mono space-y-1 shadow-sm"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-[#111827] flex items-center gap-2">
+                        <span className="px-2 py-0.5 rounded-full bg-[#FFF0E6] text-[#FF5C00] border border-[#FFD8BF] text-xs font-extrabold">
+                          Round {msg.round_num}
+                        </span>
+                        <span>{msg.sender_agent} &bull; {msg.message_type}</span>
                       </span>
-                      <span>{msg.sender_agent} &bull; {msg.message_type}</span>
-                    </span>
-                    <span className="text-[#059669] font-extrabold text-xs">
-                      {(msg.proposed_alpha * 100).toFixed(1)}% @ {msg.proposed_yield_apr_bps} bps
-                    </span>
+                      <span className="text-[#059669] font-extrabold text-xs">
+                        {(msg.proposed_alpha * 100).toFixed(1)}% @ {msg.proposed_yield_apr_bps} bps
+                      </span>
+                    </div>
+                    <p className="text-[#4B5563] text-xs leading-relaxed">{msg.detail}</p>
                   </div>
-                  <p className="text-[#4B5563] text-xs leading-relaxed">{msg.detail}</p>
-                </div>
-              ))
+                ))}
+
+                {/* CNP Pagination Controls */}
+                {filteredCnpMessages.length > cnpPerPage && (
+                  <div className="flex items-center justify-between pt-2 border-t border-[#E5E7EB]">
+                    <span className="text-[11px] text-[#6B7280]">
+                      Showing {displayedCnpMessages.length} of {filteredCnpMessages.length} messages (Page {cnpPage} of {totalCnpPages})
+                    </span>
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => setCnpPage((p) => Math.max(1, p - 1))}
+                        disabled={cnpPage === 1}
+                        className="pagination-btn !h-7 !px-2 text-xs"
+                      >
+                        <ChevronLeft className="h-3 w-3" />
+                      </button>
+                      {Array.from({ length: totalCnpPages }, (_, i) => i + 1).map((p) => (
+                        <button
+                          key={p}
+                          onClick={() => setCnpPage(p)}
+                          className={`pagination-btn !h-7 !px-2.5 text-xs ${cnpPage === p ? "pagination-btn-active" : ""}`}
+                        >
+                          {p}
+                        </button>
+                      ))}
+                      <button
+                        onClick={() => setCnpPage((p) => Math.min(totalCnpPages, p + 1))}
+                        disabled={cnpPage === totalCnpPages}
+                        className="pagination-btn !h-7 !px-2 text-xs"
+                      >
+                        <ChevronRight className="h-3 w-3" />
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             )}
           </div>
         )}
       </div>
+
 
       {/* Layer-4 secp256k1 ZK Solvency & WeBank FATE Card */}
       <div className="planora-card flex flex-col gap-4">
@@ -357,9 +462,13 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
                 {showFullCommitment ? "Short View" : "Full 66-Hex"}
               </button>
             </div>
-            <p className="font-extrabold text-[#0284C7] text-xs sm:text-sm break-all font-mono bg-white p-2.5 rounded-xl border border-[#E5E7EB]">
-              {showFullCommitment ? commitmentFull : commitmentDisplay}
-            </p>
+            {isExecuting ? (
+              <div className="skeleton-shimmer h-8 w-full rounded-xl"></div>
+            ) : (
+              <p className="font-extrabold text-[#0284C7] text-xs sm:text-sm break-all font-mono bg-white p-2.5 rounded-xl border border-[#E5E7EB]">
+                {showFullCommitment ? commitmentFull : commitmentDisplay}
+              </p>
+            )}
             <p className="text-xs text-[#6B7280]">
               C₁ = v&bull;G + r₁&bull;H (v = 76,376 BDT, T = 56,828 BDT)
             </p>
@@ -371,18 +480,27 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
               <span className="text-[#6B7280] text-xs font-semibold">DSCR Solvency Verification:</span>
               <span className="chip-success text-xs font-bold">16-Bit VERIFIED</span>
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-[#111827] font-extrabold text-sm sm:text-base">DSCR = {displayDscr.toFixed(4)}x</span>
-              <span className="text-xs text-[#059669] font-mono font-bold bg-[#ECFDF5] px-2 py-0.5 rounded-full border border-[#A7F3D0]">
-                &Delta;v = 19,548 &isin; [0, 2¹⁶-1]
-              </span>
-            </div>
-            <div className="flex items-center justify-between pt-2 border-t border-[#E5E7EB]">
-              <span className="text-[#6B7280] text-xs font-semibold">WeBank FATE Hetero-LR Score:</span>
-              <span className="text-[#FF5C00] font-extrabold text-sm sm:text-base font-mono">
-                p₁ = {(fateScore * 100).toFixed(1)}%
-              </span>
-            </div>
+            {isExecuting ? (
+              <div className="space-y-2 py-1">
+                <div className="skeleton-shimmer h-5 w-40"></div>
+                <div className="skeleton-shimmer h-4 w-48"></div>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center justify-between">
+                  <span className="text-[#111827] font-extrabold text-sm sm:text-base">DSCR = {displayDscr.toFixed(4)}x</span>
+                  <span className="text-xs text-[#059669] font-mono font-bold bg-[#ECFDF5] px-2 py-0.5 rounded-full border border-[#A7F3D0]">
+                    &Delta;v = 19,548 &isin; [0, 2¹⁶-1]
+                  </span>
+                </div>
+                <div className="flex items-center justify-between pt-2 border-t border-[#E5E7EB]">
+                  <span className="text-[#6B7280] text-xs font-semibold">WeBank FATE Hetero-LR Score:</span>
+                  <span className="text-[#FF5C00] font-extrabold text-sm sm:text-base font-mono">
+                    p₁ = {(fateScore * 100).toFixed(1)}%
+                  </span>
+                </div>
+              </>
+            )}
           </div>
         </div>
 
@@ -397,7 +515,7 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
 
       {/* Besley-Coate Nash Equilibrium Table */}
       <div className="planora-card flex flex-col gap-4">
-        <div className="flex items-center justify-between border-b border-[#E5E7EB] pb-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[#E5E7EB] pb-3 gap-2">
           <div className="flex items-center gap-2">
             <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#ECFDF5] text-[#059669]">
               <Shield className="h-4 w-4" />
@@ -406,9 +524,26 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
               Besley-Coate (1995) Nash Equilibrium Staking Table
             </h3>
           </div>
-          <span className="text-xs font-mono font-bold text-[#111827] bg-[#F3F4F6] px-3 py-1 rounded-full border border-[#E5E7EB]">
-            100.0% Coverage ({displayR1.toLocaleString()} BDT)
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-mono font-bold text-[#111827] bg-[#F3F4F6] px-3 py-1 rounded-full border border-[#E5E7EB]">
+              100.0% Coverage ({displayR1.toLocaleString()} BDT)
+            </span>
+            {/* Table Pagination */}
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setNashPage(1)}
+                className={`pagination-btn !h-7 !px-2.5 text-xs ${nashPage === 1 ? "pagination-btn-active" : ""}`}
+              >
+                P1
+              </button>
+              <button
+                onClick={() => setNashPage(2)}
+                className={`pagination-btn !h-7 !px-2.5 text-xs ${nashPage === 2 ? "pagination-btn-active" : ""}`}
+              >
+                P2
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Dynamic Table */}
@@ -425,58 +560,34 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
               </tr>
             </thead>
             <tbody className="divide-y divide-[#E5E7EB]">
-              {/* AGT-04 */}
-              <tr className="hover:bg-[#FAFBFD] transition">
-                <td className="py-3 px-3 font-extrabold text-[#111827] font-mono">AGT-04</td>
-                <td className="py-3 px-3 font-semibold text-[#1F2937]">Nasrin Pharmacy</td>
-                <td className="py-3 px-3 text-right text-[#FF5C00] font-extrabold">40.0% (Cap)</td>
-                <td className="py-3 px-3 text-right text-[#111827] font-extrabold">18,184.93 BDT</td>
-                <td className="py-3 px-3 text-right text-[#059669] font-extrabold">+169.85 BDT</td>
-                <td className="py-3 px-3 text-center">
-                  <span className="chip-success text-xs font-bold">
-                    SIGNED (EIP-712)
-                  </span>
-                </td>
-              </tr>
-              {/* AGT-02 */}
-              <tr className="hover:bg-[#FAFBFD] transition">
-                <td className="py-3 px-3 font-extrabold text-[#111827] font-mono">AGT-02</td>
-                <td className="py-3 px-3 font-semibold text-[#1F2937]">Fatema Textiles</td>
-                <td className="py-3 px-3 text-right text-[#FF5C00] font-extrabold">35.0%</td>
-                <td className="py-3 px-3 text-right text-[#111827] font-extrabold">15,911.82 BDT</td>
-                <td className="py-3 px-3 text-right text-[#059669] font-extrabold">+64.12 BDT</td>
-                <td className="py-3 px-3 text-center">
-                  <span className="chip-success text-xs font-bold">
-                    SIGNED (EIP-712)
-                  </span>
-                </td>
-              </tr>
-              {/* AGT-03 */}
-              <tr className="hover:bg-[#FAFBFD] transition">
-                <td className="py-3 px-3 font-extrabold text-[#111827] font-mono">AGT-03</td>
-                <td className="py-3 px-3 font-semibold text-[#1F2937]">Kamal Agro</td>
-                <td className="py-3 px-3 text-right text-[#FF5C00] font-extrabold">25.0%</td>
-                <td className="py-3 px-3 text-right text-[#111827] font-extrabold">11,365.58 BDT</td>
-                <td className="py-3 px-3 text-right text-[#059669] font-extrabold">+51.40 BDT</td>
-                <td className="py-3 px-3 text-center">
-                  <span className="chip-success text-xs font-bold">
-                    SIGNED (EIP-712)
-                  </span>
-                </td>
-              </tr>
-              {/* AGT-05 */}
-              <tr className="hover:bg-[#FAFBFD] transition opacity-70">
-                <td className="py-3 px-3 font-extrabold text-[#6B7280] font-mono">AGT-05</td>
-                <td className="py-3 px-3 text-[#6B7280]">Sohel Electronics</td>
-                <td className="py-3 px-3 text-right text-[#6B7280]">0.0%</td>
-                <td className="py-3 px-3 text-right text-[#6B7280]">0.00 BDT</td>
-                <td className="py-3 px-3 text-right text-[#DC2626] font-bold">-142.60 BDT</td>
-                <td className="py-3 px-3 text-center">
-                  <span className="chip-neutral text-xs">
-                    ABSTAINED (CV&gt;0.55)
-                  </span>
-                </td>
-              </tr>
+              {displayedNashRows.map((row) => (
+                <tr
+                  key={row.id}
+                  className={`hover:bg-[#FAFBFD] transition ${row.isAbstained ? "opacity-70" : ""}`}
+                >
+                  <td className={`py-3 px-3 font-extrabold font-mono ${row.isAbstained ? "text-[#6B7280]" : "text-[#111827]"}`}>
+                    {row.id}
+                  </td>
+                  <td className={`py-3 px-3 font-semibold ${row.isAbstained ? "text-[#6B7280]" : "text-[#1F2937]"}`}>
+                    {row.name}
+                  </td>
+                  <td className={`py-3 px-3 text-right font-extrabold ${row.isAbstained ? "text-[#6B7280]" : "text-[#FF5C00]"}`}>
+                    {row.share}
+                  </td>
+                  <td className={`py-3 px-3 text-right font-extrabold ${row.isAbstained ? "text-[#6B7280]" : "text-[#111827]"}`}>
+                    {row.stake}
+                  </td>
+                  <td className={`py-3 px-3 text-right font-extrabold ${row.isAbstained ? "text-[#DC2626]" : "text-[#059669]"}`}>
+                    {row.utility}
+                  </td>
+                  <td className="py-3 px-3 text-center">
+                    <span className={`${row.statusChip} text-xs font-bold`}>
+                      {row.status}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+
               {/* Total Row */}
               <tr className="font-extrabold border-t-2 border-[#E5E7EB] bg-[#F3F4F6] text-xs sm:text-sm">
                 <td colSpan={2} className="py-3 px-3 text-[#111827]">
@@ -492,6 +603,7 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
             </tbody>
           </table>
         </div>
+
 
         {/* Monsoon Shock & Flash Bailout Button */}
         <div className="pt-3 flex items-center justify-between border-t border-[#E5E7EB] flex-wrap gap-3">

@@ -137,4 +137,81 @@ All numbers across all views must strictly reconcile to the core protocol econom
   - Kamal Agro (AGT-03): 25.0% (`11,365.58 BDT`)
   - Sohel Electronics (AGT-05): 0.0% (Abstained, CV = 0.62)
 - **WeBank FATE Enterprise Score:** `98.5%` ($p_1 = 0.985$)
-- **WeBank FATE Hetero-LR AUC Lift:** `+21.96%` ($0.866$ vs $0.742$)
+- **WeBank FATE Hetero-LR AUC Lift:** `+21.96%` ($0.8769$ vs $0.7190$ Solo MFS baseline)
+
+---
+
+## 7. Floating Browser Mockup Hero (Landing Page)
+
+Inspired by modern SaaS design systems (Planora/InternLink), the landing page features a **floating browser window mockup** (`.browser-window-mockup`):
+- **Window Chrome:** Rounded-3xl ceramic container (`bg-white/95`, `border border-[#E5E7EB]`, `shadow-2xl hover:shadow-orange-500/10`) with macOS traffic light buttons (Red `#EF4444`, Amber `#F59E0B`, Green `#10B981`) and a centered subtle URL pill (`bg-[#F3F4F6]`, lock icon, monospace URL: `kendrafi.network/dhaka/kendra-01/dashboard`).
+- **Internal Mini Navigation Sidebar:** Quick navigation icons with high-contrast active pill:
+  - `Dashboard` (Active emerald tint `#ECFDF5` + `#059669`)
+  - `Browse Loans`
+  - `Agent Arena`
+  - `ZK Privacy`
+  - `Risk Gateways`
+- **Merchant Greeting Header:** High-visibility greeting: `Welcome back, Rahim Store` with subtitle `Karwan Bazar Rice & Grocery • Active Borrower Node (AGT-01)` and notification bell + merchant avatar badge (`RS`).
+- **3 Prominent Metric Cards:**
+  1. `Active Facility`: **45,000 BDT** (30-Day Tenor @ 12.50%)
+  2. `Cosigned Quorum`: **4-of-5 Signed** (100.0% Coverage Locked)
+  3. `Solvency Score`: **1.6800x** (98.5% FATE Hetero-LR)
+- **"Recommended for you" Restock Facilities:**
+  - 1st Row: Fully populated facility card: `50 Sacks Miniket Rice • Meghna Group Wholesale` (30-Day Tenor, 1.50% Wholesaler MDR, `98.5% match` chip).
+  - 2nd & 3rd Rows: Realistic shimmering skeleton rows (`.skeleton-shimmer`) with match percentage chips (`87.0% match`), illustrating active agent discovery in progress.
+- **Exterior Floating Accent Badges:**
+  - Top-Right Floating Badge (`.animate-float-slow`): `ZK Solvency Score: 98.5 / 100` with `16-Bit Verified` emerald chip.
+  - Bottom-Left Floating Badge (`.animate-float-delayed`): `New Syndicate Quorum: Nasrin Pharmacy Cosigned` with `40.0% Stake` orange chip.
+
+---
+
+## 8. Reactive Skeleton Loaders & Transition Rules
+
+During asynchronous operations (scenario execution, OCR ingestion, voice note parsing, ZK solvency proof generation, and on-chain escrow cosigning), UI components **MUST** render smooth shimmering skeleton loaders instead of blank or frozen states:
+
+- **CSS Shimmer Effect:**
+  ```css
+  @keyframes skeletonShimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  .skeleton-shimmer {
+    background: linear-gradient(90deg, #F3F4F6 25%, #E5E7EB 50%, #F3F4F6 75%);
+    background-size: 200% 100%;
+    animation: skeletonShimmer 1.8s infinite ease-in-out;
+  }
+  ```
+- **Execution States:**
+  - `MerchantMobilePanel.tsx`: Shimmering OCR table rows and audio waveform skeleton when `isExecuting` is true.
+  - `KendraArenaPanel.tsx`: Shimmering CNP message rows and ZK commitment proof card during execution.
+  - `SecurityEscrowPanel.tsx`: Shimmering 4-tier firewall gate indicators and 4-signer session key rows during verification.
+
+---
+
+## 9. Pagination Standards & Controls
+
+All data-intensive lists, feeds, and tables must implement clean, accessible pagination controls matching the Planora design tokens:
+
+- **Styling Tokens:**
+  - Inactive Page Button: `.pagination-btn` (`px-3 py-1.5 rounded-xl text-xs font-bold bg-[#F3F4F6] text-[#4B5563] border border-[#E5E7EB] hover:bg-white`)
+  - Active Page Button: `.pagination-btn-active` (`bg-[#FF5C00] text-white shadow-sm border border-[#FF5C00]`)
+- **Implemented Paginated Elements:**
+  1. **Contract Net Protocol (CNP) Timeline:** Round filters (`All`, `R1`, `R2`, `R3`) + Previous/Next pagination for multi-agent negotiation logs.
+  2. **Besley-Coate Nash Equilibrium Table:** Multi-page paging (`P1`, `P2`) with quick toggle chips.
+  3. **Feature Importance Ranking List:** 2-page pagination (`Page 1 of 2` and `Page 2 of 2`) displaying top 3 features per page.
+  4. **Synthetic Kendra Cohort Dataset Explorer:** Full table pagination across 1,000 Kendras (5 samples per page, `< Previous`, `1`, `2`, `Next >`).
+
+---
+
+## 10. Animated Interactive Analytical Charts & ROC-AUC Dual Visualizer
+
+In the **Backtest Analytics View** (`MonteCarloAnalyticsView.tsx`), the protocol features an interactive SVG-driven ROC-AUC and Precision-Recall dual curve visualizer:
+- **Interactive Threshold Slider:** $\tau \in [0.10, 0.85]$ allowing judges to dynamically slide the operating cutoff threshold.
+- **Dynamic Operating Point Cursor:** Moving cursor dot on the ROC curve that updates in real-time as $\tau$ changes.
+- **Live Performance Metrics:** Real-time calculation and display of True Positive Rate (Sensitivity), False Positive Rate ($1 - \text{Specificity}$), Precision (PPV), and F1 Score at the selected threshold.
+- **Visual Curves:**
+  - **KendraFi Protocol Curve (Green):** $\text{AUC} = 0.8769$ with smooth cubic bezier curve.
+  - **Solo MFS Baseline (Red Dashed):** $\text{AUC} = 0.7190$ representing traditional uncollateralized microfinance.
+  - **Random Baseline (Gray Diagonal):** $\text{AUC} = 0.5000$.
+  - **Shaded Lift Area:** Soft emerald gradient fill illustrating the **+21.96% WeBank FATE Lift**.
+

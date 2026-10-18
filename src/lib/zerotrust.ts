@@ -145,15 +145,20 @@ export async function callPythonBackend<T = any>(
   const url = `${baseUrl}${cleanEndpoint}`;
   const signed = signZeroTrustPayload(body);
 
-  const response = await fetch(url, {
-    method: "POST",
+  const method = (options.method || "POST").toUpperCase();
+  const fetchOptions: RequestInit = {
+    ...options,
+    method,
     headers: {
       ...signed.headers,
       ...(options.headers || {}),
     },
-    body: signed.body,
-    ...options,
-  });
+  };
+  if (method !== "GET" && method !== "HEAD") {
+    fetchOptions.body = signed.body;
+  }
+
+  const response = await fetch(url, fetchOptions);
 
   if (!response.ok) {
     const errorText = await response.text();

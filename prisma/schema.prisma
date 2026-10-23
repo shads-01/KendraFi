@@ -1,5 +1,14 @@
 // KendraFi (Weiyedai-Global) Prisma Schema
 // Configured for Supabase PostgreSQL (IPv4 Session & Transaction Poolers)
+//
+// Multi-tenant SaaS evolution (Part 3 — Databases & storage, Task 1).
+// Design notes, ERD and index rationale: docs/database-schema.md.
+// Additive-only vs the LOCKED Supabase migration
+// supabase/migrations/20261015000000_kendra_zerotrust_schema.sql (never edit it):
+// existing @@map table names and natural-key PKs (kendra_agents.agent_id,
+// kyb_supplier_registry.supplier_id, relayer_nonce_lock.relayer_address) are preserved.
+// All new columns carry DB defaults so the locked seed INSERTs (which name their
+// columns explicitly) keep working.
 
 generator client {
   provider = "prisma-client-js"
@@ -9,6 +18,48 @@ datasource db {
   provider = "postgresql"
 }
 
+// ============================================================================
+// TENANT ROOT — one organization per merchant in year one (docs/system-design.md §3)
+// ============================================================================
+
+model Organization {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  users       User[]
+  agents      KendraAgent[]
+  cashflows   MerchantPrivateCashflow[]
+  commitments ZkSolvencyCommitment[]
+  fsmEvents   KendraFsmEvent[]
+  intercepts  ZeroTrustSecurityIntercept[]
+
+  @@map("organizations")
+}
+
+// Placeholder for Part 4 (auth) reconciliation — NO auth fields by ruling:
+// no passwords, no sessions, no roles. Part 4 owns those.
+model User {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organizationId String    @map("organization_id") @db.Uuid
+  email          String    @unique
+  name           String?
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @default(now()) @updatedAt @map("updated_at")
+  deletedAt      DateTime? @map("deleted_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+
+  @@index([organizationId, deletedAt], map: "users_organization_id_deleted_at_idx")
+  @@map("users")
+}
+
+// ============================================================================
+// EXISTING SUPABASE TABLES (locked @@map names) + additive multi-tenant columns
+// ============================================================================
+
 model KybSupplier {
   supplierId    String   @id @map("supplier_id")
   walletAddress String   @unique @map("wallet_address")
@@ -17,6 +68,7 @@ model KybSupplier {
   taxIdentifier String?  @map("tax_identifier")
   isVerified    Boolean  @default(true) @map("is_verified")
   createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at")
 
   agents KendraAgent[]
 
@@ -24,40 +76,52 @@ model KybSupplier {
 }
 
 model KendraAgent {
-  agentId             String   @id @map("agent_id")
-  merchantName        String   @map("merchant_name")
-  businessType        String   @map("business_type")
-  walletAddress       String   @unique @map("wallet_address")
-  reliabilityScoreP   Decimal  @map("reliability_score_p") @db.Decimal(5, 4)
-  liquidityBufferBdt  Decimal  @map("liquidity_buffer_bdt") @db.Decimal(12, 2)
-  preferredSupplierId String?  @map("preferred_supplier_id")
-  createdAt           DateTime @default(now()) @map("created_at")
+  agentId             String    @id @map("agent_id")
+  organizationId      String    @map("organization_id") @db.Uuid
+  merchantName        String    @map("merchant_name")
+  businessType        String    @map("business_type")
+  walletAddress       String    @unique @map("wallet_address")
+  reliabilityScoreP   Decimal   @map("reliability_score_p") @db.Decimal(5, 4)
+  liquidityBufferBdt  Decimal   @map("liquidity_buffer_bdt") @db.Decimal(12, 2)
+  preferredSupplierId String?   @map("preferred_supplier_id")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @default(now()) @updatedAt @map("updated_at")
+  deletedAt           DateTime? @map("deleted_at")
 
-  preferredSupplier   KybSupplier?             @relation(fields: [preferredSupplierId], references: [supplierId])
+  organization        Organization              @relation(fields: [organizationId], references: [id])
+  preferredSupplier   KybSupplier?              @relation(fields: [preferredSupplierId], references: [supplierId])
   cashflows           MerchantPrivateCashflow[]
   solvencyCommitments ZkSolvencyCommitment[]
 
+  @@index([organizationId], map: "kendra_agents_organization_id_idx")
+  @@index([preferredSupplierId], map: "kendra_agents_preferred_supplier_id_idx")
   @@map("kendra_agents")
 }
 
 model MerchantPrivateCashflow {
-  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  agentId     String   @map("agent_id")
-  recordDate  DateTime @map("record_date") @db.Date
-  inflowBdt   Decimal  @map("inflow_bdt") @db.Decimal(12, 2)
-  outflowBdt  Decimal  @map("outflow_bdt") @db.Decimal(12, 2)
-  netFlowBdt  Decimal  @map("net_flow_bdt") @db.Decimal(12, 2)
-  mfsProvider String   @default("bKash") @map("mfs_provider")
-  createdAt   DateTime @default(now()) @map("created_at")
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  agentId        String   @map("agent_id")
+  recordDate     DateTime @map("record_date") @db.Date
+  inflowBdt      Decimal  @map("inflow_bdt") @db.Decimal(12, 2)
+  outflowBdt     Decimal  @map("outflow_bdt") @db.Decimal(12, 2)
+  netFlowBdt     Decimal  @map("net_flow_bdt") @db.Decimal(12, 2)
+  mfsProvider    String   @default("bKash") @map("mfs_provider")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @default(now()) @updatedAt @map("updated_at")
 
-  agent KendraAgent @relation(fields: [agentId], references: [agentId])
+  organization Organization @relation(fields: [organizationId], references: [id])
+  agent        KendraAgent  @relation(fields: [agentId], references: [agentId])
 
+  // agent_id FK is indexed by the leading column of uq_agent_record_date below.
   @@unique([agentId, recordDate], map: "uq_agent_record_date")
+  @@index([organizationId], map: "merchant_private_cashflows_organization_id_idx")
   @@map("merchant_private_cashflows")
 }
 
 model ZkSolvencyCommitment {
   id                   String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organizationId       String   @map("organization_id") @db.Uuid
   invoiceId            String   @unique @map("invoice_id")
   borrowerAgentId      String   @map("borrower_agent_id")
   commitmentHex        String   @map("commitment_hex")
@@ -70,28 +134,39 @@ model ZkSolvencyCommitment {
   collusionEntropyPass Boolean  @map("collusion_entropy_pass")
   fateSurvivalProbP    Decimal  @map("fate_survival_prob_p") @db.Decimal(5, 4)
   createdAt            DateTime @default(now()) @map("created_at")
+  updatedAt            DateTime @default(now()) @updatedAt @map("updated_at")
 
-  borrower KendraAgent @relation(fields: [borrowerAgentId], references: [agentId])
+  organization Organization @relation(fields: [organizationId], references: [id])
+  borrower     KendraAgent  @relation(fields: [borrowerAgentId], references: [agentId])
 
+  @@index([organizationId], map: "zk_solvency_commitments_organization_id_idx")
+  @@index([borrowerAgentId], map: "zk_solvency_commitments_borrower_agent_id_idx")
   @@map("zk_solvency_commitments")
 }
 
 model KendraFsmEvent {
-  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  invoiceId    String   @map("invoice_id")
-  fromState    String   @map("from_state")
-  toState      String   @map("to_state")
-  triggerEvent String   @map("trigger_event")
-  roundNum     Int?     @default(0) @map("round_num")
-  payload      Json     @default("{}")
-  timestampSec BigInt   @map("timestamp_sec")
-  createdAt    DateTime @default(now()) @map("created_at")
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  invoiceId      String   @map("invoice_id")
+  fromState      String   @map("from_state")
+  toState        String   @map("to_state")
+  triggerEvent   String   @map("trigger_event")
+  roundNum       Int?     @default(0) @map("round_num")
+  payload        Json     @default("{}")
+  timestampSec   BigInt   @map("timestamp_sec")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @default(now()) @updatedAt @map("updated_at")
 
+  organization Organization @relation(fields: [organizationId], references: [id])
+
+  @@index([organizationId], map: "kendra_fsm_events_organization_id_idx")
+  @@index([invoiceId, timestampSec], map: "kendra_fsm_events_invoice_id_timestamp_sec_idx")
   @@map("kendra_fsm_events")
 }
 
 model ZeroTrustSecurityIntercept {
   id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organizationId  String   @map("organization_id") @db.Uuid
   invoiceId       String   @map("invoice_id")
   attemptedBy     String   @map("attempted_by")
   attackType      String   @map("attack_type")
@@ -99,14 +174,25 @@ model ZeroTrustSecurityIntercept {
   payload         Json
   clientIp        String?  @map("client_ip")
   createdAt       DateTime @default(now()) @map("created_at")
+  // Plain default, NO @updatedAt: the locked prevent_audit_tampering trigger
+  // cryptographically prohibits UPDATE, so updated_at can never advance.
+  updatedAt       DateTime @default(now()) @map("updated_at")
 
+  organization Organization @relation(fields: [organizationId], references: [id])
+
+  @@index([organizationId, createdAt], map: "zerotrust_security_intercepts_organization_id_created_at_idx")
+  @@index([invoiceId], map: "zerotrust_security_intercepts_invoice_id_idx")
   @@map("zerotrust_security_intercepts")
 }
 
 model RelayerNonceLock {
   relayerAddress String   @id @map("relayer_address")
   currentNonce   BigInt   @default(0) @map("current_nonce")
-  updatedAt      DateTime @default(now()) @map("updated_at")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @default(now()) @updatedAt @map("updated_at")
 
+  // Platform infrastructure, not tenant data: no organization_id.
+  // PK stays relayer_address (text): the LOCKED get_and_increment_nonce(addr)
+  // RPC inserts/updates on this natural key — a surrogate UUID would break it.
   @@map("relayer_nonce_lock")
 }

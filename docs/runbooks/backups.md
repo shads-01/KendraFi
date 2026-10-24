@@ -152,7 +152,10 @@ because this repo's environment is Windows-primary (matches the Task 2
 
 5. **Reference row counts** for a dump taken from the *local seeded* dev DB
    (Prisma seed, commit `70de5c7`) — your production dump will differ, these
-   are sanity anchors for the local drill:
+   are sanity anchors for the local drill. Seed that DB with
+   `node prisma/seed.js` (Prisma 7 ignores the package.json `prisma.seed`
+   key, so `npx prisma db seed` is a no-op that still exits 0 — verified in
+   Part 3, Task 5):
 
    | Table | Rows |
    | :--- | ---: |

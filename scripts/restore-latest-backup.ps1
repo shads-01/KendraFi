@@ -128,6 +128,22 @@ $SlashAt = $Authority.IndexOf('/')
 if ($SlashAt -ge 0) { $Authority = $Authority.Substring(0, $SlashAt) }
 $RestoreUrl = "postgresql://$Authority/$RestoreDbName"
 
+# --- 6.5 Avoid the 'schema "public" already exists' collision -----------------
+# pg_dump 18+ clients always emit CREATE SCHEMA public (pg_restore --list
+# shows a 'SCHEMA - public' TOC entry), but every fresh PG 15+ database
+# already ships one. If (and only if) the backup carries its own public
+# schema, drop the just-created throwaway DB's empty default so the restore
+# can recreate it. Runs only on kendrafi_restore_test, after the prod guard.
+$CarriesPublicSchema = if ($Latest.Extension -eq '.dump') {
+    [bool](& pg_restore --list $Latest.FullName | Select-String -Pattern '^\d+;\s+\d+\s+\d+\s+SCHEMA\s')
+} else {
+    [bool](Select-String -LiteralPath $Latest.FullName -Pattern 'CREATE SCHEMA public' -Quiet)
+}
+if ($CarriesPublicSchema) {
+    & psql $RestoreUrl -v ON_ERROR_STOP=1 -c "DROP SCHEMA public CASCADE;"
+    if ($LASTEXITCODE -ne 0) { Fail "DROP SCHEMA public failed on the fresh restore database." }
+}
+
 # --- 7. Restore ---------------------------------------------------------------
 Write-Host "Restoring     : $($Latest.Name) -> database '$RestoreDbName' on $TargetHost"
 if ($Latest.Extension -eq '.dump') {

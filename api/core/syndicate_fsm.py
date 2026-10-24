@@ -105,12 +105,15 @@ def stream_fsm_event(
     try:
         client = get_supabase_client()
         if client:
+            # Column names must match the LOCKED supabase schema exactly:
+            # invoice_id / trigger_event / timestamp_sec (NOT NULL, no default).
             client.table("kendra_fsm_events").insert({
-                "facility_id": facility_id,
-                "event_type": event_type,
+                "invoice_id": facility_id,
+                "trigger_event": event_type,
                 "from_state": from_state,
                 "to_state": to_state,
                 "payload": payload,
+                "timestamp_sec": int(time.time()),
             }).execute()
     except Exception:
         pass

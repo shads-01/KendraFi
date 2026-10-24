@@ -247,6 +247,10 @@ Prisma cannot express `CHECK`, so NOT NULL / UNIQUE live in the schema, and the 
 4. **Locked seed re-run caveat.** The locked SQL's `INSERT`s name their columns explicitly and omit the new columns, so every added column carries a DB default — but `organization_id` cannot be defaulted. After Task 2, never re-run the locked seed standalone against an empty, post-migration `kendra_agents` (its INSERT would violate NOT NULL). Task 2's Prisma seed supersedes the locked seed for org-attributed data.
 5. **Seed shape.** 2 organizations × 3 users + org attribution for the demo agents (year one: `AGT-01` → org 1, peers → org 2, etc. — exact mapping is Task 2's call).
 
+### 5.6 File storage: N/A (Part 3, Task 3 ruling)
+
+No file uploads exist anywhere in the codebase — no upload endpoints in `src/app/api/**`, no multipart/storage SDK code in `src/` or `api/`; `public/` and `test-invoices/` are static assets. The pre-signed-URL/private-bucket deliverable is therefore N/A. When uploads arrive (e.g., invoice scans via the perception sandbox), the rule is: private-by-default bucket, access only through short-lived pre-signed URLs, and object paths keyed by `organization_id` so tenant isolation starts at storage, not just at the database.
+
 ---
 
 ## 6. Verification

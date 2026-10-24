@@ -45,8 +45,11 @@ is the pgbouncer pooler (port 6543) — fine for the app, **not** for `pg_dump`.
 
 **Not covered by our dumps:** `auth.users`, `storage.objects`, roles and
 realtime settings (they live outside `public`). At pilot scale these are
-reconstructible from VCS and config. A paid plan's platform backups/PITR would
-cover the whole project; our `pg_dump` layer covers tenant business data.
+reconstructible from VCS and config — with one caveat for restores: roles are
+cluster-level, so a restore drill must pre-create them on a fresh target
+(§4 step 2); the dump itself never carries them. A paid plan's platform
+backups/PITR would cover the whole project; our `pg_dump` layer covers tenant
+business data.
 
 **Free-tier pause warning:** free projects auto-pause after ~1 week of
 inactivity (this project was `INACTIVE` on 2026-10-24). Unpause in the
@@ -121,27 +124,50 @@ because this repo's environment is Windows-primary (matches the Task 2
 
 **Steps:**
 
-1. **Start the throwaway target** (Task 2 pattern; reuse with
-   `docker start kendrafi-pg-restore` if it already exists):
+1. **Start the throwaway target** (reuse with `docker start
+   kendrafi-pg-restore` if it already exists):
 
    ```powershell
-   docker run -d --name kendrafi-pg-restore -e POSTGRES_PASSWORD=kendrafi -p 54330:5432 postgres:16-alpine
+   docker run -d --name kendrafi-pg-restore -e POSTGRES_PASSWORD=kendrafi -p 54330:5432 postgres:17-alpine
    ```
 
-2. **Make sure at least one dump exists** (§3). The script exits with a clear
+   **PG17+ target is a hard constraint, not a preference:** dumps captured
+   with this repo's pg_dump client (18.4, i.e. ≥17) unconditionally embed
+   `SET transaction_timeout` — a PG17+ GUC — and a PG16 target cannot replay
+   it (empirically proven in Part 3, Task 5: the same dump failed on
+   `postgres:16-alpine` and passed on `postgres:17-alpine`). Keep drill
+   targets at PostgreSQL 17 or newer.
+
+2. **Pre-create the three Supabase roles** the dump's 12
+   `CREATE POLICY ... TO anon/authenticated/service_role` entries reference.
+   Roles are cluster-level and a fresh container does not have them, so the
+   restore fails without this step:
+
+   ```powershell
+   docker exec kendrafi-pg-restore psql -U postgres -d postgres -c "CREATE ROLE anon NOLOGIN; CREATE ROLE authenticated NOLOGIN; CREATE ROLE service_role NOLOGIN;"
+   ```
+
+3. **Make sure at least one dump exists** (§3). The script exits with a clear
    error if `backups/` is empty — it is a restore script, not a capture one.
 
-3. **Run the drill:**
+4. **Run the drill** — in a **fresh shell**, or after clearing
+   `DATABASE_URL`, `SUPABASE_URL`, and `DIRECT_URL` (e.g.
+   `Remove-Item Env:DATABASE_URL -ErrorAction SilentlyContinue` for each):
 
    ```powershell
    powershell -ExecutionPolicy Bypass -File scripts\restore-latest-backup.ps1
    ```
 
+   The production-host guard refuses any target whose host equals the host of
+   one of those three env vars — *including localhost*. That is failsafe, but
+   confusing if your shell still holds a local dev `DATABASE_URL`: the
+   default localhost target gets refused for looking like a "source" host.
+
    Target selection (first wins): `-TargetUrl` parameter →
    `TARGET_DATABASE_URL` env var → default
    `postgresql://postgres:kendrafi@localhost:54330/postgres`.
 
-4. **What the script does:** refuses Supabase-looking targets (host contains
+5. **What the script does:** refuses Supabase-looking targets (host contains
    `supabase`, or equals the host of `SUPABASE_URL`/`DIRECT_URL`/`DATABASE_URL`)
    → finds the newest `.dump`/`.sql` in `backups/` → checks the target server
    is reachable → `DROP DATABASE IF EXISTS kendrafi_restore_test WITH (FORCE)`
@@ -150,7 +176,14 @@ because this repo's environment is Windows-primary (matches the Task 2
    total rows > 0; otherwise **FAIL** (exit 1). The target URL's own database
    is only used as the maintenance connection — it is never written to.
 
-5. **Reference row counts** for a dump taken from the *local seeded* dev DB
+   *Guard limits (know what it does not catch):* the refusal is a name/env
+   host match only — an IP-literal target or an unknown custom domain would
+   pass the check. The real blast-radius limit is the fixed throwaway
+   database name `kendrafi_restore_test`: the script can only ever drop,
+   create, and restore that one database on the target server, never the
+   target URL's own database.
+
+6. **Reference row counts** for a dump taken from the *local seeded* dev DB
    (Prisma seed, commit `70de5c7`) — your production dump will differ, these
    are sanity anchors for the local drill. Seed that DB with
    `node prisma/seed.js` (Prisma 7 ignores the package.json `prisma.seed`
@@ -169,12 +202,15 @@ because this repo's environment is Windows-primary (matches the Task 2
    | zerotrust_security_intercepts | 2 |
    | relayer_nonce_lock | 0 |
 
-6. **Clean up:** nothing required — `kendrafi_restore_test` is throwaway. Stop
+7. **Clean up:** nothing required — `kendrafi_restore_test` is throwaway. Stop
    the container between drills (`docker stop kendrafi-pg-restore`).
 
 **Troubleshooting:** *connection refused* → container not started (step 1).
-*Restore version errors* → production server is PG 17 while the drill target
-container is PG 16; for a byte-exact drill run `postgres:17-alpine` instead.
+*Restore version errors* (`unrecognized configuration parameter
+"transaction_timeout"`) → the dump was captured with a pg_dump client ≥ 17
+(this repo: 18.4), which embeds PG17+ GUCs; the target must be PG17+ (step 1's
+`postgres:17-alpine` — a PG16 target cannot replay such dumps at all).
+*`role "anon" does not exist`* → step 2 was skipped.
 *zero rows* → the dump predates the seed or was schema-only.
 
 ---

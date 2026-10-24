@@ -11,8 +11,9 @@
   Target selection (first wins):
     1. -TargetUrl parameter
     2. TARGET_DATABASE_URL environment variable
-    3. Default: the local Docker pattern proven in Task 2:
-       docker run -d --name kendrafi-pg-restore -e POSTGRES_PASSWORD=kendrafi -p 54330:5432 postgres:16-alpine
+    3. Default: the local Docker pattern proven in Task 2/5 (PG17+ required —
+       pg_dump 18.4 embeds PG17+ GUCs that PG16 cannot restore):
+       docker run -d --name kendrafi-pg-restore -e POSTGRES_PASSWORD=kendrafi -p 54330:5432 postgres:17-alpine
 
   Safety guard: REFUSES to run if the target host looks like the Supabase
   production host (host contains "supabase", or equals the host of

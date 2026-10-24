@@ -141,7 +141,7 @@ erDiagram
 | `MerchantPrivateCashflow` | `merchant_private_cashflows` | ✅ `organization_id` FK | Denormalized org FK so RLS policies never need a join to `kendra_agents`. DENY-ALL RLS from the locked migration stays untouched. |
 | `ZkSolvencyCommitment` | `zk_solvency_commitments` | ✅ `organization_id` FK | Attributed to the **borrower's** org. |
 | `KendraFsmEvent` | `kendra_fsm_events` | ✅ `organization_id` FK | Attributed to the acting agent's org; Realtime SELECT policies unchanged. |
-| `ZeroTrustSecurityIntercept` | `zerotrust_security_intercepts` | ✅ `organization_id` FK | Attributed to the acting (attacking) agent's org, so each tenant sees only its own intercepts. |
+| `ZeroTrustSecurityIntercept` | `zerotrust_security_intercepts` | ✅ `organization_id` FK | Attributed to the acting (attacking) agent's org. Reads are **public, not tenant-scoped**: the locked policy `Allow public judge & peer read security intercepts` grants `FOR SELECT TO anon, authenticated USING (true)` (mirrored by the local init migration) — deliberate judge transparency, so every intercept is visible to every tenant. `organization_id` enables future per-org views/feeds but restricts nothing today. |
 | `KybSupplier` | `kyb_supplier_registry` | ❌ deliberate | Platform-shared counterparty whitelist (public read RLS). Org-scoping it would break the shared x402 semantics — every tenant validates against the same suppliers. |
 | `RelayerNonceLock` | `relayer_nonce_lock` | ❌ deliberate | Platform relayer infrastructure (one hot row per relayer address). |
 
@@ -241,7 +241,24 @@ Prisma cannot express `CHECK`, so NOT NULL / UNIQUE live in the schema, and the 
 
 ### 5.5 Task 2 (migration/seed) mechanics — critical hand-off
 
-1. **Additive-only vs the locked SQL.** The 7 locked tables already exist in the Supabase project. Task 2 must baseline them (`prisma migrate diff` / introspection) and ALTER additively — never regenerate the locked DDL, never edit `supabase/`.
+1. **Strategy as executed (not the additive-ALTER path sketched here before).**
+   Task 2 did **not** baseline-and-ALTER the remote Supabase project. What it
+   shipped is a **fresh-DB baseline init migration**
+   (`prisma/migrations/20261023200857_init/migration.sql`): full DDL
+   regeneration for local/dev databases — Prisma-generated tables/indexes/FKs
+   plus a hand-written section carrying the CHECKs, RLS with the locked policy
+   names, the immutability trigger, and `anon`/`authenticated`/`service_role`
+   as NOLOGIN role placeholders. The **remote Supabase project was untouched**
+   by this work — no migrations, no seeds, no data writes were ever sent to
+   it. Adding `organization_id` to those existing remote tables via additive
+   ALTERs is an explicit **Part 4/5 hand-off; no such migration exists yet**.
+   `supabase/` itself was never edited. Items 2–4 below are the ordering
+   hazards for that future additive path — the local init migration did not
+   need them (its `organization_id` columns are born `NOT NULL` on a fresh
+   DB). **Deliberate local-vs-locked divergences:** timestamps are Prisma's
+   `TIMESTAMP(3)` without time zone (locked SQL: `TIMESTAMPTZ`); no
+   `get_and_increment_nonce(addr)` RPC function; no realtime publication
+   entries; no extensions.
 2. **NOT NULL backfill order.** `organization_id` is NOT NULL on six tables: create `organizations` → create per-tenant orgs → add the column (nullable/defaulted) → backfill from the owning agent → `SET NOT NULL` → attach the FK.
 3. **Immutability-trigger hazard.** Backfilling `organization_id`/`updated_at` on *existing* `zerotrust_security_intercepts` rows requires `UPDATE`, which `prevent_audit_tampering` blocks. The migration must `DISABLE TRIGGER prevent_audit_tampering`, backfill, re-enable — or run before any intercept rows exist (fresh DB).
 4. **Locked seed re-run caveat.** The locked SQL's `INSERT`s name their columns explicitly and omit the new columns, so every added column carries a DB default — but `organization_id` cannot be defaulted. After Task 2, never re-run the locked seed standalone against an empty, post-migration `kendra_agents` (its INSERT would violate NOT NULL). Task 2's Prisma seed supersedes the locked seed for org-attributed data.
@@ -250,6 +267,24 @@ Prisma cannot express `CHECK`, so NOT NULL / UNIQUE live in the schema, and the 
 ### 5.6 File storage: N/A (Part 3, Task 3 ruling)
 
 No file uploads exist anywhere in the codebase — no upload endpoints in `src/app/api/**`, no multipart/storage SDK code in `src/` or `api/`; `public/` and `test-invoices/` are static assets. The pre-signed-URL/private-bucket deliverable is therefore N/A. When uploads arrive (e.g., invoice scans via the perception sandbox), the rule is: private-by-default bucket, access only through short-lived pre-signed URLs, and object paths keyed by `organization_id` so tenant isolation starts at storage, not just at the database.
+
+### 5.7 Denormalized `organization_id` consistency invariant
+
+`organization_id` is denormalized onto the tenant tables so RLS and org
+scoping never need a join — which makes **write-path discipline the
+load-bearing invariant: every write path must set `organization_id` to the
+owning org at write time.** This can later be enforced in the schema with a
+composite FK (e.g. `kendra_agents(agent_id, organization_id)` referenced as
+`(agent_id, organization_id)` from the referencing tables), but no such
+constraint exists yet — until then correctness rests entirely on the writers.
+Until Part 4/5 ship real write paths, the demo writers —
+`api/core/syndicate_fsm.py::stream_fsm_event` and the security-intercept
+writer in `api/core/perception_sandbox.py` — target the **locked remote
+schema** (whose `kendra_fsm_events`/`zerotrust_security_intercepts` have no
+`organization_id` columns at all, per Task 3's locked-contract test). They
+must **not** be pointed at local-migration databases: the local init
+migration adds `organization_id` as `NOT NULL` with no default, so the same
+INSERTs would fail there.
 
 ---
 

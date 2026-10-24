@@ -48,3 +48,6 @@ contracts/cache/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Local database backups (restore-test dumps - see docs/runbooks/backups.md)
+backups/

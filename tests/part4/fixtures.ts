@@ -63,6 +63,29 @@ export async function resetAgents(): Promise<void> {
   }
 }
 
+// Seed-baseline users (prisma/seed.js): role MEMBER (migration default),
+// authUserId null. Team tests mutate/delete these rows; resetMembers()
+// restores them before each test so flows stay order- and run-independent.
+const BASELINE_USERS = [
+  { email: "rahim.uddin@karwanbazartraders.com.bd", organizationId: ORG_A, name: "Rahim Uddin" },
+  { email: "fatema.begum@karwanbazartraders.com.bd", organizationId: ORG_A, name: "Fatema Begum" },
+  { email: "kamal.hossain@karwanbazartraders.com.bd", organizationId: ORG_A, name: "Kamal Hossain" },
+  { email: "nasrin.akter@dhanmondiretailgroup.com.bd", organizationId: ORG_B, name: "Nasrin Akter" },
+  { email: "sohel.rana@dhanmondiretailgroup.com.bd", organizationId: ORG_B, name: "Sohel Rana" },
+  { email: "jamil.iqbal@dhanmondiretailgroup.com.bd", organizationId: ORG_B, name: "Jamil Iqbal" },
+] as const;
+
+/** Restore seed-baseline members (live, role MEMBER). Idempotent. */
+export async function resetMembers(): Promise<void> {
+  for (const u of BASELINE_USERS) {
+    await prisma.user.upsert({
+      where: { email: u.email },
+      create: { ...u, role: "MEMBER" },
+      update: { role: "MEMBER", deletedAt: null },
+    });
+  }
+}
+
 /**
  * Ensure a users row with the given role exists (role default in the DB is
  * MEMBER, so every non-MEMBER role needs an explicit fixture row) and return

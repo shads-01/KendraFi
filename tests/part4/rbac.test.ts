@@ -17,6 +17,11 @@ describe("can() — resource-aware ADMIN protections", () => {
     expect(can("ADMIN", "member:role", { targetRole: "VIEWER" })).toBe(true);
   });
 
+  it("ADMIN member:role/remove against an ADMIN row → false (ADMIN-on-ADMIN blocked)", () => {
+    expect(can("ADMIN", "member:role", { targetRole: "ADMIN" })).toBe(false);
+    expect(can("ADMIN", "member:remove", { targetRole: "ADMIN" })).toBe(false);
+  });
+
   it("ADMIN member:role/remove without resource.targetRole → false (fail closed)", () => {
     expect(can("ADMIN", "member:role")).toBe(false);
     expect(can("ADMIN", "member:remove")).toBe(false);

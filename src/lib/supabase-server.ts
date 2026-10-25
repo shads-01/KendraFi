@@ -15,3 +15,12 @@ export const supabaseServer = createClient(supabaseUrl || "https://placeholder.s
     autoRefreshToken: false,
   },
 });
+
+/**
+ * True only with real (non-placeholder) service-role credentials. Admin calls
+ * (e.g. session revocation on member removal) guard on this so a paused or
+ * unconfigured Supabase project degrades gracefully instead of hanging/fetching.
+ */
+export function isSupabaseAdminConfigured(): boolean {
+  return Boolean(supabaseUrl && supabaseServiceKey) && !supabaseUrl.includes("placeholder");
+}

@@ -12,6 +12,15 @@ export async function GET(request: NextRequest) {
   const { searchParams, origin } = request.nextUrl;
   const next = sanitizeNext(searchParams.get("next"));
 
+  // Invite links (accept itself is POST-only via /api/team/invites/accept):
+  // forward the token to /team where the UI offers an "Accept invite" button.
+  const inviteToken = searchParams.get("invite_token");
+  if (inviteToken) {
+    return NextResponse.redirect(
+      new URL(`/team?invite_token=${encodeURIComponent(inviteToken)}`, origin)
+    );
+  }
+
   if (!isAuthConfigured()) {
     return NextResponse.redirect(new URL("/login?error=auth_not_configured", origin));
   }

@@ -142,3 +142,14 @@ export async function loadAgent(agentId: string, organizationId: string) {
     where: { agentId, organizationId, deletedAt: null },
   });
 }
+
+/**
+ * Org-scoped member load (users PK is `id`). Returns null for cross-org,
+ * missing, or soft-deleted rows so callers map to 404 — never an existence
+ * leak. Mirrors loadAgent().
+ */
+export async function loadUser(userId: string, organizationId: string) {
+  return prisma.user.findFirst({
+    where: { id: userId, organizationId, deletedAt: null },
+  });
+}

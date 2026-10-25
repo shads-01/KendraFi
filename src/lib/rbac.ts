@@ -48,14 +48,15 @@ export type ActionResource = { targetRole?: string };
 /**
  * `can(role, action, resource?)` — the single authorization decision.
  * Unknown roles fail closed. For member:role / member:remove, ADMIN may act
- * on MEMBER and VIEWER rows only: a provided `resource.targetRole` of
- * "OWNER" (or a missing resource) is denied — only OWNER outranks ADMIN.
+ * on MEMBER and VIEWER rows only: OWNER and ADMIN targets are denied
+ * (ADMIN-on-ADMIN included — only OWNER outranks ADMIN), and a missing
+ * resource fails closed.
  */
 export function can(role: string, action: Action, resource?: ActionResource): boolean {
   if (!(ROLES as readonly string[]).includes(role)) return false;
   if (!PERMISSIONS_MATRIX[action].includes(role as Role)) return false;
   if ((action === "member:role" || action === "member:remove") && role === "ADMIN") {
-    return resource?.targetRole != null && resource.targetRole !== "OWNER";
+    return resource?.targetRole === "MEMBER" || resource?.targetRole === "VIEWER";
   }
   return true;
 }

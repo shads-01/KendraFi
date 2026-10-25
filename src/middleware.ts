@@ -15,7 +15,9 @@ const PUBLIC_PAGES = new Set([
 ]);
 const PUBLIC_PREFIXES = ["/api/auth/", "/api/health", "/api/kendra", "/_next"];
 
-function isPublic(pathname: string): boolean {
+// Exported pure for tests (tests/part4/public-routes.test.ts) — no edge
+// runtime needed to evaluate the public-route gate.
+export function isPublic(pathname: string): boolean {
   return (
     PUBLIC_PAGES.has(pathname) ||
     PUBLIC_PREFIXES.some((p) => pathname.startsWith(p)) ||

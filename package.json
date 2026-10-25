@@ -12,6 +12,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test:auth": "vitest run --config tests/part4/vitest.config.ts",
+    "test:api": "python -m pytest -q",
+    "typecheck": "tsc --noEmit",
     "generate:sandbox": "([ -f .venv/bin/python3 ] && .venv/bin/python3 api/data/generate_sandbox.py) || python3 api/data/generate_sandbox.py"
   },
   "prisma": {

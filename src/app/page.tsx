@@ -58,8 +58,7 @@ export default function HomePage() {
   const [lastError, setLastError] = useState<string | null>(null);
   const [retryAction, setRetryAction] = useState<(() => void) | null>(null);
 
-  const apiErrorMessage = async (res: Response): Promise<string> => {
-    const data: unknown = await res.json().catch(() => null);
+  const apiErrorMessage = (res: Response, data: unknown): string => {
     const err = (data as { error?: unknown } | null)?.error;
     if (typeof err === "string" && err) return err;
     if (err && typeof err === "object" && "message" in err && typeof (err as { message: unknown }).message === "string") {
@@ -138,7 +137,7 @@ export default function HomePage() {
         const errorData = await res.json().catch(() => ({}));
         const reqId = res.headers.get("x-request-id") || "none";
         console.error(`[API Error] Status ${res.status} (X-Request-ID: ${reqId}):`, errorData?.error?.message || errorData?.error || res.statusText);
-        setLastError(await apiErrorMessage(res));
+        setLastError(apiErrorMessage(res, errorData));
       }
     } catch (err: unknown) {
       console.error("Execution error:", err);
@@ -188,7 +187,7 @@ export default function HomePage() {
         const errorData = await res.json().catch(() => ({}));
         const reqId = res.headers.get("x-request-id") || "none";
         console.error(`[Repay Error] Status ${res.status} (X-Request-ID: ${reqId}):`, errorData?.error?.message || errorData?.error || res.statusText);
-        setLastError(await apiErrorMessage(res));
+        setLastError(apiErrorMessage(res, errorData));
       }
     } catch (err: unknown) {
       console.error("Repay sweep error:", err);
@@ -227,7 +226,7 @@ export default function HomePage() {
         const errorData = await res.json().catch(() => ({}));
         const reqId = res.headers.get("x-request-id") || "none";
         console.error(`[Bailout Error] Status ${res.status} (X-Request-ID: ${reqId}):`, errorData?.error?.message || errorData?.error || res.statusText);
-        setLastError(await apiErrorMessage(res));
+        setLastError(apiErrorMessage(res, errorData));
       }
     } catch (err: unknown) {
       console.error("Bailout error:", err);

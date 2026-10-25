@@ -152,6 +152,35 @@ export default function SecurityEscrowPanel({
         </div>
       </div>
 
+      {/* Scenario/API Error Banner with Retry (re-invokes the last failed call) — rendered on BOTH tabs */}
+      {lastError && (
+        <div
+          role="alert"
+          className="planora-card-interactive flex items-start justify-between gap-3 border-2 !bg-[#FEECEE] !border-[#DC2626]/40 p-3.5 animate-fadeIn"
+        >
+          <div className="flex items-start gap-2.5">
+            <AlertTriangle className="h-5 w-5 text-[#DC2626] shrink-0" />
+            <div>
+              <span className="text-xs sm:text-sm font-extrabold text-[#DC2626] block">
+                Scenario Execution Failed
+              </span>
+              <span className="text-xs text-[#111827] font-medium leading-relaxed break-words">
+                {lastError}
+              </span>
+            </div>
+          </div>
+          {onRetry && (
+            <button
+              type="button"
+              onClick={onRetry}
+              className="shrink-0 px-3.5 py-1.5 rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] text-white text-xs font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] focus-visible:ring-offset-1"
+            >
+              Retry
+            </button>
+          )}
+        </div>
+      )}
+
       {activeTab === "backtest" ? (
         /* ================================================================= */
         /* TAB 2: EMPIRICAL MONTE CARLO BACKTEST BENCHMARK DRAWER             */
@@ -239,35 +268,6 @@ export default function SecurityEscrowPanel({
         /* TAB 1: LIVE 4-TIER ZERO-TRUST FIREWALL & SETTLEMENT FEED          */
         /* ================================================================= */
         <>
-          {/* Scenario/API Error Banner with Retry (re-invokes the last failed call) */}
-          {lastError && (
-            <div
-              role="alert"
-              className="planora-card-interactive flex items-start justify-between gap-3 border-2 !bg-[#FEECEE] !border-[#DC2626]/40 p-3.5 animate-fadeIn"
-            >
-              <div className="flex items-start gap-2.5">
-                <AlertTriangle className="h-5 w-5 text-[#DC2626] shrink-0" />
-                <div>
-                  <span className="text-xs sm:text-sm font-extrabold text-[#DC2626] block">
-                    Scenario Execution Failed
-                  </span>
-                  <span className="text-xs text-[#111827] font-medium leading-relaxed break-words">
-                    {lastError}
-                  </span>
-                </div>
-              </div>
-              {onRetry && (
-                <button
-                  type="button"
-                  onClick={onRetry}
-                  className="shrink-0 px-3.5 py-1.5 rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] text-white text-xs font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] focus-visible:ring-offset-1"
-                >
-                  Retry
-                </button>
-              )}
-            </div>
-          )}
-
           {/* High-Visibility Red/Blush Security Intercept Alert Banner */}
           {securityAlert && (
             <div

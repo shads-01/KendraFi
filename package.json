@@ -12,6 +12,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test:auth": "vitest run --config tests/part4/vitest.config.ts",
+    "test:e2e": "playwright test",
     "test:api": "python -m pytest -q",
     "typecheck": "tsc --noEmit",
     "generate:sandbox": "([ -f .venv/bin/python3 ] && .venv/bin/python3 api/data/generate_sandbox.py) || python3 api/data/generate_sandbox.py"
@@ -32,6 +33,7 @@
     "server-only": "^0.0.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.1",
     "@types/node": "^20.17.0",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.1",

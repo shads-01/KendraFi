@@ -2,6 +2,7 @@ import "server-only";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
+import { can, type Action, type ActionResource } from "@/lib/rbac";
 import { prisma } from "@/lib/prisma";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || "";
@@ -89,4 +90,60 @@ export async function requireAuth(): Promise<AuthContext> {
   const ctx = await getAuthContext();
   if (!ctx) throw new AuthRequiredError();
   return ctx;
+}
+
+// ============================================================================
+// Authorization (Part 4, Task 2) — permission gate + org-scoped resource load
+// ============================================================================
+
+/** Typed authz failure: 401 unauthenticated or 403 unauthorized. */
+export class AuthzError extends Error {
+  readonly status: 401 | 403;
+  readonly code: "unauthenticated" | "forbidden";
+  constructor(status: 401 | 403, code: "unauthenticated" | "forbidden") {
+    super(code);
+    this.status = status;
+    this.code = code;
+  }
+}
+
+/**
+ * The one gate every protected endpoint calls. Throws AuthzError (401 when
+ * signed out, 403 when `can()` denies the action). Handlers catch via
+ * authzErrorResponse() below — no ad-hoc role checks in endpoints.
+ */
+export async function requirePermission(
+  action: Action,
+  resource?: ActionResource,
+): Promise<AuthContext> {
+  const ctx = await getAuthContext();
+  if (!ctx) throw new AuthzError(401, "unauthenticated");
+  if (!can(ctx.role, action, resource)) throw new AuthzError(403, "forbidden");
+  return ctx;
+}
+
+/** Map a thrown error to the JSON response; AuthzError keeps its status. */
+export function authzErrorResponse(error: unknown): NextResponse {
+  if (error instanceof AuthzError) {
+    return NextResponse.json({ error: error.code }, { status: error.status });
+  }
+  console.error("route handler error:", error);
+  return NextResponse.json({ error: "internal_error" }, { status: 500 });
+}
+
+/**
+ * Org-scoped load: the resource must belong to the caller's organization.
+ * Returns null for cross-org, missing, or soft-deleted rows so callers map
+ * to 404 — never 403, never an existence leak.
+ */
+export async function loadOrgResource<R>(
+  model: {
+    findFirst(args: {
+      where: { id: string; organizationId: string; deletedAt: Date | null };
+    }): Promise<R | null>;
+  },
+  id: string,
+  organizationId: string,
+): Promise<R | null> {
+  return model.findFirst({ where: { id, organizationId, deletedAt: null } });
 }

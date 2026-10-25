@@ -29,6 +29,12 @@ export default function AuthNav() {
     <nav aria-label="Account" className="flex items-center justify-end gap-3 bg-white border-b border-gray-200 px-6 py-2">
       {email ? (
         <>
+          <a
+            href="/team"
+            className="text-xs font-bold text-gray-700 border border-gray-300 rounded-lg px-3 py-1.5 hover:bg-gray-50"
+          >
+            Dashboard
+          </a>
           <span className="text-xs font-semibold text-gray-600">{email}</span>
           <button
             type="button"

@@ -48,10 +48,11 @@ export default function LoginPage() {
     setError(null);
     try {
       // Requires the Google provider to be enabled in the Supabase dashboard.
-      await getAuthBrowserClient().auth.signInWithOAuth({
+      const { error } = await getAuthBrowserClient().auth.signInWithOAuth({
         provider: "google",
         options: { redirectTo: `${window.location.origin}/api/auth/callback` },
       });
+      if (error) setError(error.message);
     } finally {
       setBusy(false);
     }

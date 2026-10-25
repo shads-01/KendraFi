@@ -31,9 +31,15 @@ export async function middleware(request: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
     "";
-  // Auth unconfigured (build/demo mode): pass through instead of locking the
-  // app behind a login that can never succeed.
-  if (!url || !key || url.includes("placeholder")) return NextResponse.next();
+  // Fail closed: unconfigured/placeholder env is treated exactly like an
+  // unauthenticated request. Route handlers are the enforcement boundary
+  // (getAuthContext fails closed); middleware gating is UX.
+  if (!url || !key || url.includes("placeholder")) {
+    if (request.nextUrl.pathname.startsWith("/api/")) {
+      return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+    }
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
 
   let response = NextResponse.next({ request });
   const supabase = createServerClient(url, key, {

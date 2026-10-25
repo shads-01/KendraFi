@@ -57,6 +57,9 @@ provider-owned; `users.auth_user_id` keeps our DB schema independent of
 must be enabled in the Supabase dashboard — no server endpoint needed).
 
 Harder: runtime auth requires a live Supabase project (currently paused);
-middleware makes one `getUser()` validation round-trip per protected request
-(local JWKS validation is a future optimization). RLS policies binding
+middleware **fails closed** when auth is unconfigured/placeholder (protected
+pages redirect to `/login`, protected APIs get 401 — the public demo routes
+`/`, `/api/kendra/*`, `/api/health`, `/api/auth/*` are unaffected); middleware
+makes one `getUser()` validation round-trip per protected request (local JWKS
+validation is a future optimization). RLS policies binding
 `organization_id` to the JWT remain a Part 4/5 hand-off.

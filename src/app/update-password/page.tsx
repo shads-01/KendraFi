@@ -64,14 +64,14 @@ export default function UpdatePasswordPage() {
           <button
             type="submit"
             disabled={busy}
-            className="w-full bg-[#FF5C00] hover:bg-[#E65200] disabled:opacity-50 text-white text-sm font-bold rounded-lg py-2.5"
+            className="w-full bg-[#FF5C00] hover:bg-[#E65200] disabled:opacity-50 text-white text-sm font-bold rounded-lg py-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-2"
           >
             Update password
           </button>
         </form>
 
         <p className="mt-6 text-xs font-semibold text-center">
-          <a href="/reset-password" className="text-[#FF5C00] hover:underline">
+          <a href="/reset-password" className="text-[#FF5C00] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1 rounded">
             Request a new reset link
           </a>
         </p>

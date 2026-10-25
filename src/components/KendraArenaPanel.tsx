@@ -4,23 +4,12 @@ import React, { useState } from "react";
 import {
   Users,
   Shield,
-  Lock,
-  CheckCircle,
-  AlertOctagon,
   CloudLightning,
   Eye,
-  Key,
-  Database,
-  ArrowRight,
-  TrendingUp,
-  Cpu,
   Fingerprint,
-  Info,
-  Radio,
   Zap,
   ChevronLeft,
   ChevronRight,
-  Filter,
 } from "lucide-react";
 import type {
   CNPWallMessage,
@@ -110,9 +99,7 @@ const AGENT_NODES = [
 ];
 
 export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
-  fsmState,
   cnpMessages,
-  peerVotes,
   zkProof,
   dscr,
   grossRepaymentBdt,
@@ -121,7 +108,6 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<"pentagon" | "cnp" | "zk">("pentagon");
   const [showFullCommitment, setShowFullCommitment] = useState(false);
-  const [hoveredAgent, setHoveredAgent] = useState<string | null>(null);
 
   // Pagination & Filter States
   const [cnpRoundFilter, setCnpRoundFilter] = useState<"all" | 1 | 2 | 3>("all");
@@ -160,8 +146,6 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
     { id: "AGT-05", name: "Sohel Electronics", share: "0.0%", stake: "0.00 BDT", utility: "-142.60 BDT", status: "ABSTAINED (CV>0.55)", statusChip: "chip-neutral", isAbstained: true },
   ];
 
-  const nashPerPage = 3;
-  const totalNashPages = Math.ceil(nashRows.length / nashPerPage);
   const displayedNashRows = nashPage === 1 ? nashRows.slice(0, 3) : nashRows.slice(3);
 
   return (
@@ -188,7 +172,8 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition ${
+              aria-pressed={activeTab === tab.key}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1 ${
                 activeTab === tab.key
                   ? "bg-white text-[#FF5C00] shadow-xs"
                   : "text-[#6B7280] hover:text-[#111827]"
@@ -244,8 +229,6 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
               <div
                 key={agent.id}
                 style={{ left: `${agent.coords.x}%`, top: `${agent.coords.y}%` }}
-                onMouseEnter={() => setHoveredAgent(agent.id)}
-                onMouseLeave={() => setHoveredAgent(null)}
                 className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group cursor-pointer z-10"
               >
                 {/* Node Orb with Pulsing Halo */}
@@ -318,6 +301,16 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
           </div>
         </div>
 
+          {/* Empty State: no trace populated yet */}
+          {!isExecuting && cnpMessages.length === 0 && (
+            <div
+              role="status"
+              className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 rounded-full bg-[#F3F4F6]/95 border border-[#E5E7EB] px-4 py-1.5 text-xs font-bold text-[#6B7280] whitespace-nowrap"
+            >
+              Run a scenario to populate the live CNP trace
+            </div>
+          )}
+
         {/* Tab Sub-View: Multi-Round CNP Negotiation Feed */}
         {activeTab === "cnp" && (
           <div className="w-full mt-4 rounded-2xl border border-[#E5E7EB] bg-[#FAFBFD] p-4 space-y-3 animate-fadeIn">
@@ -336,7 +329,8 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
                       setCnpRoundFilter(r);
                       setCnpPage(1);
                     }}
-                    className={`px-2.5 py-1 rounded-lg transition ${
+                    aria-pressed={cnpRoundFilter === r}
+                    className={`px-2.5 py-1 rounded-lg transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1 ${
                       cnpRoundFilter === r
                         ? "bg-white text-[#FF5C00] shadow-xs"
                         : "text-[#6B7280] hover:text-[#111827]"
@@ -403,6 +397,7 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
                       <button
                         onClick={() => setCnpPage((p) => Math.max(1, p - 1))}
                         disabled={cnpPage === 1}
+                        aria-label="Previous CNP page"
                         className="pagination-btn !h-7 !px-2 text-xs"
                       >
                         <ChevronLeft className="h-3 w-3" />
@@ -411,6 +406,7 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
                         <button
                           key={p}
                           onClick={() => setCnpPage(p)}
+                          aria-label={`Go to CNP page ${p}`}
                           className={`pagination-btn !h-7 !px-2.5 text-xs ${cnpPage === p ? "pagination-btn-active" : ""}`}
                         >
                           {p}
@@ -419,6 +415,7 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
                       <button
                         onClick={() => setCnpPage((p) => Math.min(totalCnpPages, p + 1))}
                         disabled={cnpPage === totalCnpPages}
+                        aria-label="Next CNP page"
                         className="pagination-btn !h-7 !px-2 text-xs"
                       >
                         <ChevronRight className="h-3 w-3" />
@@ -456,7 +453,8 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
               <span className="font-semibold">Pedersen Curve Commitment (C₁):</span>
               <button
                 onClick={() => setShowFullCommitment(!showFullCommitment)}
-                className="text-[#0284C7] hover:underline flex items-center gap-1 text-xs font-bold"
+                aria-pressed={showFullCommitment}
+                className="text-[#0284C7] hover:underline flex items-center gap-1 text-xs font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0284C7] focus-visible:ring-offset-1 rounded"
               >
                 <Eye className="h-3.5 w-3.5" />
                 {showFullCommitment ? "Short View" : "Full 66-Hex"}
@@ -532,12 +530,14 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
             <div className="flex items-center gap-1">
               <button
                 onClick={() => setNashPage(1)}
+                aria-pressed={nashPage === 1}
                 className={`pagination-btn !h-7 !px-2.5 text-xs ${nashPage === 1 ? "pagination-btn-active" : ""}`}
               >
                 P1
               </button>
               <button
                 onClick={() => setNashPage(2)}
+                aria-pressed={nashPage === 2}
                 className={`pagination-btn !h-7 !px-2.5 text-xs ${nashPage === 2 ? "pagination-btn-active" : ""}`}
               >
                 P2
@@ -613,7 +613,7 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
           <button
             onClick={onTriggerBailout}
             disabled={isExecuting}
-            className="btn-animated-primary text-xs sm:text-sm px-5 py-2.5 font-bold"
+            className="btn-animated-primary text-xs sm:text-sm px-5 py-2.5 font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0284C7] focus-visible:ring-offset-1"
           >
             <CloudLightning className="h-4 w-4" />
             <span>Simulate Monsoon Shock &rarr; Flash Bailout</span>

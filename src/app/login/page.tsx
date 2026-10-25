@@ -112,7 +112,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={busy}
-            className="w-full bg-[#FF5C00] hover:bg-[#E65200] disabled:opacity-50 text-white text-sm font-bold rounded-lg py-2.5"
+            className="w-full bg-[#FF5C00] hover:bg-[#E65200] disabled:opacity-50 text-white text-sm font-bold rounded-lg py-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-2"
           >
             Log in
           </button>
@@ -122,7 +122,7 @@ export default function LoginPage() {
           type="button"
           onClick={handleMagicLink}
           disabled={busy || !email}
-          className="w-full mt-3 border border-gray-300 hover:bg-gray-50 disabled:opacity-50 text-gray-700 text-sm font-bold rounded-lg py-2.5"
+          className="w-full mt-3 border border-gray-300 hover:bg-gray-50 disabled:opacity-50 text-gray-700 text-sm font-bold rounded-lg py-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-2"
         >
           Email me a magic link
         </button>
@@ -130,16 +130,16 @@ export default function LoginPage() {
           type="button"
           onClick={handleGoogle}
           disabled={busy}
-          className="w-full mt-3 border border-gray-300 hover:bg-gray-50 disabled:opacity-50 text-gray-700 text-sm font-bold rounded-lg py-2.5"
+          className="w-full mt-3 border border-gray-300 hover:bg-gray-50 disabled:opacity-50 text-gray-700 text-sm font-bold rounded-lg py-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-2"
         >
           Continue with Google
         </button>
 
         <div className="mt-6 flex justify-between text-xs font-semibold">
-          <a href="/reset-password" className="text-gray-500 hover:text-[#FF5C00]">
+          <a href="/reset-password" className="text-gray-500 hover:text-[#FF5C00] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1 rounded">
             Forgot password?
           </a>
-          <a href="/signup" className="text-[#FF5C00] hover:underline">
+          <a href="/signup" className="text-[#FF5C00] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1 rounded">
             Create an account
           </a>
         </div>

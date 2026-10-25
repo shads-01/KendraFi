@@ -119,19 +119,19 @@ export default function TeamClient({
           <p className="text-xs font-semibold text-gray-800">You have a pending team invite.</p>
           <button
             onClick={acceptInvite}
-            className="text-xs font-bold text-white bg-[#FF5C00] rounded-lg px-3 py-1.5 hover:bg-orange-600"
+            className="text-xs font-bold text-white bg-[#FF5C00] rounded-lg px-3 py-1.5 hover:bg-orange-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1"
           >
             Accept invite
           </button>
         </div>
       )}
       {error && (
-        <p className="text-xs font-bold text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+        <p role="alert" className="text-xs font-bold text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
           {error}
         </p>
       )}
       {notice && (
-        <p className="text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2 break-all">
+        <p role="status" className="text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2 break-all">
           {notice}
         </p>
       )}
@@ -154,7 +154,8 @@ export default function TeamClient({
                     <select
                       value={m.role}
                       onChange={(e) => changeRole(m.id, e.target.value)}
-                      className="text-xs font-bold border border-gray-300 rounded-lg px-2 py-1 bg-white"
+                      aria-label={`Change role for ${m.email}`}
+                      className="text-xs font-bold border border-gray-300 rounded-lg px-2 py-1 bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1"
                     >
                       {ROLE_OPTIONS.map((r) => (
                         <option key={r} value={r}>
@@ -174,7 +175,7 @@ export default function TeamClient({
                   {myRole === "OWNER" && m.id !== myUserId && (
                     <button
                       onClick={() => transfer(m.id)}
-                      className="text-xs font-bold text-gray-700 border border-gray-300 rounded-lg px-2 py-1 hover:bg-gray-50"
+                      className="text-xs font-bold text-gray-700 border border-gray-300 rounded-lg px-2 py-1 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1"
                     >
                       Transfer ownership
                     </button>
@@ -182,7 +183,7 @@ export default function TeamClient({
                   {canManage && m.id !== myUserId && (
                     <button
                       onClick={() => removeMember(m.id)}
-                      className="text-xs font-bold text-red-600 border border-red-200 rounded-lg px-2 py-1 hover:bg-red-50"
+                      className="text-xs font-bold text-red-600 border border-red-200 rounded-lg px-2 py-1 hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-1"
                     >
                       Remove
                     </button>
@@ -212,12 +213,14 @@ export default function TeamClient({
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="teammate@example.com"
-            className="flex-1 min-w-[200px] text-sm border border-gray-300 rounded-lg px-3 py-2"
+            aria-label="Invite email"
+            className="flex-1 min-w-[200px] text-sm border border-gray-300 rounded-lg px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1"
           />
           <select
             value={inviteRole}
             onChange={(e) => setInviteRole(e.target.value as (typeof ROLE_OPTIONS)[number])}
-            className="text-xs font-bold border border-gray-300 rounded-lg px-2 py-2 bg-white"
+            aria-label="Invite role"
+            className="text-xs font-bold border border-gray-300 rounded-lg px-2 py-2 bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1"
           >
             {ROLE_OPTIONS.map((r) => (
               <option key={r} value={r}>
@@ -227,7 +230,7 @@ export default function TeamClient({
           </select>
           <button
             type="submit"
-            className="text-xs font-bold text-white bg-[#FF5C00] rounded-lg px-4 py-2 hover:bg-orange-600"
+            className="text-xs font-bold text-white bg-[#FF5C00] rounded-lg px-4 py-2 hover:bg-orange-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1"
           >
             Invite
           </button>
@@ -236,7 +239,7 @@ export default function TeamClient({
 
       <button
         onClick={leave}
-        className="text-xs font-bold text-gray-700 bg-white border border-gray-300 rounded-lg px-4 py-2 hover:bg-gray-50"
+        className="text-xs font-bold text-gray-700 bg-white border border-gray-300 rounded-lg px-4 py-2 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1"
       >
         Leave organization
       </button>

@@ -14,7 +14,7 @@ export default function VerifyEmailPage() {
         </p>
         <a
           href="/login"
-          className="inline-block bg-[#FF5C00] hover:bg-[#E65200] text-white text-sm font-bold rounded-lg px-6 py-2.5"
+          className="inline-block bg-[#FF5C00] hover:bg-[#E65200] text-white text-sm font-bold rounded-lg px-6 py-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-2"
         >
           Go to log in
         </a>

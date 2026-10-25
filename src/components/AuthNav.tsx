@@ -31,7 +31,7 @@ export default function AuthNav() {
         <>
           <a
             href="/team"
-            className="text-xs font-bold text-gray-700 border border-gray-300 rounded-lg px-3 py-1.5 hover:bg-gray-50"
+            className="text-xs font-bold text-gray-700 border border-gray-300 rounded-lg px-3 py-1.5 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1"
           >
             Dashboard
           </a>
@@ -39,19 +39,22 @@ export default function AuthNav() {
           <button
             type="button"
             onClick={handleSignOut}
-            className="text-xs font-bold text-gray-700 border border-gray-300 rounded-lg px-3 py-1.5 hover:bg-gray-50"
+            className="text-xs font-bold text-gray-700 border border-gray-300 rounded-lg px-3 py-1.5 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1"
           >
             Sign out
           </button>
         </>
       ) : (
         <>
-          <a href="/login" className="text-xs font-bold text-gray-700 hover:text-[#FF5C00]">
+          <a
+            href="/login"
+            className="text-xs font-bold text-gray-700 hover:text-[#FF5C00] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1 rounded"
+          >
             Log in
           </a>
           <a
             href="/signup"
-            className="text-xs font-bold text-white bg-[#FF5C00] hover:bg-[#E65200] rounded-lg px-3 py-1.5"
+            className="text-xs font-bold text-white bg-[#FF5C00] hover:bg-[#E65200] rounded-lg px-3 py-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1"
           >
             Sign up
           </a>

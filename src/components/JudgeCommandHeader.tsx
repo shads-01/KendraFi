@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { ShieldCheck, Activity, Radio, ZoomIn, ZoomOut, Cpu, Sparkles, LayoutDashboard, BarChart3, Globe } from "lucide-react";
+import { ShieldCheck, Activity, Radio, ZoomIn, ZoomOut, Cpu, LayoutDashboard, BarChart3, Globe } from "lucide-react";
 import type { FSMState, TransactionMode } from "@/types";
 
 export type HeaderViewType = "landing" | "command_center" | "backtest";
@@ -129,7 +129,8 @@ export const JudgeCommandHeader: React.FC<JudgeCommandHeaderProps> = ({
           <button
             id="nav-tab-overview"
             onClick={() => onViewChange("landing")}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition ${
+            aria-pressed={activeView === "landing"}
+            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1 ${
               activeView === "landing"
                 ? "bg-white text-[#111827] shadow-sm border border-[#E5E7EB]"
                 : "text-[#6B7280] hover:text-[#111827]"
@@ -142,7 +143,8 @@ export const JudgeCommandHeader: React.FC<JudgeCommandHeaderProps> = ({
           <button
             id="nav-tab-command-center"
             onClick={() => onViewChange("command_center")}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition ${
+            aria-pressed={activeView === "command_center"}
+            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1 ${
               activeView === "command_center"
                 ? "bg-white text-[#FF5C00] shadow-sm border border-[#E5E7EB]"
                 : "text-[#6B7280] hover:text-[#111827]"
@@ -155,7 +157,8 @@ export const JudgeCommandHeader: React.FC<JudgeCommandHeaderProps> = ({
           <button
             id="nav-tab-analytics"
             onClick={() => onViewChange("backtest")}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition ${
+            aria-pressed={activeView === "backtest"}
+            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1 ${
               activeView === "backtest"
                 ? "bg-white text-[#0284C7] shadow-sm border border-[#E5E7EB]"
                 : "text-[#6B7280] hover:text-[#111827]"
@@ -215,7 +218,8 @@ export const JudgeCommandHeader: React.FC<JudgeCommandHeaderProps> = ({
             </span>
             <button
               onClick={() => onZoomChange(Math.max(1.0, zoomLevel - 0.25))}
-              className="p-1 hover:bg-white rounded-full text-[#4B5563] hover:text-[#111827] transition"
+              aria-label="Zoom out"
+              className="p-1 hover:bg-white rounded-full text-[#4B5563] hover:text-[#111827] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1"
               title="Zoom Out"
             >
               <ZoomOut className="h-4 w-4" />
@@ -225,7 +229,9 @@ export const JudgeCommandHeader: React.FC<JudgeCommandHeaderProps> = ({
                 <button
                   key={lvl}
                   onClick={() => onZoomChange(lvl)}
-                  className={`px-2 py-0.5 rounded-full text-xs font-mono transition ${
+                  aria-label={`Set judge camera zoom to ${lvl}x`}
+                  aria-pressed={Math.abs(zoomLevel - lvl) < 0.05}
+                  className={`px-2 py-0.5 rounded-full text-xs font-mono transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1 ${
                     Math.abs(zoomLevel - lvl) < 0.05
                       ? "bg-[#FFF0E6] text-[#FF5C00] font-bold shadow-xs"
                       : "text-[#6B7280] hover:bg-white hover:text-[#111827]"
@@ -237,7 +243,8 @@ export const JudgeCommandHeader: React.FC<JudgeCommandHeaderProps> = ({
             </div>
             <button
               onClick={() => onZoomChange(Math.min(2.5, zoomLevel + 0.25))}
-              className="p-1 hover:bg-white rounded-full text-[#4B5563] hover:text-[#111827] transition"
+              aria-label="Zoom in"
+              className="p-1 hover:bg-white rounded-full text-[#4B5563] hover:text-[#111827] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1"
               title="Zoom In"
             >
               <ZoomIn className="h-4 w-4" />

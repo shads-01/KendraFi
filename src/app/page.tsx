@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import JudgeCommandHeader, { type HeaderViewType } from "@/components/JudgeCommandHeader";
+import AuthNav from "@/components/AuthNav";
 import MerchantMobilePanel from "@/components/MerchantMobilePanel";
 import KendraArenaPanel from "@/components/KendraArenaPanel";
 import SecurityEscrowPanel from "@/components/SecurityEscrowPanel";
@@ -186,6 +187,9 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-[#F4F5F7] flex flex-col">
+      {/* Auth-aware account nav (Part 4): login/signup links when signed out */}
+      <AuthNav />
+
       {/* Top HUD Header with Multi-View Switcher */}
       <JudgeCommandHeader
         fsmState={fsmState}

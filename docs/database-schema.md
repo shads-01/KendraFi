@@ -239,6 +239,16 @@ Prisma cannot express `CHECK`, so NOT NULL / UNIQUE live in the schema, and the 
 - Per-org RLS policies (e.g., `organization_id = (auth.jwt() ->> 'org_id')::uuid`) are Part 4 work; Part 3's job was only to guarantee the column exists on every tenant row.
 - The DENY-ALL RLS on `merchant_private_cashflows` (service_role only) is untouched and must remain the strongest policy in the stack.
 
+#### 5.4.1 What Part 4 Task 1 actually added (2026-10-25)
+
+- **Migration** `prisma/migrations/20261025090000_part4_auth/migration.sql` (additive; LOCKED `supabase/migrations/**` untouched):
+  - `users.auth_user_id` UUID, unique, nullable — link to Supabase `auth.users.id`. Deliberately **no FK** across the managed `auth` schema.
+  - `users.role` TEXT NOT NULL DEFAULT `'MEMBER'` + hand-written DB CHECK `role IN ('OWNER','ADMIN','MEMBER','VIEWER')` (Prisma cannot model CHECKs; same hand-written-section pattern as the init migration).
+  - New table `invites`: uuid PK, `organization_id` FK, `email`, `role` (same CHECK), unique `token`, `expires_at`, nullable `accepted_at`/`invited_by` (FK → `users.id` ON DELETE SET NULL), `created_at`/`updated_at`. Timestamps stay `TIMESTAMP(3)` per the established Prisma-mapping convention (§5.5 divergence note), **not** `TIMESTAMPTZ(3)`.
+  - Verification: fresh-DB `prisma migrate deploy` (both migrations) + CHECK rejection probes on a local PG17 container.
+- **Provisioning:** `POST /api/auth/signup` transactionally creates `Organization` (capitalized email local-part) + `users` row (`role = 'OWNER'`, `auth_user_id` set) after Supabase `auth.signUp` — including when email confirmation holds the session; idempotent via the `auth_user_id` unique constraint, and it links pre-existing same-email seed rows that lack an auth identity.
+- **Still open (later Part 4/5 tasks):** per-org RLS policies bound to the auth JWT; `requirePermission(action)` enforcement (Task 2); invite acceptance flow (Task 4).
+
 ### 5.5 Task 2 (migration/seed) mechanics — critical hand-off
 
 1. **Strategy as executed (not the additive-ALTER path sketched here before).**

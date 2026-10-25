@@ -35,25 +35,51 @@ model Organization {
   commitments ZkSolvencyCommitment[]
   fsmEvents   KendraFsmEvent[]
   intercepts  ZeroTrustSecurityIntercept[]
+  invites     Invite[]
 
   @@map("organizations")
 }
 
-// Placeholder for Part 4 (auth) reconciliation — NO auth fields by ruling:
-// no passwords, no sessions, no roles. Part 4 owns those.
+// Part 4 (auth, Task 1) reconciliation: `auth_user_id` links the row to the
+// Supabase Auth identity (auth.users.id — no FK across managed schemas);
+// `role` carries the RBAC role (DB CHECK in the Part 4 migration). Passwords
+// and sessions stay owned by Supabase Auth — never stored here.
 model User {
   id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   organizationId String    @map("organization_id") @db.Uuid
   email          String    @unique
+  authUserId     String?   @unique @map("auth_user_id") @db.Uuid
+  role           String    @default("MEMBER")
   name           String?
   createdAt      DateTime  @default(now()) @map("created_at")
   updatedAt      DateTime  @default(now()) @updatedAt @map("updated_at")
   deletedAt      DateTime? @map("deleted_at")
 
   organization Organization @relation(fields: [organizationId], references: [id])
+  invitesSent  Invite[]     @relation("InviteInviter")
 
   @@index([organizationId, deletedAt], map: "users_organization_id_deleted_at_idx")
   @@map("users")
+}
+
+// Team invite lifecycle (Part 4; acceptance flow ships in Task 4).
+model Invite {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organizationId String    @map("organization_id") @db.Uuid
+  email          String
+  role           String
+  token          String    @unique
+  expiresAt      DateTime  @map("expires_at")
+  acceptedAt     DateTime? @map("accepted_at")
+  invitedBy      String?   @map("invited_by") @db.Uuid
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @default(now()) @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+  inviter      User?        @relation("InviteInviter", fields: [invitedBy], references: [id])
+
+  @@index([organizationId], map: "invites_organization_id_idx")
+  @@map("invites")
 }
 
 // ============================================================================

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { Prisma } from "@prisma/client";
-import { authzErrorResponse, loadOrgResource, requirePermission } from "@/lib/auth-context";
+import { authzErrorResponse, loadAgent, requirePermission } from "@/lib/auth-context";
 import { prisma } from "@/lib/prisma";
 
 type Params = { params: Promise<{ agentId: string }> };
@@ -28,7 +28,7 @@ export async function GET(_request: Request, { params }: Params) {
   try {
     const { agentId } = await params;
     const ctx = await requirePermission("agent:read");
-    const agent = await loadOrgResource(prisma.kendraAgent, agentId, ctx.organization.id);
+    const agent = await loadAgent(agentId, ctx.organization.id);
     if (!agent) return NextResponse.json({ error: "not_found" }, { status: 404 });
     return NextResponse.json(toAgentJson(agent));
   } catch (e) {
@@ -53,10 +53,10 @@ export async function PATCH(request: Request, { params }: Params) {
     ) {
       return NextResponse.json({ error: "invalid_liquidity_buffer" }, { status: 400 });
     }
-    const agent = await loadOrgResource(prisma.kendraAgent, agentId, ctx.organization.id);
+    const agent = await loadAgent(agentId, ctx.organization.id);
     if (!agent) return NextResponse.json({ error: "not_found" }, { status: 404 });
     const updated = await prisma.kendraAgent.update({
-      where: { agentId },
+      where: { agentId, organizationId: ctx.organization.id },
       data: { liquidityBufferBdt: body.liquidityBufferBdt },
     });
     return NextResponse.json(toAgentJson(updated));
@@ -70,10 +70,10 @@ export async function DELETE(_request: Request, { params }: Params) {
   try {
     const { agentId } = await params;
     const ctx = await requirePermission("agent:delete");
-    const agent = await loadOrgResource(prisma.kendraAgent, agentId, ctx.organization.id);
+    const agent = await loadAgent(agentId, ctx.organization.id);
     if (!agent) return NextResponse.json({ error: "not_found" }, { status: 404 });
     await prisma.kendraAgent.update({
-      where: { agentId },
+      where: { agentId, organizationId: ctx.organization.id },
       data: { deletedAt: new Date() },
     });
     return NextResponse.json({ ok: true });

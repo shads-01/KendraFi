@@ -132,18 +132,13 @@ export function authzErrorResponse(error: unknown): NextResponse {
 }
 
 /**
- * Org-scoped load: the resource must belong to the caller's organization.
+ * Org-scoped agent load: the agent must belong to the caller's organization.
  * Returns null for cross-org, missing, or soft-deleted rows so callers map
- * to 404 — never 403, never an existence leak.
+ * to 404 — never 403, never an existence leak. KendraAgent's PK is agentId
+ * (no `id` column), so the where-clause keys off agentId directly.
  */
-export async function loadOrgResource<R>(
-  model: {
-    findFirst(args: {
-      where: { id: string; organizationId: string; deletedAt: Date | null };
-    }): Promise<R | null>;
-  },
-  id: string,
-  organizationId: string,
-): Promise<R | null> {
-  return model.findFirst({ where: { id, organizationId, deletedAt: null } });
+export async function loadAgent(agentId: string, organizationId: string) {
+  return prisma.kendraAgent.findFirst({
+    where: { agentId, organizationId, deletedAt: null },
+  });
 }

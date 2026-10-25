@@ -25,6 +25,14 @@ export function isPublic(pathname: string): boolean {
   );
 }
 
+// /login redirect preserves the original path+query as `next` so post-auth
+// flows (e.g. invite links) resume where the user started.
+function loginRedirect(request: NextRequest) {
+  const login = new URL("/login", request.url);
+  login.searchParams.set("next", request.nextUrl.pathname + request.nextUrl.search);
+  return NextResponse.redirect(login);
+}
+
 export async function middleware(request: NextRequest) {
   if (isPublic(request.nextUrl.pathname)) return NextResponse.next();
 
@@ -40,7 +48,7 @@ export async function middleware(request: NextRequest) {
     if (request.nextUrl.pathname.startsWith("/api/")) {
       return NextResponse.json({ error: "unauthorized" }, { status: 401 });
     }
-    return NextResponse.redirect(new URL("/login", request.url));
+    return loginRedirect(request);
   }
 
   let response = NextResponse.next({ request });
@@ -70,7 +78,7 @@ export async function middleware(request: NextRequest) {
     if (request.nextUrl.pathname.startsWith("/api/")) {
       return NextResponse.json({ error: "unauthorized" }, { status: 401 });
     }
-    return NextResponse.redirect(new URL("/login", request.url));
+    return loginRedirect(request);
   }
   return response;
 }

@@ -55,6 +55,26 @@ export async function POST(request: NextRequest) {
       }
       return;
     }
+    // Pending-invite reconciliation: a fresh signup via a team invite lands
+    // directly in the inviting organization with the invited role — otherwise
+    // the personal-org OWNER row would make their later accept attempt fail
+    // with 409 email_in_use (single-org ruling) and invites would be a dead
+    // letter for new users.
+    const invite = await tx.invite.findFirst({
+      where: {
+        email: { equals: email, mode: "insensitive" },
+        acceptedAt: null,
+        expiresAt: { gt: new Date() },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+    if (invite) {
+      await tx.user.create({
+        data: { organizationId: invite.organizationId, email, authUserId: uid, role: invite.role },
+      });
+      await tx.invite.update({ where: { id: invite.id }, data: { acceptedAt: new Date() } });
+      return;
+    }
     const org = await tx.organization.create({ data: { name: orgNameFromEmail(email) } });
     await tx.user.create({
       data: { organizationId: org.id, email, authUserId: uid, role: "OWNER" },

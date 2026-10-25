@@ -1,16 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getAuthBrowserClient } from "@/lib/supabase-auth-browser";
 
+// Same validation as the Task 1 auth callback: root-relative, no protocol-relatives.
+function sanitizeNext(raw: string | null): string {
+  return raw && raw.startsWith("/") && !raw.startsWith("//") ? raw : "/";
+}
+
 export default function LoginPage() {
   const router = useRouter();
+  const [next, setNext] = useState("/");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [notice, setNotice] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    setNext(sanitizeNext(new URLSearchParams(window.location.search).get("next")));
+  }, []);
 
   async function post(path: string, body: object) {
     const res = await fetch(path, {
@@ -29,7 +39,7 @@ export default function LoginPage() {
     const err = await post("/api/auth/login", { email, password });
     setBusy(false);
     if (err) setError(err);
-    else router.push("/");
+    else router.push(next);
   }
 
   async function handleMagicLink(e: React.FormEvent) {

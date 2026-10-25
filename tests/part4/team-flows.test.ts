@@ -1,17 +1,23 @@
 import type { AuthContext } from "@/lib/auth-context";
 import { randomUUID } from "node:crypto";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { can } from "@/lib/rbac";
+import { NextRequest } from "next/server";
 
 // ---------------------------------------------------------------------------
-// Two seams:
+// Three seams:
 // 1. auth-context: requireAuth/requirePermission/getAuthContext stubbed,
-//    delegating to the REAL can() (same construction as team-authz.test.ts).
+//    delegating to the REAL can() (same construction as team-authz.test.ts);
+//    Supabase is "configured" here so the signup + callback routes can be
+//    exercised with a stubbed anon client (Fix A / Fix B).
 // 2. supabase-server: the service-role admin client is stubbed so session
 //    revocation (auth.admin.signOut) is assertable without a live project.
 // ---------------------------------------------------------------------------
 const authMock = vi.hoisted(() => ({ ctx: null as AuthContext | null }));
 const signOut = vi.hoisted(() => vi.fn(async () => ({ error: null })));
+const sessionMock = vi.hoisted(() => ({
+  user: null as { id: string } | null,
+  uids: new Map<string, string>(), // signup email → stable auth uid per test run
+}));
 
 vi.mock("@/lib/auth-context", async (importOriginal) => {
   const actual = await importOriginal<typeof import("@/lib/auth-context")>();
@@ -29,6 +35,22 @@ vi.mock("@/lib/auth-context", async (importOriginal) => {
     requireAuth: async () => gate("org:read"),
     requirePermission: async (action: Parameters<typeof actual.requirePermission>[0]) =>
       gate(action),
+    isAuthConfigured: () => true,
+    createAuthServerClient: () => ({
+      auth: {
+        getUser: async () => ({ data: { user: sessionMock.user }, error: null }),
+        signUp: async (...args: readonly unknown[]) => {
+          const email = String((args[0] as { email?: string } | undefined)?.email ?? "");
+          let uid = sessionMock.uids.get(email);
+          if (!uid) {
+            uid = randomUUID();
+            sessionMock.uids.set(email, uid);
+          }
+          // session: null → mirrors email-confirmation-on (provisioning still runs).
+          return { data: { user: { id: uid }, session: null }, error: null };
+        },
+      },
+    }),
   };
 });
 
@@ -37,6 +59,7 @@ vi.mock("@/lib/supabase-server", () => ({
   isSupabaseAdminConfigured: () => true,
 }));
 
+import { GET as callbackGet } from "@/app/api/auth/callback/route";
 import { POST as acceptInvite } from "@/app/api/team/invites/accept/route";
 import { POST as createInvite } from "@/app/api/team/invites/route";
 import {
@@ -45,6 +68,7 @@ import {
 } from "@/app/api/team/members/[userId]/route";
 import { POST as transferOwnership } from "@/app/api/team/transfer-ownership/route";
 import { POST as leaveOrg } from "@/app/api/team/leave/route";
+import { POST as signupHandler } from "@/app/api/auth/signup/route";
 import { ORG_A, ORG_B, authContextFor, resetMembers } from "./fixtures";
 import { prisma } from "@/lib/prisma";
 
@@ -77,6 +101,8 @@ async function contextForEmail(email: string): Promise<AuthContext> {
 beforeEach(async () => {
   authMock.ctx = null;
   signOut.mockClear();
+  sessionMock.user = null;
+  sessionMock.uids.clear();
   // FK order: invites reference users. Wipes prior-run state too (the test
   // container persists between runs); ALL orgs so fixed invite tokens
   // (@unique) never collide across runs.
@@ -302,5 +328,116 @@ describe("leave", () => {
     expect(
       (await prisma.user.findUniqueOrThrow({ where: { id: memberCtx.user.id } })).deletedAt
     ).not.toBeNull();
+  });
+});
+
+describe("signup reconciles pending invites (Fix A)", () => {
+  const signup = (email: string) =>
+    signupHandler(
+      new NextRequest("http://localhost/api/auth/signup", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ email, password: "password123" }),
+      })
+    );
+
+  it("pending invite → users row lands in the inviting org with the invite role; invite accepted; NO personal org", async () => {
+    const ownerCtx = await authContextFor("OWNER");
+    authMock.ctx = ownerCtx;
+    const invRes = await createInvite(jsonReq({ email: "joiner@part4.test", role: "ADMIN" }));
+    expect(invRes.status).toBe(200);
+    authMock.ctx = null;
+
+    const res = await signup("joiner@part4.test");
+    expect(res.status).toBe(200);
+
+    const user = await prisma.user.findUniqueOrThrow({ where: { email: "joiner@part4.test" } });
+    // A personal org would have a different id and role OWNER — landing in the
+    // invite org with the invited role proves no personal org was created.
+    expect(user.organizationId).toBe(ORG_A);
+    expect(user.role).toBe("ADMIN");
+    expect(user.authUserId).not.toBeNull();
+    const invite = await prisma.invite.findFirstOrThrow({
+      where: { email: "joiner@part4.test" },
+    });
+    expect(invite.acceptedAt).not.toBeNull();
+  });
+
+  it("expired invite → signup falls back to the personal org (OWNER), invite left unaccepted", async () => {
+    await prisma.invite.create({
+      data: {
+        organizationId: ORG_A,
+        email: "late.joiner@part4.test",
+        role: "ADMIN",
+        token: "stale-signup-token",
+        expiresAt: new Date(Date.now() - 1000),
+      },
+    });
+
+    const res = await signup("late.joiner@part4.test");
+    expect(res.status).toBe(200);
+
+    const user = await prisma.user.findUniqueOrThrow({
+      where: { email: "late.joiner@part4.test" },
+    });
+    expect(user.organizationId).not.toBe(ORG_A);
+    expect(user.role).toBe("OWNER");
+    const org = await prisma.organization.findUniqueOrThrow({
+      where: { id: user.organizationId },
+    });
+    expect(org.name).toBe("Late Joiner"); // orgNameFromEmail derivation
+    const invite = await prisma.invite.findUniqueOrThrow({ where: { token: "stale-signup-token" } });
+    expect(invite.acceptedAt).toBeNull();
+  });
+
+  it("no invite → personal org + OWNER (baseline behavior unchanged)", async () => {
+    const res = await signup("solo.joiner@part4.test");
+    expect(res.status).toBe(200);
+    const user = await prisma.user.findUniqueOrThrow({
+      where: { email: "solo.joiner@part4.test" },
+    });
+    expect(user.organizationId).not.toBe(ORG_A);
+    expect(user.role).toBe("OWNER");
+  });
+
+  it("re-signup is idempotent: same auth uid → early return, no duplicate row or personal org", async () => {
+    const ownerCtx = await authContextFor("OWNER");
+    authMock.ctx = ownerCtx;
+    await createInvite(jsonReq({ email: "dupe.joiner@part4.test", role: "ADMIN" }));
+    authMock.ctx = null;
+
+    expect((await signup("dupe.joiner@part4.test")).status).toBe(200);
+    expect((await signup("dupe.joiner@part4.test")).status).toBe(200);
+
+    expect(await prisma.user.count({ where: { email: "dupe.joiner@part4.test" } })).toBe(1);
+    expect(await prisma.user.count({ where: { email: "dupe.joiner@part4.test", role: "ADMIN" } })).toBe(1);
+    expect(
+      await prisma.organization.count({ where: { name: "Dupe Joiner" } })
+    ).toBe(0);
+    const invite = await prisma.invite.findFirstOrThrow({
+      where: { email: "dupe.joiner@part4.test" },
+    });
+    expect(invite.acceptedAt).not.toBeNull();
+  });
+});
+
+describe("auth callback invite routing (Fix B)", () => {
+  it("unauthenticated visitor with invite_token → redirect to /signup carrying token + next", async () => {
+    const res = await callbackGet(
+      new NextRequest("http://localhost/api/auth/callback?invite_token=tok123")
+    );
+    expect([302, 307]).toContain(res.status);
+    const loc = res.headers.get("location") ?? "";
+    expect(loc.startsWith("http://localhost/signup?invite_token=tok123")).toBe(true);
+    expect(loc).toContain(`next=${encodeURIComponent("/team")}`);
+  });
+
+  it("authenticated visitor with invite_token → forwarded to /team (accept UI)", async () => {
+    sessionMock.user = { id: "session-user-1" };
+    const res = await callbackGet(
+      new NextRequest("http://localhost/api/auth/callback?invite_token=tok456")
+    );
+    expect([302, 307]).toContain(res.status);
+    expect(res.headers.get("location")).toContain("/team?invite_token=tok456");
   });
 });

@@ -1,15 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+
+// Same validation as the Task 1 auth callback: root-relative, no protocol-relatives.
+function sanitizeNext(raw: string | null): string {
+  return raw && raw.startsWith("/") && !raw.startsWith("//") ? raw : "/";
+}
 
 export default function SignupPage() {
   const router = useRouter();
+  const [next, setNext] = useState("/");
+  const [invited, setInvited] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [notice, setNotice] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setNext(sanitizeNext(params.get("next")));
+    setInvited(Boolean(params.get("invite_token")));
+  }, []);
 
   async function handleSignup(e: React.FormEvent) {
     e.preventDefault();
@@ -28,7 +41,7 @@ export default function SignupPage() {
         return;
       }
       if (data.has_session) {
-        router.push("/");
+        router.push(next);
       } else {
         setNotice("Account created. Check your inbox to confirm your email, then log in.");
       }
@@ -44,6 +57,12 @@ export default function SignupPage() {
         <p className="text-sm text-gray-500 mb-6">
           We&rsquo;ll set up your organization automatically from your email.
         </p>
+
+        {invited && (
+          <p className="mb-4 rounded-lg border border-orange-200 bg-orange-50 px-3 py-2 text-xs font-semibold text-[#B34700]">
+            You were invited to a team — sign up with the invited email to join.
+          </p>
+        )}
 
         <form onSubmit={handleSignup} className="space-y-4">
           <div>

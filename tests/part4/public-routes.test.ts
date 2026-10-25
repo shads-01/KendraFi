@@ -42,6 +42,13 @@ describe("middleware behavior (Supabase env unconfigured → fail closed)", () =
     expect(res.headers.get("location")).toContain("/login");
   });
 
+  it("redirect for protected paths preserves path+query as the next param", async () => {
+    const res = await middleware(req("/team?invite_token=abc"));
+    const loc = res.headers.get("location") ?? "";
+    expect(loc).toContain("/login");
+    expect(loc).toContain(`next=${encodeURIComponent("/team?invite_token=abc")}`);
+  });
+
   it("public API routes pass through (no 401, no redirect)", async () => {
     for (const pathname of ["/api/health", "/api/kendra/execute", "/api/auth/login"]) {
       const res = await middleware(req(pathname));

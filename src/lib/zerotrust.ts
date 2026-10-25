@@ -50,7 +50,7 @@ export function getZeroTrustSecret(): string {
  * Generates an HMAC-SHA256 signature over `${timestamp}.${body}` and includes
  * the anti-replay timestamp header.
  */
-export function signZeroTrustPayload(body: any = {}): SignedZeroTrustRequest {
+export function signZeroTrustPayload(body: unknown = {}): SignedZeroTrustRequest {
   const secret = getZeroTrustSecret();
   const timestamp = (Date.now() / 1000).toFixed(3);
   const bodyString = typeof body === "string" ? body : JSON.stringify(body ?? {});
@@ -120,8 +120,9 @@ export function verifyZeroTrustPayload(
       return { valid: true };
     }
     return { valid: false, error: "Invalid HMAC-SHA256 signature" };
-  } catch {
-    return { valid: false, error: "Signature verification failed" };
+  } catch (err: unknown) {
+    const detail = err instanceof Error ? err.message : String(err);
+    return { valid: false, error: `Signature verification failed: ${detail}` };
   }
 }
 
@@ -135,9 +136,9 @@ export function getPythonRiskEngineUrl(): string {
 /**
  * Dispatches an HMAC-authenticated HTTP POST request from Next.js BFF to FastAPI.
  */
-export async function callPythonBackend<T = any>(
+export async function callPythonBackend<T = unknown>(
   endpoint: string,
-  body: any = {},
+  body: unknown = {},
   options: RequestInit = {}
 ): Promise<T> {
   const baseUrl = getPythonRiskEngineUrl();

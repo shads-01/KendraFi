@@ -15,9 +15,13 @@ Exposes zero-trust authenticated REST endpoints for the KendraFi cooperative syn
 from __future__ import annotations
 
 import os
+from contextlib import asynccontextmanager
 from typing import Any, Dict, Optional
-from fastapi import FastAPI, Header, HTTPException, Request, Response, status
+from fastapi import Depends, FastAPI, Header, HTTPException, Request, Response, status
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from starlette.exceptions import HTTPException as StarletteHTTPException
 from pydantic import BaseModel, Field
 
 from api.core.schemas import (
@@ -27,21 +31,73 @@ from api.core.schemas import (
 )
 from api.core.zerotrust_guard import verify_zerotrust_headers, get_supabase_client
 from api.core.syndicate_fsm import SyndicateFSMRunner
+from api.core.rate_limit import rate_limit
+from api.core.logging_mw import StructuredLoggingMiddleware
+
+
+def validate_production_security() -> None:
+    """
+    Enforces that bypass flags or unconfigured secrets are strictly prohibited in production.
+    Raises at startup if KENDRA_ENV == 'production' and any insecure configuration is present.
+    """
+    if os.getenv("KENDRA_ENV", "").lower() == "production":
+        is_bypass = os.getenv("TEST_BYPASS_AUTH", "").lower() in ("true", "1")
+        if is_bypass:
+            raise RuntimeError(
+                "CRITICAL_SECURITY_ERROR: TEST_BYPASS_AUTH cannot be enabled when KENDRA_ENV=production"
+            )
+        secret = os.getenv("ZEROTRUST_INTERNAL_HMAC_SECRET", "").strip()
+        if not secret or secret == "change-me-32-bytes":
+            raise RuntimeError(
+                "CRITICAL_SECURITY_ERROR: ZEROTRUST_INTERNAL_HMAC_SECRET is missing or invalid in production"
+            )
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    validate_production_security()
+    yield
+
 
 app = FastAPI(
     title="KendraFi Core Protocol API",
     description="Zero-Trust Multi-Agent Cooperative Risk and Programmable B2B Escrow Protocol",
     version="1.0.0",
+    lifespan=lifespan,
 )
 
-# Enable CORS for Next.js frontend
+# Structured JSON request logging middleware (stdout log stream with X-Request-ID)
+app.add_middleware(StructuredLoggingMiddleware)
+
+# Enable CORS with explicit origins from environment
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        origin.strip()
+        for origin in os.getenv("KENDRA_ALLOWED_ORIGINS", "http://localhost:3000").split(",")
+        if origin.strip()
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.exception_handler(StarletteHTTPException)
+async def http_exception_handler(request: Request, exc: StarletteHTTPException):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"error": {"code": exc.status_code, "message": exc.detail}},
+        headers=getattr(exc, "headers", None) or {},
+    )
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    return JSONResponse(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        content={"error": {"code": status.HTTP_400_BAD_REQUEST, "message": str(exc)}},
+    )
 
 runner = SyndicateFSMRunner()
 
@@ -59,9 +115,21 @@ async def authenticate_zerotrust_request(
     Enforces HMAC-SHA256 signature verification and 30-second anti-replay window.
     Bypasses authentication in local development if explicitly allowed or test runner flag is set.
     """
-    # Allow testing without signature if HMAC secret is set to 'development-bypass'
+    # Refuse to run bypass or unconfigured secret in production (fail-closed)
     secret = os.getenv("ZEROTRUST_INTERNAL_HMAC_SECRET", "")
-    if os.getenv("TEST_BYPASS_AUTH", "").lower() in ("true", "1") or not secret:
+    is_production = os.getenv("KENDRA_ENV", "").lower() == "production"
+    is_bypass = os.getenv("TEST_BYPASS_AUTH", "").lower() in ("true", "1")
+
+    if is_production:
+        if is_bypass:
+            raise RuntimeError(
+                "CRITICAL_SECURITY_ERROR: TEST_BYPASS_AUTH cannot be enabled when KENDRA_ENV=production"
+            )
+        if not secret or secret == "change-me-32-bytes":
+            raise RuntimeError(
+                "CRITICAL_SECURITY_ERROR: ZEROTRUST_INTERNAL_HMAC_SECRET is missing or invalid in production"
+            )
+    elif is_bypass or not secret:
         return
 
     body_bytes = await request.body()
@@ -72,6 +140,17 @@ async def authenticate_zerotrust_request(
         timestamp=x_zerotrust_timestamp,
         body=body_str,
     )
+
+    # For GET / HEAD requests where body is empty, accept signature over empty JSON object "{}" as well
+    if not is_valid and request.method in ("GET", "HEAD") and not body_str:
+        is_valid_alt, _ = verify_zerotrust_headers(
+            signature=x_zerotrust_signature,
+            timestamp=x_zerotrust_timestamp,
+            body="{}",
+        )
+        if is_valid_alt:
+            is_valid = True
+            error_msg = ""
 
     if not is_valid:
         raise HTTPException(
@@ -95,7 +174,7 @@ async def health_check():
     }
 
 
-@app.post("/api/kendra/execute")
+@app.post("/api/kendra/execute", dependencies=[Depends(rate_limit("execute", limit=10, per_seconds=60))])
 async def execute_scenario(
     payload: ExecuteScenarioRequest,
     request: Request,
@@ -110,7 +189,7 @@ async def execute_scenario(
     return result
 
 
-@app.post("/api/kendra/repay")
+@app.post("/api/kendra/repay", dependencies=[Depends(rate_limit("repay", limit=30, per_seconds=60))])
 async def execute_repayment_sweep(
     payload: RepaymentSweepRequest,
     request: Request,
@@ -129,7 +208,7 @@ async def execute_repayment_sweep(
     return result
 
 
-@app.post("/api/kendra/bailout")
+@app.post("/api/kendra/bailout", dependencies=[Depends(rate_limit("bailout", limit=10, per_seconds=60))])
 async def execute_flash_bailout(
     payload: FlashBailoutRequest,
     request: Request,
@@ -148,9 +227,14 @@ async def execute_flash_bailout(
     return result
 
 
-@app.get("/api/kendra/state")
-async def get_system_state():
+@app.get("/api/kendra/state", dependencies=[Depends(rate_limit("state", limit=60, per_seconds=60))])
+async def get_system_state(
+    request: Request,
+    x_zerotrust_signature: Optional[str] = Header(None, alias="X-ZeroTrust-Signature"),
+    x_zerotrust_timestamp: Optional[str] = Header(None, alias="X-ZeroTrust-Timestamp"),
+):
     """Returns current syndicate system state, agents, and contract parameters."""
+    await authenticate_zerotrust_request(request, x_zerotrust_signature, x_zerotrust_timestamp)
     return {
         "status": "OPERATIONAL",
         "current_facility": {

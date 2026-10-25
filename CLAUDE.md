@@ -23,6 +23,14 @@ engines and four-tier zero-trust security. Users (judges) watch live scenario de
 - Hosting: Vercel (Next.js + Python runtime, <65 MB bundle)
 - Financial math: pure NumPy in `api/core/risk_engine.py` — **zero LLM math, ever**
 
+## Architecture
+
+- **Modular monolith** (ADR-0002): Next.js 15 BFF (`src/app/api/`) + FastAPI core (`api/`) + Foundry contracts (`contracts/`) ship as one deployable unit.
+- **BFF ↔ FastAPI bridge** (ADR-0003): HMAC-SHA256 signed calls (`X-ZeroTrust-Signature`, `X-ZeroTrust-Timestamp`, 30s anti-replay) via `PYTHON_RISK_ENGINE_URL`.
+- **Background jobs** (ADR-0004): scheduled (Supabase pg_cron / Vercel Cron), never in-request.
+- Full component diagram, stack per layer, cost, risks: `/docs/architecture.md`. ADR log: `/docs/decisions/`.
+- Folder structure: `src/` (Next BFF + views) · `api/` (FastAPI Tier 0–5) · `contracts/` (Foundry) · `supabase/` (RLS migrations) · `prisma/` (models) · `tests/` (pytest) · `docs/` (traces/plans).
+
 ## Rules
 
 - Never commit secrets. All secrets go in environment variables, documented in `.env.example`.
@@ -71,8 +79,9 @@ See `/docs/decisions/` for the ADR log of decisions and why they were made.
 
 ## Current phase
 
-SaaS-readiness plan series in `docs/plans/` (Parts 0–15). Part 0 (agent memory & working
-loop) is the active part; Parts 1–15 are not started. Run parts in order.
+SaaS-readiness plan series in `docs/plans/` (Parts 0–15). Parts 0–5 & Parts 10–11 & Part 13 complete
+(0: agent memory · 1: system design · 2: architecture · 3: databases · 4: auth & BFF · 5: APIs & backend · 10: security · 11: rate limiting · 13: error tracking & logs).
+Next: Part 6 (frontend). Run parts in order.
 
 ## Subagent SOPs
 

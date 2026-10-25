@@ -18,8 +18,8 @@
     "BLOCKED_ADVERSARIAL"
   ],
   "intercept_log": {
-    "incident_id": "0f811aca-9db0-48c7-91f5-b0d625503b9c",
-    "timestamp": "2026-10-18T05:46:40.741357+00:00",
+    "incident_id": "58592bbe-278a-49b5-bb5f-18e4a49faceb",
+    "timestamp": "2026-10-23T06:59:03.709471+00:00",
     "threat_tier": "TIER-0",
     "reason": "TIER0_PROMPT_INJECTION_DETECTED",
     "payload_digest": "5bd3e663662e362b5b3863618d8c91811c9927cc7d01c5740e54986f7c9df9d1",

@@ -26,6 +26,7 @@ Implements:
 from __future__ import annotations
 
 import json
+import logging
 import time
 import uuid
 from typing import Any, Dict, List, Literal, Optional, TypedDict
@@ -115,8 +116,8 @@ def stream_fsm_event(
                 "payload": payload,
                 "timestamp_sec": int(time.time()),
             }).execute()
-    except Exception:
-        pass
+    except Exception as e:
+        logging.getLogger("kendra.fsm").warning("Supabase FSM event audit logging skipped/failed: %s", e)
 
 
 # ==============================================================================

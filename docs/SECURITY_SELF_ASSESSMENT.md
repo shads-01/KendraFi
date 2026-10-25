@@ -166,3 +166,35 @@ To guarantee seamless execution on both **Base Sepolia (Chain ID 84532)** and **
 | **Zero-Knowledge Solvency Prover** | `api/core/zk_fate_privacy.py` | **PASSED** (<15ms verification) |
 | **Supabase RLS & Immutable Triggers**| `supabase/migrations/` | **PASSED** (Append-only enforced) |
 | **FISCO BCOS Paris EVM Compatibility**| `foundry.toml` | **PASSED** (No PUSH0 opcodes) |
+
+---
+
+## 7. Dependency Audit & Vulnerability Triage (One-Shot Assessment)
+
+Executed `pip-audit -r api/requirements.txt` and `npm audit --audit-level=high`:
+
+| Ecosystem | Package | Severity / ID | Status | Architectural Triage & Non-Exploitability Rationale |
+| :--- | :--- | :---: | :---: | :--- |
+| **npm** | `deepmerge-ts` (<8.0.0) | High | **FIXED** | Resolved via `npm audit fix`. |
+| **npm** | `mysql2` (<=3.23.0) | High | **FIXED** | Resolved via `npm audit fix`. |
+| **npm** | `postcss` (<=8.5.22) | High | **UNFIXED (DEFERRED)** | Transitive dependency of `next@15.3.x`. Fixed in Next.js 16 breaking release. Zero risk: Next.js serverless routes and build pipeline never ingest or render untrusted CSS source maps. |
+| **npm** | `tinypool` (<=2.1.1) | Critical | **UNFIXED (DEFERRED)** | Transitive test dependency of `vitest@4.x`. Fixed in Vitest 5 breaking release. Zero risk: test runner only; never deployed or bundled into Vercel production serverless execution. |
+| **Python** | `ecdsa` (0.19.2) | PYSEC-2026-1325 | **UNFIXED (DEFERRED)** | Pure Python library used strictly in testing/mocking; production on-chain Paris EVM signing and verification relies exclusively on C-accelerated `web3` and `eth-account`. No upstream fix version published. |
+
+---
+
+## 8. Compressed 10-Line OWASP Threat Model Matrix
+
+| # | Entry Point / Surface | Top Threat Vector | Deployed Production Control |
+| :-: | :--- | :--- | :--- |
+| **1** | **API Execution (`/api/kendra/execute`)** | Unauthenticated/tampered inter-service RPC | Zero-Trust HMAC-SHA256 (`X-ZeroTrust-Signature`) with 30s anti-replay window (`X-ZeroTrust-Timestamp`). |
+| **2** | **State Route (`/api/kendra/state`)** | Unauthorized state inspection & leakage | Strict HMAC verification required; bypass (`TEST_BYPASS_AUTH`) crashes at boot if `KENDRA_ENV=production`. |
+| **3** | **Multimodal Audio / Voice Ingestion** | Voice prompt injection / adversarial directive | Tier-0 perception sandbox string extraction; LLM restricted solely to transcription with zero execution rights. |
+| **4** | **OCR Invoice Text Parsing** | Malicious prompt injection (`SYSTEM DIRECTIVE...`) | Regex + perplexity firewall (`check_for_prompt_injection`) immediately forces `BLOCKED_ADVERSARIAL`. |
+| **5** | **Wholesale Supplier Disbursals** | Fraudulent supplier wallet spoofing | Tier-0 on-chain x402 whitelist verification against `KNOWN_KYB_SUPPLIERS` before loan evaluation. |
+| **6** | **Agent Guarantee Stake Bids** | Malicious or runaway syndicate liability | Tier-1 ERC-4337 smart account with immutable session key cap `maxAlphaBps <= 4000` (40.0% max stake). |
+| **7** | **Credit Underwriting Engine** | Hallucinated or non-deterministic credit decisions | Tier-2 Zero-LLM math gate: 100% deterministic NumPy ACT/365 DSCR and wash trading entropy ($H_{st} \ge 0.65$). |
+| **8** | **Private Cashflow Ledger** | Competitor transaction & ledger surveillance | Supabase PostgreSQL Row-Level Security (RLS) isolating raw rows to serverless service-role only. |
+| **9** | **Escrow Disbursal Settlement** | Single-signer rogue vault drainage | Layer-5 `KendraEscrow.sol` 4-of-5 on-chain EIP-712 ECDSA quorum check + 1.50% MDR fee split. |
+| **10** | **Smart Contract Execution** | Shanghai opcode failure on consortium chains | Paris EVM target (`foundry.toml`) prohibiting `PUSH0` (0x5f) for 100% FISCO BCOS & Base compatibility. |
+

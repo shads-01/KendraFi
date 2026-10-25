@@ -2,11 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
-// Same validation as the Task 1 auth callback: root-relative, no protocol-relatives.
-function sanitizeNext(raw: string | null): string {
-  return raw && raw.startsWith("/") && !raw.startsWith("//") ? raw : "/";
-}
+import { sanitizeRedirect } from "@/lib/next-redirect";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -20,7 +16,7 @@ export default function SignupPage() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    setNext(sanitizeNext(params.get("next")));
+    setNext(sanitizeRedirect(params.get("next"), window.location.origin));
     setInvited(Boolean(params.get("invite_token")));
   }, []);
 

@@ -78,17 +78,14 @@ export async function getAuthContext(): Promise<AuthContext | null> {
   };
 }
 
-export class AuthRequiredError extends Error {
-  readonly status = 401 as const;
-  constructor() {
-    super("authentication required");
-  }
-}
-
-/** 401 signal for route handlers: throws AuthRequiredError when signed out. */
+/**
+ * 401 signal for route handlers: throws the mapped AuthzError when signed out
+ * OR when the session's users row is missing/soft-deleted (getAuthContext
+ * resolves null) — authzErrorResponse() maps both to 401 {error:"unauthenticated"}.
+ */
 export async function requireAuth(): Promise<AuthContext> {
   const ctx = await getAuthContext();
-  if (!ctx) throw new AuthRequiredError();
+  if (!ctx) throw new AuthzError(401, "unauthenticated");
   return ctx;
 }
 

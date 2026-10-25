@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
   // Requires the session established by the reset link's code exchange
   // (callback route). Without it, Supabase returns a session error -> 401.
   const { error } = await supabase.auth.updateUser({ password });
-  if (error) return NextResponse.json({ error: error.message }, { status: 401 });
+  if (error) return NextResponse.json({ error: "update_failed" }, { status: 401 });
 
   return NextResponse.json({ ok: true });
 }

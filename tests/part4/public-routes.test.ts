@@ -4,6 +4,7 @@ import { NextRequest } from "next/server";
 // run against the deliberately-unconfigured Supabase env from vitest.config.
 import { getAuthContext, isAuthConfigured } from "@/lib/auth-context";
 import { isPublic, middleware } from "@/middleware";
+import { sanitizeRedirect } from "@/lib/next-redirect";
 
 const req = (pathname: string) => new NextRequest(`http://localhost${pathname}`);
 
@@ -62,5 +63,36 @@ describe("route-handler auth fails closed to 401 (not 503) when Supabase env unc
   it("isAuthConfigured() is false and real getAuthContext() resolves null", async () => {
     expect(isAuthConfigured()).toBe(false);
     await expect(getAuthContext()).resolves.toBeNull();
+  });
+});
+
+// Empirically verified with the WHATWG parser (node URL === browser Location
+// parsing): "/\\evil.com" resolves to http://evil.com and "/\\t//evil.com" to
+// http://t — the old startsWith("/") && !startsWith("//") guard passed both.
+describe("sanitizeRedirect guard (I-1): resolve-and-compare-origins", () => {
+  const ORIGIN = "http://localhost:3000";
+
+  it("rejects WHATWG-normalized and absolute cross-origin targets → /", () => {
+    for (const bad of [
+      "/\\evil.com",
+      "/\\t//evil.com",
+      "//evil.com",
+      "https://evil.com",
+      "http://evil.com",
+      "javascript:alert(1)",
+    ]) {
+      expect(sanitizeRedirect(bad, ORIGIN), bad).toBe("/");
+    }
+  });
+
+  it("passes same-origin relative targets through unchanged", () => {
+    for (const good of ["/team", "/login?x=1", "/", "/team?invite_token=abc"]) {
+      expect(sanitizeRedirect(good, ORIGIN), good).toBe(good);
+    }
+  });
+
+  it("null/empty → /", () => {
+    expect(sanitizeRedirect(null, ORIGIN)).toBe("/");
+    expect(sanitizeRedirect("", ORIGIN)).toBe("/");
   });
 });

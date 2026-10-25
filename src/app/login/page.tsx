@@ -3,11 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getAuthBrowserClient } from "@/lib/supabase-auth-browser";
-
-// Same validation as the Task 1 auth callback: root-relative, no protocol-relatives.
-function sanitizeNext(raw: string | null): string {
-  return raw && raw.startsWith("/") && !raw.startsWith("//") ? raw : "/";
-}
+import { sanitizeRedirect } from "@/lib/next-redirect";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -19,7 +15,7 @@ export default function LoginPage() {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    setNext(sanitizeNext(new URLSearchParams(window.location.search).get("next")));
+    setNext(sanitizeRedirect(new URLSearchParams(window.location.search).get("next"), window.location.origin));
   }, []);
 
   async function post(path: string, body: object) {

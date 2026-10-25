@@ -1,16 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAuthServerClient, isAuthConfigured } from "@/lib/auth-context";
+import { sanitizeRedirect } from "@/lib/next-redirect";
 
 // Handles ALL Supabase email/OAuth code exchanges: verify-email confirmations,
-// password-reset links, magic links, OAuth callbacks, (future) invite links.
-function sanitizeNext(raw: string | null): string {
-  if (raw && raw.startsWith("/") && !raw.startsWith("//")) return raw;
-  return "/";
-}
-
+// password-reset links, magic links, OAuth callbacks, invite links.
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = request.nextUrl;
-  const next = sanitizeNext(searchParams.get("next"));
+  const next = sanitizeRedirect(searchParams.get("next"), origin);
 
   // Invite links (accept itself is POST-only via /api/team/invites/accept):
   // authenticated → forward to /team where the UI offers an "Accept invite"
@@ -48,9 +44,8 @@ export async function GET(request: NextRequest) {
   const supabase = createAuthServerClient();
   const { error } = await supabase.auth.exchangeCodeForSession(code);
   if (error) {
-    return NextResponse.redirect(
-      new URL(`/login?error=${encodeURIComponent(error.message)}`, origin)
-    );
+    // Stable code, never the raw provider message (client-facing URL).
+    return NextResponse.redirect(new URL("/login?error=callback_failed", origin));
   }
   return NextResponse.redirect(new URL(next, origin));
 }

@@ -21,13 +21,21 @@ export async function POST(request: NextRequest) {
   if (!isAuthConfigured()) return authNotConfiguredResponse();
 
   const body = await request.json().catch(() => ({}));
-  const { email, password } = body as { email?: unknown; password?: unknown };
-  if (typeof email !== "string" || !email || typeof password !== "string" || password.length < 8) {
+  const { email: rawEmail, password } = body as { email?: unknown; password?: unknown };
+  if (
+    typeof rawEmail !== "string" ||
+    !rawEmail ||
+    typeof password !== "string" ||
+    password.length < 8
+  ) {
     return NextResponse.json(
       { error: "email and a password of at least 8 characters are required" },
       { status: 400 }
     );
   }
+  // Supabase lowercases auth.users emails — normalize here so DB provisioning
+  // and invite matching can never diverge on case.
+  const email = rawEmail.toLowerCase();
 
   const supabase = createAuthServerClient();
   const { data, error } = await supabase.auth.signUp({
@@ -37,7 +45,16 @@ export async function POST(request: NextRequest) {
       emailRedirectTo: `${request.nextUrl.origin}/api/auth/callback?next=/verify-email`,
     },
   });
-  if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+  if (error) {
+    // Stable codes only — raw provider messages leak account-existence state.
+    const msg = error.message.toLowerCase();
+    const code = msg.includes("already registered")
+      ? "email_taken"
+      : msg.includes("password")
+        ? "weak_password"
+        : "signup_failed";
+    return NextResponse.json({ error: code }, { status: 400 });
+  }
   if (!data.user) return NextResponse.json({ error: "signup_failed" }, { status: 500 });
 
   const uid = data.user.id;

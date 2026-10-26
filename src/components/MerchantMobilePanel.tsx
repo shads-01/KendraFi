@@ -309,7 +309,7 @@ export const MerchantMobilePanel: React.FC<MerchantMobilePanelProps> = ({
           </div>
           <div>
             <h2 className="text-base font-extrabold text-[#111827]">
-              Merchant Smartphone HUD
+              Merchant Smartphone HUD · বণিকের স্মার্টফোন
             </h2>
             <p className="text-xs text-[#6B7280]">
               Tier-0 Perception Sandbox &bull; Bangla Audio / OCR
@@ -341,7 +341,7 @@ export const MerchantMobilePanel: React.FC<MerchantMobilePanelProps> = ({
             <div className="flex items-center justify-between w-full mb-2">
               <span className="text-xs sm:text-sm font-bold text-[#111827] flex items-center gap-1.5">
                 <CheckCircle2 className="h-4 w-4 text-[#059669]" />
-                Scenario A: Valid Restock
+                Scenario A: Valid Restock · বৈধ রিস্টক
               </span>
               <span className="chip-success text-xs font-bold">45k BDT</span>
             </div>
@@ -364,7 +364,7 @@ export const MerchantMobilePanel: React.FC<MerchantMobilePanelProps> = ({
             <div className="flex items-center justify-between w-full mb-2">
               <span className="text-xs sm:text-sm font-bold text-[#111827] flex items-center gap-1.5">
                 <ShieldAlert className="h-4 w-4 text-[#DC2626]" />
-                Scenario B: Red-Team Attack
+                Scenario B: Red-Team Attack · রেড-টিম হামলা
               </span>
               <span className="chip-attention text-xs font-bold">AGT-05</span>
             </div>
@@ -387,7 +387,7 @@ export const MerchantMobilePanel: React.FC<MerchantMobilePanelProps> = ({
             <div className="flex items-center justify-between w-full mb-2">
               <span className="text-xs sm:text-sm font-bold text-[#111827] flex items-center gap-1.5">
                 <AlertTriangle className="h-4 w-4 text-[#FF5C00]" />
-                Scenario C: Sybil Wash Ring
+                Scenario C: Sybil Wash Ring · সিবিল ওয়াশ চক্র
               </span>
               <span className="chip-progress text-xs font-bold">A&rarr;B&rarr;A</span>
             </div>
@@ -405,7 +405,7 @@ export const MerchantMobilePanel: React.FC<MerchantMobilePanelProps> = ({
             <div className="flex items-center justify-between w-full mb-2">
               <span className="text-xs sm:text-sm font-bold text-[#111827] flex items-center gap-1.5">
                 <RefreshCw className="h-4 w-4 text-[#059669] group-hover:rotate-180 transition-transform duration-500" />
-                Post-Loan: 30-Day Sweep
+                Post-Loan: 30-Day Sweep · ৩০-দিনের সুইপ
               </span>
               <span className="chip-success text-xs font-bold">+1.0% ySCT</span>
             </div>
@@ -651,7 +651,7 @@ export const MerchantMobilePanel: React.FC<MerchantMobilePanelProps> = ({
             <div className="flex items-center justify-between border-b border-[#E5E7EB] pb-2">
               <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-[#111827]">
                 <FileText className="h-4 w-4 text-[#0284C7]" />
-                <span>B2B Restock Invoice OCR</span>
+                <span>B2B Restock Invoice OCR · পাইকারি ইনভয়েস</span>
               </div>
               <span className={persona.invoice.statusChip}>
                 {persona.invoice.statusLabel}
@@ -746,7 +746,7 @@ export const MerchantMobilePanel: React.FC<MerchantMobilePanelProps> = ({
         {/* APR Breakdown List */}
         <div className="space-y-2 text-xs sm:text-sm">
           <div className="flex items-center justify-between">
-            <span className="text-[#6B7280]">1. Wholesale Capital (20% WeBank / 80% Partner):</span>
+            <span className="text-[#6B7280]">1. Wholesale Capital (20/80 Co-Lending Tranche):</span>
             <span className="font-bold text-[#111827]">8.50% APR</span>
           </div>
           <div className="flex items-center justify-between">

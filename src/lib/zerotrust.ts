@@ -6,6 +6,18 @@ const SIGNATURE_HEADER_NAME = "X-ZeroTrust-Signature";
 const TIMESTAMP_HEADER_NAME = "X-ZeroTrust-Timestamp";
 const MAX_SKEW_SECONDS = 30;
 
+/**
+ * Lazy env guard — invoked inside the request path (callPythonBackend), NOT at module
+ * import, so `next build`/CI never evaluates it. Throws listing ALL missing vars at once.
+ */
+export function assertEnv(): void {
+  const required = ["PYTHON_RISK_ENGINE_URL", "SUPABASE_SERVICE_ROLE_KEY"];
+  const missing = required.filter((key) => !process.env[key]);
+  if (missing.length > 0) {
+    throw new Error(`Missing required env vars: ${missing.join(", ")}`);
+  }
+}
+
 export interface SignedZeroTrustRequest {
   signature: string;
   timestamp: string;
@@ -130,7 +142,13 @@ export function verifyZeroTrustPayload(
  * Returns the configured Python Risk Engine base URL.
  */
 export function getPythonRiskEngineUrl(): string {
-  return process.env.PYTHON_RISK_ENGINE_URL || "http://127.0.0.1:8000";
+  const url = process.env.PYTHON_RISK_ENGINE_URL;
+  if (!url) {
+    throw new Error(
+      "Missing required env vars: PYTHON_RISK_ENGINE_URL (no localhost fallback — configure in .env / Vercel)"
+    );
+  }
+  return url;
 }
 
 /**
@@ -141,6 +159,7 @@ export async function callPythonBackend<T = unknown>(
   body: unknown = {},
   options: RequestInit = {}
 ): Promise<T> {
+  assertEnv();
   const baseUrl = getPythonRiskEngineUrl();
   const cleanEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
   const url = `${baseUrl}${cleanEndpoint}`;

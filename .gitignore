@@ -52,3 +52,14 @@ yarn-error.log*
 
 # Local database backups (restore-test dumps - see docs/runbooks/backups.md)
 backups/
+
+# Test artifacts
+test-results/
+
+# Agent & crawler scratch
+.superpowers/
+.firecrawl/
+
+# Extraction files
+extraction_*.md
+extraction_1792747023602.md

@@ -196,13 +196,13 @@ export default function SecurityEscrowPanel({
               </span>
             </div>
             <span className="chip-purple text-xs font-bold py-1 px-3">
-              WeBank FATE Uplift
+              AUC Uplift vs MFS App
             </span>
           </div>
 
           <div className="bg-[#FAFBFD] p-3.5 rounded-2xl border border-[#EDEFF2] space-y-2">
             <p className="text-xs text-[#374151] leading-relaxed">
-              Empirical Synthetic Karwan Bazar Monte Carlo Backtest (1,000 Kendras / 5,000 Merchants) — benchmarked against WeBank&apos;s published <strong>+12% FATE Hetero-LR AUC uplift</strong> (IEEE P3652.1).
+              Empirical Synthetic Karwan Bazar Monte Carlo Backtest (1,000 Kendras / 5,000 Merchants) — default discrimination lifted <strong>+16.7% ROC-AUC</strong> over the solo-MFS app baseline shown here (federated Hetero-LR, IEEE P3652.1).
             </p>
           </div>
 
@@ -240,7 +240,7 @@ export default function SecurityEscrowPanel({
             </span>
             <div className="text-xs space-y-1.5">
               <div className="flex justify-between py-1.5 border-b border-[#EDEFF2]">
-                <span className="text-[#6B7280]">1. FATE Hetero-LR Enterprise Score:</span>
+                <span className="text-[#6B7280]">1. Federated Hetero-LR Enterprise Score:</span>
                 <span className="font-mono font-bold text-[#111827]">+34.8% wt</span>
               </div>
               <div className="flex justify-between py-1.5 border-b border-[#EDEFF2]">

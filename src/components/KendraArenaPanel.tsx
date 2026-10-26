@@ -430,7 +430,7 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
       </div>
 
 
-      {/* Layer-4 secp256k1 ZK Solvency & WeBank FATE Card */}
+      {/* Layer-4 secp256k1 ZK Solvency & Federated Scoring Card */}
       <div className="planora-card flex flex-col gap-4">
         <div className="flex items-center justify-between border-b border-[#E5E7EB] pb-3">
           <div className="flex items-center gap-2">
@@ -438,7 +438,7 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
               <Fingerprint className="h-4 w-4" />
             </div>
             <h3 className="text-sm sm:text-base font-bold text-[#111827]">
-              Layer-4 Cryptographic ZK Solvency &amp; WeBank FATE Scorer
+              Layer-4 Cryptographic ZK Solvency &amp; Federated Scoring
             </h3>
           </div>
           <span className="chip-info text-xs font-bold">
@@ -472,7 +472,7 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
             </p>
           </div>
 
-          {/* Range Proof & FATE Score */}
+          {/* Range Proof & Federated Score */}
           <div className="rounded-2xl border border-[#E5E7EB] bg-[#FAFBFD] p-4 space-y-2.5">
             <div className="flex items-center justify-between">
               <span className="text-[#6B7280] text-xs font-semibold">DSCR Solvency Verification:</span>
@@ -492,7 +492,7 @@ export const KendraArenaPanel: React.FC<KendraArenaPanelProps> = ({
                   </span>
                 </div>
                 <div className="flex items-center justify-between pt-2 border-t border-[#E5E7EB]">
-                  <span className="text-[#6B7280] text-xs font-semibold">WeBank FATE Hetero-LR Score:</span>
+                  <span className="text-[#6B7280] text-xs font-semibold">Federated Hetero-LR Score:</span>
                   <span className="text-[#FF5C00] font-extrabold text-sm sm:text-base font-mono">
                     p₁ = {(fateScore * 100).toFixed(1)}%
                   </span>

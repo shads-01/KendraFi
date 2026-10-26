@@ -4,6 +4,7 @@ import {
   createAuthServerClient,
   isAuthConfigured,
 } from "@/lib/auth-context";
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 
 // Org name derived from the email local-part, e.g. "rahim.store" -> "Rahim Store".
@@ -62,7 +63,7 @@ export async function POST(request: NextRequest) {
   // holds the session (session == null, user != null). Idempotent on re-run
   // via the auth_user_id unique constraint; also adopts (links) a pre-existing
   // same-email row from the Part 3 seed that has no auth identity yet.
-  await prisma.$transaction(async (tx) => {
+  await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
     const existing = await tx.user.findFirst({
       where: { OR: [{ authUserId: uid }, { email }] },
     });

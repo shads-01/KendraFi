@@ -18,7 +18,7 @@ Incidents are declared when:
 
 1. **Query Health Endpoint:**
    ```bash
-   curl -i https://<deployed-domain>/api/health
+   curl -i https://kendrafi.vercel.app/api/health
    ```
    - If HTTP 200 and `"db": "ok"`: Process and database are operational. Check frontend CDN or network routing.
    - If HTTP 503 and `"db": "fail"`: Database connectivity failure detected. Proceed to Step 2.
@@ -41,11 +41,11 @@ Incidents are declared when:
 Point a free-tier external uptime monitor (e.g., [Better Stack](https://betterstack.com) or [UptimeRobot](https://uptimerobot.com)) at production:
 
 1. **Monitor 1 (Web & BFF Root):**
-   - URL: `https://<deployed-domain>/`
+   - URL: `https://kendrafi.vercel.app/`
    - Frequency: Every 5 minutes
    - Expected Status: HTTP 200
 2. **Monitor 2 (Deep Health & Database Reachability):**
-   - URL: `https://<deployed-domain>/api/health`
+   - URL: `https://kendrafi.vercel.app/api/health`
    - Frequency: Every 5 minutes
    - Expected Status: HTTP 200 (alerts on 503)
    - Keyword check: `"status":"healthy"`

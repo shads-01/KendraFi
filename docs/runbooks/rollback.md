@@ -41,12 +41,12 @@ If a deployment introduces a breaking bug, runtime panic, or memory leak:
 Immediately run the following smoke tests:
 1. **Verify Health Endpoint:**
    ```bash
-   curl -i https://<deployed-domain>/api/health
+   curl -i https://kendrafi.vercel.app/api/health
    ```
    Confirm HTTP 200 with `"status":"healthy"` and `"components":{"db":"ok"}`.
 2. **Verify Core Scenario A:**
    - Execute 1 live scenario via UI or BFF:
      ```bash
-     curl -X POST https://<deployed-domain>/api/kendra/execute -H "Content-Type: application/json" -d '{"scenario":"SCENARIO_A_VALID"}'
+     curl -X POST https://kendrafi.vercel.app/api/kendra/execute -H "Content-Type: application/json" -d '{"scenario":"SCENARIO_A_VALID"}'
      ```
    - Confirm status `"SUCCESS"` and 4-of-5 on-chain quorum lock.

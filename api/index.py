@@ -15,8 +15,10 @@ Exposes zero-trust authenticated REST endpoints for the KendraFi cooperative syn
 from __future__ import annotations
 
 import os
+import uuid
 from contextlib import asynccontextmanager
 from typing import Any, Dict, Optional
+import httpx
 from fastapi import Depends, FastAPI, Header, HTTPException, Request, Response, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
@@ -160,18 +162,78 @@ async def authenticate_zerotrust_request(
 
 
 # ==============================================================================
+# DATABASE CONNECTIVITY MONITORING (PART 14)
+# ==============================================================================
+
+async def check_supabase_health(timeout_seconds: float = 2.0) -> bool:
+    """
+    Pings Supabase with a 2-second timeout via REST API HEAD request.
+    Returns True if reachable and responding with HTTP status < 500, False otherwise.
+    In hermetic local test runs, respects TEST_MOCK_DB_HEALTH or test bypass flags
+    unless FORCE_DB_HEALTH_FAIL is explicitly set.
+    """
+    if os.getenv("FORCE_DB_HEALTH_FAIL", "").lower() in ("true", "1"):
+        return False
+
+    if os.getenv("TEST_MOCK_DB_HEALTH", "").lower() in ("true", "1") or os.getenv("TEST_BYPASS_AUTH", "").lower() in ("true", "1"):
+        return True
+
+    url = os.getenv("SUPABASE_URL") or os.getenv("NEXT_PUBLIC_SUPABASE_URL")
+    key = (
+        os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+        or os.getenv("SUPABASE_SECRET_KEY")
+        or os.getenv("SUPABASE_PUBLISHABLE_KEY")
+        or os.getenv("NEXT_PUBLIC_SUPABASE_ANON_KEY")
+    )
+    if not url or not key:
+        return False
+
+    try:
+        clean_url = url.rstrip("/")
+        headers = {
+            "apikey": key,
+            "Authorization": f"Bearer {key}",
+        }
+        async with httpx.AsyncClient(timeout=timeout_seconds) as client:
+            resp = await client.head(f"{clean_url}/rest/v1/", headers=headers)
+            if resp.status_code == 405:
+                resp = await client.get(f"{clean_url}/rest/v1/", headers=headers)
+            return resp.status_code < 500
+    except Exception:
+        return False
+
+
+# ==============================================================================
 # API ROUTE HANDLERS
 # ==============================================================================
 
 @app.get("/api/health")
-async def health_check():
-    """Health check endpoint for Vercel and container probes."""
-    return {
-        "status": "healthy",
+async def health_check(request: Request):
+    """
+    Health check endpoint verifying process integrity and Supabase DB reachability.
+    Returns HTTP 200 with components {"db": "ok"} when healthy.
+    Returns HTTP 503 with components {"db": "fail"} when DB ping fails.
+    """
+    request_id = getattr(request.state, "request_id", None) or uuid.uuid4().hex[:12]
+    db_ok = await check_supabase_health(timeout_seconds=2.0)
+
+    status_code = status.HTTP_200_OK if db_ok else status.HTTP_503_SERVICE_UNAVAILABLE
+    content = {
+        "status": "healthy" if db_ok else "unhealthy",
         "service": "kendra-core-engine",
         "version": "1.0.0",
-        "framework": "LangGraph + FastAPI",
+        "components": {
+            "db": "ok" if db_ok else "fail",
+        },
+        "request_id": request_id,
     }
+    return JSONResponse(status_code=status_code, content=content)
+
+
+@app.get("/api/health/live")
+async def liveness_probe():
+    """Lightweight process liveness probe for load balancers and container runners."""
+    return {"status": "live"}
 
 
 @app.post("/api/kendra/execute", dependencies=[Depends(rate_limit("execute", limit=10, per_seconds=60))])

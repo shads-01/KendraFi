@@ -79,8 +79,8 @@ See `/docs/decisions/` for the ADR log of decisions and why they were made.
 
 ## Current phase
 
-SaaS-readiness plan series in `docs/plans/` (Parts 0–15). Parts 0–5 & Parts 10–11 & Part 13 complete
-(0: agent memory · 1: system design · 2: architecture · 3: databases · 4: auth & BFF · 5: APIs & backend · 10: security · 11: rate limiting · 13: error tracking & logs).
+SaaS-readiness plan series in `docs/plans/` (Parts 0–15). Parts 0–5 & Parts 10–11 & Parts 13–14 complete
+(0: agent memory · 1: system design · 2: architecture · 3: databases · 4: auth & BFF · 5: APIs & backend · 10: security · 11: rate limiting · 13: error tracking & logs · 14: monitoring & alerts).
 Next: Part 6 (frontend). Run parts in order.
 
 ## Subagent SOPs

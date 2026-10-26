@@ -17,52 +17,52 @@ interface JudgeCommandHeaderProps {
   onViewChange: (view: HeaderViewType) => void;
 }
 
-const STATE_CONFIG: Record<FSMState, { label: string; zh: string; chipBg: string; chipText: string; dotColor: string }> = {
+const STATE_CONFIG: Record<FSMState, { label: string; bn: string; chipBg: string; chipText: string; dotColor: string }> = {
   IDLE_MONITORING: {
     label: "IDLE_MONITORING",
-    zh: "待命监测",
+    bn: "নিষ্ক্রিয় পর্যবেক্ষণ",
     chipBg: "bg-[#F3F4F6]",
     chipText: "text-[#4B5563]",
     dotColor: "bg-[#6B7280]",
   },
   INTENT_PERCEPTION: {
     label: "INTENT_PERCEPTION",
-    zh: "意图感知",
+    bn: "উদ্দেশ্য অনুধাবন",
     chipBg: "bg-[#F0F9FF]",
     chipText: "text-[#0284C7]",
     dotColor: "bg-[#0284C7]",
   },
   DETERMINISTIC_AUDIT: {
     label: "DETERMINISTIC_AUDIT",
-    zh: "确定性风控审计",
+    bn: "সুনির্দিষ্ট ঝুঁকি অডিট",
     chipBg: "bg-[#F0F9FF]",
     chipText: "text-[#2563EB]",
     dotColor: "bg-[#2563EB]",
   },
   SYNDICATE_P2P_NEGOTIATION: {
     label: "SYNDICATE_P2P_NEGOTIATION",
-    zh: "多方CNP撮合博弈",
+    bn: "সিন্ডিকেট P2P দরকষাকষি",
     chipBg: "bg-[#FFF0E6]",
     chipText: "text-[#C2410C]",
     dotColor: "bg-[#FF5C00]",
   },
   ESCROW_COSIGN_AND_SETTLE: {
     label: "ESCROW_COSIGN_AND_SETTLE",
-    zh: "链上托管会签交割",
+    bn: "এসক্রো সই ও নিষ্পত্তি",
     chipBg: "bg-[#ECFDF5]",
     chipText: "text-[#065F46]",
     dotColor: "bg-[#059669]",
   },
   BLOCKED_ADVERSARIAL: {
     label: "BLOCKED_ADVERSARIAL",
-    zh: "零信任对抗拦截",
+    bn: "প্রতিকূল প্রচেষ্টা ব্লকড",
     chipBg: "bg-[#FEF2F2]",
     chipText: "text-[#991B1B]",
     dotColor: "bg-[#DC2626]",
   },
   FLASH_BAILOUT_ACTIVE: {
     label: "FLASH_BAILOUT_ACTIVE",
-    zh: "季风外生冲击闪电解困",
+    bn: "বর্ষা শক জরুরি বেইলআউট",
     chipBg: "bg-[#FFF0E6]",
     chipText: "text-[#C2410C]",
     dotColor: "bg-[#FF5C00]",
@@ -108,18 +108,18 @@ export const JudgeCommandHeader: React.FC<JudgeCommandHeaderProps> = ({
                 KendraFi
               </span>
               <span className="text-xs sm:text-sm font-semibold text-[#4B5563] hidden md:inline">
-                Weiyedai-Global &bull; 微业贷全球化
+                SME Capital Engine &bull; কেন্দ্রফাই
               </span>
               <span className="inline-flex items-center rounded-full bg-[#FFF0E6] px-3 py-1 text-xs font-bold text-[#FF5C00] border border-[#FFD8BF]">
-                2026 Shenzhen FinTechathon
+                AI Builders Congress 2026
               </span>
             </div>
             <p className="text-xs text-[#6B7280] flex items-center gap-2 flex-wrap pt-0.5">
-              <span>清华大学五道口金融学院 (PBCSF) &amp; 微众银行 (WeBank) 联合主办</span>
+              <span>CloudCamp Bangladesh &times; Daffodil International University</span>
               <span className="text-[#D1D5DB]">|</span>
-              <span className="text-[#0284C7] font-semibold">Topic E: SME Copilot</span>
-              <span className="text-[#D1D5DB]">+</span>
-              <span className="text-[#FF5C00] font-semibold">Topic F: Agent Wallet (+5 Bonus)</span>
+              <span className="text-[#0284C7] font-semibold">FinSphere AI · SME Capital Engine</span>
+              <span className="text-[#D1D5DB]">|</span>
+              <span className="text-[#FF5C00] font-semibold">Congress Day: Dec 26, 2026 · Dhaka</span>
             </p>
           </div>
         </div>
@@ -185,7 +185,7 @@ export const JudgeCommandHeader: React.FC<JudgeCommandHeaderProps> = ({
             </span>
             <div className="flex flex-col">
               <span className="font-bold text-xs">{stateMeta.label}</span>
-              <span className="text-[10px] opacity-80">{stateMeta.zh}</span>
+              <span className="text-[10px] opacity-80">{stateMeta.bn}</span>
             </div>
           </div>
 

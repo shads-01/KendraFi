@@ -1,6 +1,7 @@
 # PITCH_SCRIPT_CLOUDDAMP.md — 1-Minute Transition + 3-Minute Pitch + Scenario A Demo Flow
 
 **Format (from the official schedule):** 1 min transition → 3 min pitch → 1 min scoring. Judges: min 5 per panel, ~14 teams per panel.
+**Preliminary video (due Oct 31):** same 3:00 runtime, official segment map (Participants Guide §9.2) — Problem 0:00–0:30 · Solution 0:30–1:00 · Demo 1:00–2:00 · AI Approach 2:00–2:30 · Impact & Next 2:30–3:00.
 **Rule:** every number spoken is a locked `CONTEXT.md` §2 constant or a `docs/backtest_results.json` output. No number is spoken that cannot be shown on screen in the same second.
 
 ---
@@ -23,12 +24,12 @@
 > "Watch the center panel — I submit Rahim's voice note: *45,000 taka, 50 sacks of Miniket rice*. Tier-0 transcribes it — and that's the **only** place a language model ever touches this pipeline: **zero LLM math**; every financial number is computed in deterministic NumPy — you can see the DSCR gate: **1.68 against a 1.25 floor**.
 > Now the negotiation. Round 1: the pharmacy agent bids **51.6%** — and its own session key **refuses**: max 40%. That's an AI agent enforcing prudence on itself. One agent abstains — its expected utility is **negative 142 taka**, and the system lets it walk away. Round 2: the 11.6% deficit clears at a **1% yield** — Fatema steps up 28 to 35%, Kamal 20 to 25%. Round 3: **40 + 35 + 25 = 100%** of the obligation — a Nash equilibrium, reached by agents, not set by a bank."
 
-**[2:00–2:40] Results + proof.**
-> "In a 5,000-merchant Monte Carlo backtest: default-detection AUC rises **0.72 to 0.88** — a 22% uplift, versus WeBank's own published 12% federated-learning benchmark — net bank losses drop **61%**, because peers absorb 31% of stress before the lender is touched. Approval rate barely moves — 63.7 versus 69.1 — this is **better risk pricing, not rationing**.
-> Now the part you can verify, not just believe: four agents sign **EIP-712** typed data; the escrow contract cryptographically recovers **all four signatures on-chain** — then pays the verified wholesaler **44,325 taka, 98.5% after a 1.5% merchant discount**. Let me click Blockscout — *(click)* — there's the transaction. Anyone in this room can verify it right now."
+**[2:00–2:30] The AI approach.**
+> "The AI approach in one sentence: language models transcribe Bangla voice and paper receipts into raw strings — then never touch a financial number. Every metric — the DSCR gate at **1.68**, the Nash utilities — runs in **deterministic NumPy**, provable and hallucination-free. Solvency is proven **in zero knowledge**: a 16-bit range proof shows projected cashflow covers 1.25x repayment without revealing the books. Scoring runs as **federated Hetero-LR** — the model learns patterns, never raw merchant data.
+> And the part you can verify, not just believe: four agents sign **EIP-712** typed data; the escrow contract cryptographically recovers **all four signatures on-chain** — then pays the verified wholesaler **44,325 taka, 98.5% after a 1.5% merchant discount**. Let me click Blockscout — *(click)* — there's the transaction. Anyone can verify it right now."
 
-**[2:40–3:00] Close.**
-> "Rahim repays at **1,515 taka a day** from his mobile wallet — half the price of microfinance, because agents and peers replaced the motorbike. 10 million SMEs. A $2.8 billion gap. AI agents with wallets, liability, and a paper trail. KendraFi — **we don't predict credit; we negotiate it.** *(End exactly on time.)*"
+**[2:30–3:00] Impact & next step.**
+> "Measured on a 5,000-merchant Monte Carlo backtest: default-detection AUC rises **0.72 to 0.88** — a 22% uplift; net bank losses drop **61%**, because peers absorb 31% of stress before the lender is touched. Approval barely moves — 63.7 versus 69.1 — **better risk pricing, not rationing**. Rahim repays **1,515 taka a day** from his mobile wallet — half the price of microfinance, because agents and peers replaced the motorbike. Next step: a live pilot with one MRA-licensed MFI and one Karwan Bazar wholesaler on real MFS data. 10 million SMEs. A $2.8 billion gap. KendraFi — **we don't predict credit; we negotiate it.** *(End exactly on time.)*"
 
 ## THE SCENARIO A DEMO FLOW (click-by-click, ends in Blockscout)
 

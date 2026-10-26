@@ -5,34 +5,48 @@
   "description": "Zero-Trust Multi-Agent Cooperative Risk and Programmable B2B Escrow Protocol for WeBank Weiyedai-Global",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test:auth": "vitest run --config tests/part4/vitest.config.ts",
+    "test:e2e": "playwright test",
+    "test:api": "python -m pytest -q",
+    "typecheck": "tsc --noEmit",
     "generate:sandbox": "([ -f .venv/bin/python3 ] && .venv/bin/python3 api/data/generate_sandbox.py) || python3 api/data/generate_sandbox.py"
   },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.10.1",
     "@prisma/client": "^7.10.0",
-    "@supabase/server": "^1.4.1",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.109.0",
-    "clsx": "^2.1.1",
-    "framer-motion": "^11.11.9",
     "lucide-react": "^0.453.0",
     "next": "^15.0.0",
+    "pg": "^8.23.1",
     "react": "^19.0.0-rc-65a47c0e-20241020",
     "react-dom": "^19.0.0-rc-65a47c0e-20241020",
-    "server-only": "^0.0.1",
-    "tailwind-merge": "^2.5.4",
-    "viem": "^2.21.26"
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.1",
     "@types/node": "^20.17.0",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.1",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
     "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^15.0.0",
     "postcss": "^8.4.47",
+    "prettier": "^3.3.3",
     "prisma": "^7.10.0",
     "tailwindcss": "^3.4.14",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "vitest": "^3.2.7"
   }
 }

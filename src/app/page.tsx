@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import JudgeCommandHeader, { type HeaderViewType } from "@/components/JudgeCommandHeader";
+import AuthNav from "@/components/AuthNav";
 import MerchantMobilePanel from "@/components/MerchantMobilePanel";
 import KendraArenaPanel from "@/components/KendraArenaPanel";
 import SecurityEscrowPanel from "@/components/SecurityEscrowPanel";
@@ -53,8 +54,27 @@ export default function HomePage() {
     mdrFeeBdt?: number;
   } | null>(null);
 
+  // Last failed scenario/API call: banner message + retry closure re-invoking it with original args
+  const [lastError, setLastError] = useState<string | null>(null);
+  const [retryAction, setRetryAction] = useState<(() => void) | null>(null);
+
+  const apiErrorMessage = (res: Response, data: unknown): string => {
+    const err = (data as { error?: unknown } | null)?.error;
+    if (typeof err === "string" && err) return err;
+    if (err && typeof err === "object" && "message" in err && typeof (err as { message: unknown }).message === "string") {
+      return (err as { message: string }).message;
+    }
+    return `Request failed (HTTP ${res.status})`;
+  };
+
   // Execute scenario via Next.js BFF route
-  const handleSelectScenario = async (scenario: ScenarioType) => {
+  const handleSelectScenario = (scenario: ScenarioType) => {
+    setRetryAction(() => () => handleSelectScenario(scenario));
+    setLastError(null);
+    void runScenario(scenario);
+  };
+
+  const runScenario = async (scenario: ScenarioType) => {
     setActiveScenario(scenario);
     setIsExecuting(true);
     const startTime = performance.now();
@@ -113,9 +133,15 @@ export default function HomePage() {
         if (scenario === "SCENARIO_A_VALID") {
           setFsmState("ESCROW_COSIGN_AND_SETTLE");
         }
+      } else {
+        const errorData = await res.json().catch(() => ({}));
+        const reqId = res.headers.get("x-request-id") || "none";
+        console.error(`[API Error] Status ${res.status} (X-Request-ID: ${reqId}):`, errorData?.error?.message || errorData?.error || res.statusText);
+        setLastError(apiErrorMessage(res, errorData));
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.error("Execution error:", err);
+      setLastError(err instanceof Error ? err.message : "Network error: could not reach the Kendra execution engine.");
     } finally {
       setIsExecuting(false);
     }
@@ -128,7 +154,13 @@ export default function HomePage() {
   };
 
   // Trigger post-loan simulated 30-day MFS repayment sweep
-  const handleTriggerRepaySweep = async () => {
+  const handleTriggerRepaySweep = () => {
+    setRetryAction(() => handleTriggerRepaySweep);
+    setLastError(null);
+    void runRepaySweep();
+  };
+
+  const runRepaySweep = async () => {
     setIsExecuting(true);
     setFsmState("INTENT_PERCEPTION");
     const startTime = performance.now();
@@ -144,23 +176,35 @@ export default function HomePage() {
       setLatencyMs(elapsed);
 
       if (res.ok) {
-        const data = await res.json();
+        await res.json();
         setRepaymentProgress({
           sweptBdt: 45462.33,
           days: 30,
           yieldPaidBdt: 37.37,
         });
         setFsmState("ESCROW_COSIGN_AND_SETTLE");
+      } else {
+        const errorData = await res.json().catch(() => ({}));
+        const reqId = res.headers.get("x-request-id") || "none";
+        console.error(`[Repay Error] Status ${res.status} (X-Request-ID: ${reqId}):`, errorData?.error?.message || errorData?.error || res.statusText);
+        setLastError(apiErrorMessage(res, errorData));
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.error("Repay sweep error:", err);
+      setLastError(err instanceof Error ? err.message : "Network error: could not reach the repayment sweep endpoint.");
     } finally {
       setIsExecuting(false);
     }
   };
 
   // Trigger monsoon flash bailout
-  const handleTriggerBailout = async () => {
+  const handleTriggerBailout = () => {
+    setRetryAction(() => handleTriggerBailout);
+    setLastError(null);
+    void runBailout();
+  };
+
+  const runBailout = async () => {
     setIsExecuting(true);
     setFsmState("FLASH_BAILOUT_ACTIVE");
     const startTime = performance.now();
@@ -177,8 +221,16 @@ export default function HomePage() {
 
       const elapsed = performance.now() - startTime;
       setLatencyMs(elapsed);
-    } catch (err) {
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        const reqId = res.headers.get("x-request-id") || "none";
+        console.error(`[Bailout Error] Status ${res.status} (X-Request-ID: ${reqId}):`, errorData?.error?.message || errorData?.error || res.statusText);
+        setLastError(apiErrorMessage(res, errorData));
+      }
+    } catch (err: unknown) {
       console.error("Bailout error:", err);
+      setLastError(err instanceof Error ? err.message : "Network error: could not reach the bailout endpoint.");
     } finally {
       setIsExecuting(false);
     }
@@ -186,6 +238,9 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-[#F4F5F7] flex flex-col">
+      {/* Auth-aware account nav (Part 4): login/signup links when signed out */}
+      <AuthNav />
+
       {/* Top HUD Header with Multi-View Switcher */}
       <JudgeCommandHeader
         fsmState={fsmState}
@@ -222,6 +277,7 @@ export default function HomePage() {
           style={{ transform: `scale(${zoomLevel})`, transformOrigin: "top center" }}
           className="flex-1 w-full max-w-[1720px] mx-auto p-4 sm:p-6 transition-transform duration-300 animate-fadeIn"
         >
+          <h1 className="sr-only">Judge Command Center</h1>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
             {/* LEFT PANEL: Merchant Mobile & Scenarios (4 Cols) */}
             <section className="lg:col-span-4 flex flex-col">
@@ -260,6 +316,8 @@ export default function HomePage() {
                 grossRepaymentBdt={grossRepaymentBdt}
                 dscr={dscr}
                 isExecuting={isExecuting}
+                lastError={lastError}
+                onRetry={retryAction ?? undefined}
               />
             </section>
           </div>

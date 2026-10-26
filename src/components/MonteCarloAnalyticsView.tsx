@@ -3,23 +3,12 @@
 import React, { useState } from "react";
 import {
   BarChart3,
-  TrendingUp,
-  ShieldCheck,
-  CheckCircle2,
-  ArrowRight,
   Zap,
-  Info,
   BookOpen,
-  PieChart,
-  Target,
-  Sparkles,
   Sliders,
   ChevronLeft,
   ChevronRight,
-  Activity,
-  Layers,
   Database,
-  Users,
 } from "lucide-react";
 
 interface MonteCarloAnalyticsViewProps {
@@ -112,7 +101,7 @@ export default function MonteCarloAnalyticsView({
 
         <button
           onClick={onBackToCommandCenter}
-          className="btn-animated-primary text-sm px-6 py-2.5 font-bold"
+          className="btn-animated-primary text-sm px-6 py-2.5 font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0284C7] focus-visible:ring-offset-1"
         >
           <Zap className="h-4 w-4" />
           <span>Open Live Command Center</span>
@@ -248,9 +237,9 @@ export default function MonteCarloAnalyticsView({
           <div>
             <div className="flex items-center gap-2">
               <span className="chip-progress text-xs">Interactive Data Science Simulator</span>
-              <h3 className="text-lg sm:text-xl font-extrabold text-[#111827]">
+              <h2 className="text-lg sm:text-xl font-extrabold text-[#111827]">
                 Empirical ROC-AUC Discrimination &amp; Precision-Recall Curves
-              </h3>
+              </h2>
             </div>
             <p className="text-xs sm:text-sm text-[#4B5563] mt-1">
               Visualizing the <strong>+21.96% empirical lift</strong> between KendraFi FATE + Besley-Coate Syndicate vs. Solo MFS Baseline App.
@@ -261,7 +250,8 @@ export default function MonteCarloAnalyticsView({
           <div className="flex items-center p-1 rounded-2xl bg-[#F3F4F6] border border-[#E5E7EB] text-xs font-bold shrink-0">
             <button
               onClick={() => setChartType("roc")}
-              className={`px-3.5 py-1.5 rounded-xl transition ${
+              aria-pressed={chartType === "roc"}
+              className={`px-3.5 py-1.5 rounded-xl transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0284C7] focus-visible:ring-offset-1 ${
                 chartType === "roc"
                   ? "bg-white text-[#111827] shadow-sm"
                   : "text-[#6B7280] hover:text-[#111827]"
@@ -271,7 +261,8 @@ export default function MonteCarloAnalyticsView({
             </button>
             <button
               onClick={() => setChartType("pr")}
-              className={`px-3.5 py-1.5 rounded-xl transition ${
+              aria-pressed={chartType === "pr"}
+              className={`px-3.5 py-1.5 rounded-xl transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0284C7] focus-visible:ring-offset-1 ${
                 chartType === "pr"
                   ? "bg-white text-[#0284C7] shadow-sm"
                   : "text-[#6B7280] hover:text-[#111827]"
@@ -488,7 +479,9 @@ export default function MonteCarloAnalyticsView({
               step="0.05"
               value={threshold}
               onChange={(e) => setThreshold(parseFloat(e.target.value))}
-              className="w-full accent-[#FF5C00] h-2 bg-[#E5E7EB] rounded-lg cursor-pointer"
+              aria-label="Operating decision threshold"
+              aria-valuetext={threshold.toFixed(2)}
+              className="w-full accent-[#FF5C00] h-2 bg-[#E5E7EB] rounded-lg cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1"
             />
             <div className="flex justify-between text-[10px] text-[#6B7280]">
               <span>0.10 (Aggressive Lending)</span>
@@ -523,9 +516,9 @@ export default function MonteCarloAnalyticsView({
         <div className="lg:col-span-7 planora-card p-6 sm:p-8 space-y-6">
           <div className="flex items-center justify-between border-b border-[#E5E7EB] pb-4">
             <div>
-              <h3 className="text-lg font-bold text-[#111827]">
+              <h2 className="text-lg font-bold text-[#111827]">
                 Feature Importance &amp; Model Coefficients (Model B)
-              </h3>
+              </h2>
               <p className="text-xs text-[#6B7280]">
                 Standardized logistic regression weights fitted on 5,000 Karwan Bazar merchants.
               </p>
@@ -575,7 +568,8 @@ export default function MonteCarloAnalyticsView({
               <button
                 onClick={() => setFeaturePage((p) => Math.max(1, p - 1))}
                 disabled={featurePage === 1}
-                className="pagination-btn"
+                aria-label="Previous features page"
+                className="pagination-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0284C7] focus-visible:ring-offset-1"
               >
                 <ChevronLeft className="h-3.5 w-3.5" />
                 <span>Prev</span>
@@ -584,7 +578,9 @@ export default function MonteCarloAnalyticsView({
                 <button
                   key={p}
                   onClick={() => setFeaturePage(p)}
-                  className={`pagination-btn ${featurePage === p ? "pagination-btn-active" : ""}`}
+                  aria-label={`Go to features page ${p}`}
+                  aria-pressed={featurePage === p}
+                  className={`pagination-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0284C7] focus-visible:ring-offset-1 ${featurePage === p ? "pagination-btn-active" : ""}`}
                 >
                   {p}
                 </button>
@@ -592,7 +588,8 @@ export default function MonteCarloAnalyticsView({
               <button
                 onClick={() => setFeaturePage((p) => Math.min(totalFeaturePages, p + 1))}
                 disabled={featurePage === totalFeaturePages}
-                className="pagination-btn"
+                aria-label="Next features page"
+                className="pagination-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0284C7] focus-visible:ring-offset-1"
               >
                 <span>Next</span>
                 <ChevronRight className="h-3.5 w-3.5" />
@@ -608,9 +605,9 @@ export default function MonteCarloAnalyticsView({
         {/* Right: Simulation Dataset Parameters */}
         <div className="lg:col-span-5 planora-card p-6 sm:p-8 space-y-6">
           <div className="flex items-center justify-between border-b border-[#E5E7EB] pb-4">
-            <h3 className="text-lg font-bold text-[#111827]">
+            <h2 className="text-lg font-bold text-[#111827]">
               Simulation Dataset
-            </h3>
+            </h2>
             <span className="chip-purple text-xs font-mono">1,000 Kendras</span>
           </div>
 
@@ -644,7 +641,7 @@ export default function MonteCarloAnalyticsView({
           <div className="pt-2">
             <button
               onClick={onBackToCommandCenter}
-              className="btn-animated-primary w-full text-sm py-3 font-bold"
+              className="btn-animated-primary w-full text-sm py-3 font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0284C7] focus-visible:ring-offset-1"
             >
               Back to Command Center Cockpit &rarr;
             </button>
@@ -662,9 +659,9 @@ export default function MonteCarloAnalyticsView({
               <Database className="h-4 w-4" />
             </div>
             <div>
-              <h3 className="text-base sm:text-lg font-bold text-[#111827]">
+              <h2 className="text-base sm:text-lg font-bold text-[#111827]">
                 Synthetic Kendra Cohort Dataset Explorer (1,000 Kendras)
-              </h3>
+              </h2>
               <p className="text-xs text-[#6B7280]">
                 Calibrated against Dhaka street market cash flows and WeBank FATE cold-start records.
               </p>
@@ -742,7 +739,8 @@ export default function MonteCarloAnalyticsView({
             <button
               onClick={() => setCohortPage((p) => Math.max(1, p - 1))}
               disabled={cohortPage === 1}
-              className="pagination-btn"
+              aria-label="Previous cohort page"
+              className="pagination-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0284C7] focus-visible:ring-offset-1"
             >
               <ChevronLeft className="h-3.5 w-3.5" />
               <span>Previous</span>
@@ -751,7 +749,9 @@ export default function MonteCarloAnalyticsView({
               <button
                 key={p}
                 onClick={() => setCohortPage(p)}
-                className={`pagination-btn ${cohortPage === p ? "pagination-btn-active" : ""}`}
+                aria-label={`Go to cohort page ${p}`}
+                aria-pressed={cohortPage === p}
+                className={`pagination-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0284C7] focus-visible:ring-offset-1 ${cohortPage === p ? "pagination-btn-active" : ""}`}
               >
                 {p}
               </button>
@@ -759,7 +759,8 @@ export default function MonteCarloAnalyticsView({
             <button
               onClick={() => setCohortPage((p) => Math.min(totalCohortPages, p + 1))}
               disabled={cohortPage === totalCohortPages}
-              className="pagination-btn"
+              aria-label="Next cohort page"
+              className="pagination-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0284C7] focus-visible:ring-offset-1"
             >
               <span>Next</span>
               <ChevronRight className="h-3.5 w-3.5" />

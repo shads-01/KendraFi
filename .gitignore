@@ -48,3 +48,18 @@ contracts/cache/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.atlas/
+
+# Local database backups (restore-test dumps - see docs/runbooks/backups.md)
+backups/
+
+# Test artifacts
+test-results/
+
+# Agent & crawler scratch
+.superpowers/
+.firecrawl/
+
+# Extraction files
+extraction_*.md
+extraction_1792747023602.md

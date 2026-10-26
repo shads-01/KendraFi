@@ -10,13 +10,7 @@ import {
   AlertTriangle,
   CheckCircle2,
   Building2,
-  DollarSign,
-  TrendingDown,
-  Info,
-  Layers,
-  ArrowRight,
   ShieldAlert,
-  Sparkles,
   RefreshCw,
   Volume2,
 } from "lucide-react";
@@ -46,7 +40,6 @@ export const MerchantMobilePanel: React.FC<MerchantMobilePanelProps> = ({
 
   // Dynamic persona based on scenario
   const isScenarioB = activeScenario === "SCENARIO_B_REDTEAM";
-  const isScenarioC = activeScenario === "SCENARIO_C_SYBIL_WASH";
 
   const persona = isScenarioB
     ? {
@@ -338,7 +331,8 @@ export const MerchantMobilePanel: React.FC<MerchantMobilePanelProps> = ({
           <button
             onClick={() => onSelectScenario("SCENARIO_A_VALID")}
             disabled={isExecuting}
-            className={`flex flex-col p-4 rounded-2xl border-2 text-left transition-all duration-300 ${
+            aria-pressed={activeScenario === "SCENARIO_A_VALID"}
+            className={`flex flex-col p-4 rounded-2xl border-2 text-left transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#059669] focus-visible:ring-offset-1 ${
               activeScenario === "SCENARIO_A_VALID"
                 ? "bg-white border-[#059669] shadow-lg ring-2 ring-[#059669]/20 -translate-y-0.5"
                 : "bg-white border-[#E5E7EB] hover:border-[#059669]/50 shadow-sm hover:-translate-y-0.5"
@@ -360,7 +354,8 @@ export const MerchantMobilePanel: React.FC<MerchantMobilePanelProps> = ({
           <button
             onClick={() => onSelectScenario("SCENARIO_B_REDTEAM")}
             disabled={isExecuting}
-            className={`flex flex-col p-4 rounded-2xl border-2 text-left transition-all duration-300 ${
+            aria-pressed={activeScenario === "SCENARIO_B_REDTEAM"}
+            className={`flex flex-col p-4 rounded-2xl border-2 text-left transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] focus-visible:ring-offset-1 ${
               activeScenario === "SCENARIO_B_REDTEAM"
                 ? "bg-white border-[#DC2626] shadow-lg ring-2 ring-[#DC2626]/20 -translate-y-0.5"
                 : "bg-white border-[#E5E7EB] hover:border-[#DC2626]/50 shadow-sm hover:-translate-y-0.5"
@@ -382,7 +377,8 @@ export const MerchantMobilePanel: React.FC<MerchantMobilePanelProps> = ({
           <button
             onClick={() => onSelectScenario("SCENARIO_C_SYBIL_WASH")}
             disabled={isExecuting}
-            className={`flex flex-col p-4 rounded-2xl border-2 text-left transition-all duration-300 ${
+            aria-pressed={activeScenario === "SCENARIO_C_SYBIL_WASH"}
+            className={`flex flex-col p-4 rounded-2xl border-2 text-left transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1 ${
               activeScenario === "SCENARIO_C_SYBIL_WASH"
                 ? "bg-white border-[#FF5C00] shadow-lg ring-2 ring-[#FF5C00]/20 -translate-y-0.5"
                 : "bg-white border-[#E5E7EB] hover:border-[#FF5C00]/50 shadow-sm hover:-translate-y-0.5"
@@ -404,7 +400,7 @@ export const MerchantMobilePanel: React.FC<MerchantMobilePanelProps> = ({
           <button
             onClick={onTriggerRepaySweep}
             disabled={isExecuting}
-            className="flex flex-col p-4 rounded-2xl border-2 border-[#E5E7EB] bg-white hover:border-[#059669]/50 text-left transition-all duration-300 hover:-translate-y-0.5 shadow-sm group"
+            className="flex flex-col p-4 rounded-2xl border-2 border-[#E5E7EB] bg-white hover:border-[#059669]/50 text-left transition-all duration-300 hover:-translate-y-0.5 shadow-sm group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#059669] focus-visible:ring-offset-1"
           >
             <div className="flex items-center justify-between w-full mb-2">
               <span className="text-xs sm:text-sm font-bold text-[#111827] flex items-center gap-1.5">
@@ -481,12 +477,13 @@ export const MerchantMobilePanel: React.FC<MerchantMobilePanelProps> = ({
                       setIsPlayingAudio(false);
                       setVoiceGender("female");
                     }}
-                    className={`px-1.5 py-0.5 rounded-md transition flex items-center gap-0.5 ${
+                    className={`px-1.5 py-0.5 rounded-md transition flex items-center gap-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1 ${
                       voiceGender === "female"
                         ? "bg-[#FF5C00] text-white shadow-xs"
                         : "text-[#6B7280] hover:text-[#111827]"
                     }`}
                     title="Authentic Female Voice (Nabanita / Jenny)"
+                    aria-pressed={voiceGender === "female"}
                   >
                     <span>👩 Female</span>
                   </button>
@@ -506,12 +503,13 @@ export const MerchantMobilePanel: React.FC<MerchantMobilePanelProps> = ({
                       setIsPlayingAudio(false);
                       setVoiceGender("male");
                     }}
-                    className={`px-1.5 py-0.5 rounded-md transition flex items-center gap-0.5 ${
+                    className={`px-1.5 py-0.5 rounded-md transition flex items-center gap-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1 ${
                       voiceGender === "male"
                         ? "bg-[#FF5C00] text-white shadow-xs"
                         : "text-[#6B7280] hover:text-[#111827]"
                     }`}
                     title="Authentic Male Voice (Pradeep / Guy)"
+                    aria-pressed={voiceGender === "male"}
                   >
                     <span>👨 Male</span>
                   </button>
@@ -539,8 +537,9 @@ export const MerchantMobilePanel: React.FC<MerchantMobilePanelProps> = ({
                       ttsLanguage === "bn"
                         ? "bg-[#FF5C00] text-white shadow-xs"
                         : "text-[#6B7280] hover:text-[#111827]"
-                    }`}
+                    } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1`}
                     title="Bangla Neural Audio (bn-BD Native)"
+                    aria-pressed={ttsLanguage === "bn"}
                   >
                     BN
                   </button>
@@ -564,8 +563,9 @@ export const MerchantMobilePanel: React.FC<MerchantMobilePanelProps> = ({
                       ttsLanguage === "en"
                         ? "bg-[#FF5C00] text-white shadow-xs"
                         : "text-[#6B7280] hover:text-[#111827]"
-                    }`}
+                    } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1`}
                     title="English Studio Audio (en-US)"
+                    aria-pressed={ttsLanguage === "en"}
                   >
                     EN
                   </button>
@@ -582,7 +582,8 @@ export const MerchantMobilePanel: React.FC<MerchantMobilePanelProps> = ({
                 type="button"
                 onClick={handleToggleAudio}
                 title={isPlayingAudio ? "Stop Audio Playback" : `Listen to ${ttsLanguage === "bn" ? "Bangla" : "English"} Voice Restock Note`}
-                className={`flex h-8 w-8 items-center justify-center rounded-full text-white active:scale-95 transition shadow-sm shrink-0 ${
+                aria-label={isPlayingAudio ? "Stop audio playback" : `Play ${ttsLanguage === "bn" ? "Bangla" : "English"} voice restock note`}
+                className={`flex h-8 w-8 items-center justify-center rounded-full text-white active:scale-95 transition shadow-sm shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1 ${
                   isPlayingAudio ? "bg-[#DC2626] hover:bg-[#B91C1C]" : "bg-[#FF5C00] hover:bg-[#E05200]"
                 }`}
               >

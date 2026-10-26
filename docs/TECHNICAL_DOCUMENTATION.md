@@ -212,3 +212,33 @@ The smart contract layer (`contracts/src/KendraEscrow.sol`, `MockBDTc.sol`, `Age
 In strict accordance with the FinTechathon guidelines:
 - **Zero Push0 Opcode:** Modern Solidity compilers defaulting to `shanghai` emit the `PUSH0` opcode (`0x5f`), which causes immediate transaction reverts on FISCO BCOS v3.x and older enterprise EVM nodes. KendraFi explicitly locks `evm_version = "paris"`, ensuring identical bytecode execution on both Base Sepolia and FISCO BCOS.
 - **On-Chain EIP-712 Verification:** `KendraEscrow.sol` recovers all 4 agent session-key signers on-chain using native `ECDSA.recover`, strictly enforcing that quorum consensus is proven cryptographically before escrow funds are released to the supplier.
+
+## 7. Intelligence Core Explainability (Input → Processing → Output)
+
+The congress rubric asks judges to assess the "input → processing → output workflow, model selection logic, and explainability of the intelligence core." This is that map, for the Scenario A happy path (`AGT-01`, 45,000 BDT rice restock):
+
+```mermaid
+flowchart LR
+    A["INPUT: Bangla voice note<br/>(45,000 BDT, 50 sacks Miniket)<br/>+ paper wholesale invoice"] -->|"Tier 0: Whisper / Gemini 2.5 Flash OCR<br/>(LLM transcribes ONLY — no math)"| B["Raw intent JSON<br/>ExtractedInvoiceIntent"]
+    B --> C{"TIER-0 FIREWALL<br/>(parallel, non-short-circuit)"}
+    C -->|"prompt-injection regex + perplexity"| C1["BLOCKED_ADVERSARIAL<br/>(Scenario B: TIER0_PROMPT_INJECTION_DETECTED)"]
+    C -->|"x402 KYB whitelist<br/>(0x71C...A91 valid)"| C2["BLOCKED_ADVERSARIAL<br/>(X402_UNVERIFIED_SUPPLIER_ADDRESS)"]
+    C -->|"clean" | D["TIER-2 DETERMINISTIC AUDIT<br/>100% NumPy, zero LLM<br/>DSCR = 1.6800x >= 1.25<br/>H_st = 1.12 >= 0.65"]
+    D -->|"secp256k1 Pedersen commitment<br/>16-bit CDS94 range proof<br/>(proves solvency, hides books)"| E["3-ROUND CNP NEGOTIATION<br/>R1: bids, 40% session-key cap<br/>R2: deficit clears at 1.00% APR<br/>R3: Nash quorum lock"]
+    E -->|"4-of-5 EIP-712 signatures<br/>ECDSA.recover on-chain"| F["TIER-3 ESCROW SETTLE<br/>Base Sepolia"]
+    F -->|"45,000.00 - 675.00 MDR<br/>= 44,325.00 BDTc direct to supplier"| G["OUTPUT: KYB supplier paid<br/>+ Blockscout-verifiable tx"]
+    G -->|"30-day sweep 1,515.41 BDT/day"| H["Repay 45,462.33 BDT<br/>+ 1.00% APR peer yield<br/>stakes unlocked, ceiling +1500bps"]
+```
+
+**The paragraph a judge can retell:** The system's intelligence core is deliberately *layered by trust level*, not one model. **Input** is unstructured — a Bangla voice note and a photo of a paper invoice; the only LLM in the entire pipeline (Whisper/Gemini 2.5 Flash, Tier 0) transcribes it into raw JSON and nothing else, because an LLM is the right tool for perception and the wrong tool for arithmetic. **Processing** then runs three deterministic stages the LLM never touches: (1) a parallel firewall that screens the transcription for prompt injection and the payee against the x402 KYB whitelist simultaneously — so a poisoned receipt that names an unverified wallet gets *both* badges; (2) a pure-NumPy ACT/365 audit that computes the Debt-Service Coverage Ratio (1.6800x against the 1.25 floor) and spatio-temporal collusion entropy (1.12 against 0.65) from the merchant's private 90-day cashflow state, and emits a Pedersen-commitment range proof proving solvency (v=76,376 ≥ T=56,828) without ever exposing raw profit margins; (3) a 3-round Contract Net Protocol where five autonomous peer agents bid real guarantee stakes under a session-key cap (maxAlphaBps = 4000), a deficit clears at a discovered yield (1.00% APR), and the game settles exactly at the Besley-Coate Nash allocation 40% + 35% + 25% = 100% of the 45,462.33 BDT obligation. **Output** is cryptographic, not narrative: all four agents sign EIP-712 typed data, the escrow contract recovers every signature on-chain before releasing 44,325.00 BDTc (98.5% after a 1.50% MDR) directly to the verified supplier, and a 30-day MFS sweep (1,515.41 BDT/day) repays the facility and pays guarantors their 1.00% APR yield — every number in this chain is recomputable from `api/core/risk_engine.py` and inspectable on Blockscout.
+
+### 7.1 Verification Run (2026-10-23, repo state `adb2927`)
+
+| Check | Command | Result |
+| :--- | :--- | :--- |
+| Deterministic core test suite | `python -m pytest tests -q` | **72 passed, 1 skipped** (57.42s) |
+| FSM trace export (A/B/C) | `python api/scripts/export_fsm_traces.py` | **3/3 traces exported** to `docs/traces/` |
+| Monte Carlo backtest reproduction | `python api/scripts/monte_carlo_backtest.py` | **Exact reproduction**: ROC-AUC 0.7190 → 0.8769 (+21.96%), net NPL 27.21% → 10.68% (−60.76%), approval 63.70% — matches committed `docs/backtest_results.json` |
+| On-chain settlement honesty | `docs/traces/scenario_a_valid_trace.json` | `tx_mode: "LIVE_RPC_BROADCAST"`; replay fallback (if venue RPC blocked) is badged `[REPLAY OF VERIFIED TESTNET TX]` per `ONCHAIN_EXECUTION_EVIDENCE.md` §5 — never disguised as live |
+
+*Note: `forge test` (Foundry fuzz: forged-signature revert, >40% stake revert — `contracts/test/KendraEscrow.t.sol`) could not be executed on this Windows workstation (Foundry not installed); run on a Foundry-equipped machine or CI before submission and attach the `PASS` output here.*

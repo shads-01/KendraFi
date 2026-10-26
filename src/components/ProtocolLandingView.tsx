@@ -5,26 +5,19 @@ import {
   ShieldCheck,
   Cpu,
   ArrowRight,
-  TrendingUp,
   Lock,
-  Layers,
   Sparkles,
   CheckCircle2,
   AlertTriangle,
   Zap,
   BarChart3,
-  ExternalLink,
   ChevronRight,
-  ShieldAlert,
   Users,
-  Coins,
   FileCheck2,
-  CloudRain,
   Building2,
   Store,
   BadgeCheck,
   Bell,
-  Search,
   LayoutDashboard,
 } from "lucide-react";
 import type { ScenarioType } from "@/types";
@@ -40,6 +33,14 @@ export default function ProtocolLandingView({
   onLaunchBacktest,
   onSelectScenarioAndLaunch,
 }: ProtocolLandingViewProps) {
+  // Keyboard activation helper for clickable card divs (a11y: Enter/Space)
+  const activateOnClick = (fn: () => void) => (e: React.KeyboardEvent<HTMLElement>) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      fn();
+    }
+  };
+
   const metrics = [
     { label: "Restock Facility", value: "45,000 BDT", sub: "30-Day Tenor ($400 USD)", color: "text-[#FF5C00]" },
     { label: "All-In Borrower APR", value: "12.50% APR", sub: "vs 24-27% Predatory MFI", color: "text-[#059669]" },
@@ -178,7 +179,7 @@ export default function ProtocolLandingView({
           <button
             id="hero-btn-launch-cockpit"
             onClick={onLaunchCommandCenter}
-            className="btn-animated-primary text-base sm:text-lg px-8 py-4 font-bold shadow-lg"
+            className="btn-animated-primary text-base sm:text-lg px-8 py-4 font-bold shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0284C7] focus-visible:ring-offset-2"
           >
             <Zap className="h-5 w-5" />
             <span>Launch Command Center Cockpit</span>
@@ -188,7 +189,7 @@ export default function ProtocolLandingView({
           <button
             id="hero-btn-launch-backtest"
             onClick={onLaunchBacktest}
-            className="btn-animated-secondary text-base sm:text-lg px-7 py-4 font-bold"
+            className="btn-animated-secondary text-base sm:text-lg px-7 py-4 font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0284C7] focus-visible:ring-offset-2"
           >
             <BarChart3 className="h-5 w-5 text-[#0284C7]" />
             <span>Explore 5k-Merchant Backtest</span>
@@ -330,7 +331,7 @@ export default function ProtocolLandingView({
                 {/* Bottom Quick Action */}
                 <button
                   onClick={onLaunchCommandCenter}
-                  className="btn-animated-primary text-xs py-2.5 px-3 w-full font-bold flex items-center justify-center gap-1.5"
+                  className="btn-animated-primary text-xs py-2.5 px-3 w-full font-bold flex items-center justify-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0284C7] focus-visible:ring-offset-1"
                 >
                   <span>Launch Cockpit</span>
                   <ChevronRight className="h-3.5 w-3.5" />
@@ -342,9 +343,9 @@ export default function ProtocolLandingView({
                 {/* Mockup Header Welcome & User Profile */}
                 <div className="flex items-center justify-between flex-wrap gap-3">
                   <div>
-                    <h3 className="text-lg sm:text-xl font-extrabold text-[#111827]">
+                    <h2 className="text-lg sm:text-xl font-extrabold text-[#111827]">
                       Welcome back, Rahim Store
-                    </h3>
+                    </h2>
                     <p className="text-xs text-[#6B7280]">
                       Karwan Bazar Rice &amp; Grocery &bull; Active Borrower Node (AGT-01)
                     </p>
@@ -497,8 +498,14 @@ export default function ProtocolLandingView({
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Scenario A Card */}
-          <div className="planora-card-interactive flex flex-col justify-between p-6 border-2 hover:border-[#059669]/50 group cursor-pointer"
-               onClick={() => onSelectScenarioAndLaunch("SCENARIO_A_VALID")}>
+          <div
+            className="planora-card-interactive flex flex-col justify-between p-6 border-2 hover:border-[#059669]/50 group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#059669] focus-visible:ring-offset-2"
+            role="button"
+            tabIndex={0}
+            aria-label="Run Scenario A: valid restock, 45,000 BDT, honest 3-round CNP and on-chain settlement"
+            onClick={() => onSelectScenarioAndLaunch("SCENARIO_A_VALID")}
+            onKeyDown={activateOnClick(() => onSelectScenarioAndLaunch("SCENARIO_A_VALID"))}
+          >
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="chip-success text-xs font-bold">
@@ -520,8 +527,14 @@ export default function ProtocolLandingView({
           </div>
 
           {/* Scenario B Card */}
-          <div className="planora-card-interactive flex flex-col justify-between p-6 border-2 hover:border-[#DC2626]/50 group cursor-pointer"
-               onClick={() => onSelectScenarioAndLaunch("SCENARIO_B_REDTEAM")}>
+          <div
+            className="planora-card-interactive flex flex-col justify-between p-6 border-2 hover:border-[#DC2626]/50 group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] focus-visible:ring-offset-2"
+            role="button"
+            tabIndex={0}
+            aria-label="Run Red-Team Attack: prompt injection and unverified wallet intercept"
+            onClick={() => onSelectScenarioAndLaunch("SCENARIO_B_REDTEAM")}
+            onKeyDown={activateOnClick(() => onSelectScenarioAndLaunch("SCENARIO_B_REDTEAM"))}
+          >
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="chip-attention text-xs font-bold">
@@ -543,8 +556,14 @@ export default function ProtocolLandingView({
           </div>
 
           {/* Scenario C Card */}
-          <div className="planora-card-interactive flex flex-col justify-between p-6 border-2 hover:border-[#FF5C00]/50 group cursor-pointer"
-               onClick={() => onSelectScenarioAndLaunch("SCENARIO_C_SYBIL_WASH")}>
+          <div
+            className="planora-card-interactive flex flex-col justify-between p-6 border-2 hover:border-[#FF5C00]/50 group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-2"
+            role="button"
+            tabIndex={0}
+            aria-label="Run Scenario C: monsoon shock, wash-trading collusion hold and flash bailout"
+            onClick={() => onSelectScenarioAndLaunch("SCENARIO_C_SYBIL_WASH")}
+            onKeyDown={activateOnClick(() => onSelectScenarioAndLaunch("SCENARIO_C_SYBIL_WASH"))}
+          >
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="chip-progress text-xs font-bold">
@@ -643,7 +662,7 @@ export default function ProtocolLandingView({
           </div>
           <button
             onClick={onLaunchCommandCenter}
-            className="px-6 py-3 rounded-xl bg-white text-[#FF5C00] font-bold text-sm hover:bg-white/90 active:scale-95 transition shadow-sm whitespace-nowrap"
+            className="px-6 py-3 rounded-xl bg-white text-[#FF5C00] font-bold text-sm hover:bg-white/90 active:scale-95 transition shadow-sm whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#FF5C00]"
           >
             See Protocol in Action &rarr;
           </button>
@@ -681,7 +700,7 @@ export default function ProtocolLandingView({
                       {a.id}
                     </div>
                     <div>
-                      <h4 className="text-base font-bold text-[#111827]">{a.name}</h4>
+                      <h3 className="text-base font-bold text-[#111827]">{a.name}</h3>
                       <span className="text-xs text-[#6B7280]">{a.market}</span>
                     </div>
                   </div>
@@ -710,16 +729,16 @@ export default function ProtocolLandingView({
               <div className="h-12 w-12 rounded-2xl bg-[#FFF0E6] text-[#FF5C00] flex items-center justify-center mx-auto">
                 <Cpu className="h-6 w-6" />
               </div>
-              <h4 className="text-base font-bold text-[#111827]">
+              <h3 className="text-base font-bold text-[#111827]">
                 Interactive Pentagon Arena
-              </h4>
+              </h3>
               <p className="text-xs text-[#4B5563]">
                 Watch all 5 nodes negotiate live with real-time SVG communication packets and dynamic Besley-Coate Nash tables.
               </p>
             </div>
             <button
               onClick={onLaunchCommandCenter}
-              className="btn-animated-primary text-xs py-2.5 px-4 w-full mt-4"
+              className="btn-animated-primary text-xs py-2.5 px-4 w-full mt-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0284C7] focus-visible:ring-offset-1"
             >
               Open Pentagon Cockpit
             </button>
@@ -748,7 +767,7 @@ export default function ProtocolLandingView({
                 <span className="font-mono text-xs font-bold px-2 py-1 rounded bg-[#FFF0E6] text-[#FF5C00] inline-block">
                   {l.number}
                 </span>
-                <h4 className="text-sm font-bold text-[#111827]">{l.title}</h4>
+                <h3 className="text-sm font-bold text-[#111827]">{l.title}</h3>
                 <span className="text-[11px] font-mono font-semibold text-[#0284C7] block">
                   {l.tech}
                 </span>
@@ -778,14 +797,14 @@ export default function ProtocolLandingView({
         <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
           <button
             onClick={onLaunchCommandCenter}
-            className="btn-animated-primary text-base px-8 py-3.5 font-bold"
+            className="btn-animated-primary text-base px-8 py-3.5 font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0284C7] focus-visible:ring-offset-2"
           >
             <Zap className="h-5 w-5" />
             <span>Launch Command Center Cockpit</span>
           </button>
           <button
             onClick={onLaunchBacktest}
-            className="btn-animated-secondary text-base px-7 py-3.5 font-bold"
+            className="btn-animated-secondary text-base px-7 py-3.5 font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0284C7] focus-visible:ring-offset-2"
           >
             <BarChart3 className="h-5 w-5 text-[#0284C7]" />
             <span>View 5,000-Merchant Backtest</span>

@@ -1,5 +1,9 @@
 # AGENTS.md — KendraFi (*Weiyedai-Global*) Multi-Agent Autonomous Protocol & Coordination Architecture
 
+> **Shared project memory:** the frozen stack, rules, commands, working loop, done-check,
+> and current phase live in **`CLAUDE.md`** (repo root). Read it first — this file
+> documents only the multi-agent protocol and competition architecture below.
+
 **Competition:** 2026 Shenzhen International FinTechathon (International Track)  
 **Co-Hosts:** Tsinghua University PBC School of Finance (PBCSF) & WeBank  
 **Theme:** *"AI as a Financial Participant"* — Topic E (SME Finance Copilot) + Topic F (Agent Wallet +5 Bonus)  

@@ -6,6 +6,18 @@ const SIGNATURE_HEADER_NAME = "X-ZeroTrust-Signature";
 const TIMESTAMP_HEADER_NAME = "X-ZeroTrust-Timestamp";
 const MAX_SKEW_SECONDS = 30;
 
+/**
+ * Lazy env guard — invoked inside the request path (callPythonBackend), NOT at module
+ * import, so `next build`/CI never evaluates it. Throws listing ALL missing vars at once.
+ */
+export function assertEnv(): void {
+  const required = ["PYTHON_RISK_ENGINE_URL", "SUPABASE_SERVICE_ROLE_KEY"];
+  const missing = required.filter((key) => !process.env[key]);
+  if (missing.length > 0) {
+    throw new Error(`Missing required env vars: ${missing.join(", ")}`);
+  }
+}
+
 export interface SignedZeroTrustRequest {
   signature: string;
   timestamp: string;
@@ -50,7 +62,7 @@ export function getZeroTrustSecret(): string {
  * Generates an HMAC-SHA256 signature over `${timestamp}.${body}` and includes
  * the anti-replay timestamp header.
  */
-export function signZeroTrustPayload(body: any = {}): SignedZeroTrustRequest {
+export function signZeroTrustPayload(body: unknown = {}): SignedZeroTrustRequest {
   const secret = getZeroTrustSecret();
   const timestamp = (Date.now() / 1000).toFixed(3);
   const bodyString = typeof body === "string" ? body : JSON.stringify(body ?? {});
@@ -120,8 +132,9 @@ export function verifyZeroTrustPayload(
       return { valid: true };
     }
     return { valid: false, error: "Invalid HMAC-SHA256 signature" };
-  } catch {
-    return { valid: false, error: "Signature verification failed" };
+  } catch (err: unknown) {
+    const detail = err instanceof Error ? err.message : String(err);
+    return { valid: false, error: `Signature verification failed: ${detail}` };
   }
 }
 
@@ -129,17 +142,24 @@ export function verifyZeroTrustPayload(
  * Returns the configured Python Risk Engine base URL.
  */
 export function getPythonRiskEngineUrl(): string {
-  return process.env.PYTHON_RISK_ENGINE_URL || "http://127.0.0.1:8000";
+  const url = process.env.PYTHON_RISK_ENGINE_URL;
+  if (!url) {
+    throw new Error(
+      "Missing required env vars: PYTHON_RISK_ENGINE_URL (no localhost fallback — configure in .env / Vercel)"
+    );
+  }
+  return url;
 }
 
 /**
  * Dispatches an HMAC-authenticated HTTP POST request from Next.js BFF to FastAPI.
  */
-export async function callPythonBackend<T = any>(
+export async function callPythonBackend<T = unknown>(
   endpoint: string,
-  body: any = {},
+  body: unknown = {},
   options: RequestInit = {}
 ): Promise<T> {
+  assertEnv();
   const baseUrl = getPythonRiskEngineUrl();
   const cleanEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
   const url = `${baseUrl}${cleanEndpoint}`;

@@ -5,23 +5,11 @@ import type { FSMState, TransactionMode, ScenarioType } from "@/types";
 import {
   Shield,
   ShieldAlert,
-  ShieldCheck,
-  Lock,
   ExternalLink,
   ChevronDown,
   ChevronUp,
-  FileCheck2,
-  CheckCircle2,
   AlertTriangle,
-  Layers,
-  BarChart3,
   Hash,
-  KeyRound,
-  Coins,
-  ArrowRight,
-  Info,
-  Sparkles,
-  Zap,
 } from "lucide-react";
 
 interface SecurityEscrowPanelProps {
@@ -44,6 +32,8 @@ interface SecurityEscrowPanelProps {
   grossRepaymentBdt?: number;
   dscr?: number;
   isExecuting?: boolean;
+  lastError?: string | null;
+  onRetry?: () => void;
 }
 
 export default function SecurityEscrowPanel({
@@ -56,6 +46,8 @@ export default function SecurityEscrowPanel({
   grossRepaymentBdt = 45462.33,
   dscr = 1.68,
   isExecuting = false,
+  lastError = null,
+  onRetry,
 }: SecurityEscrowPanelProps) {
   const [activeTab, setActiveTab] = useState<"firewall" | "backtest">("firewall");
   const [expandedSig, setExpandedSig] = useState<number | null>(null);
@@ -139,7 +131,7 @@ export default function SecurityEscrowPanel({
         <div className="flex items-center bg-[#ECEFF2] p-1 rounded-2xl text-xs font-bold">
           <button
             onClick={() => setActiveTab("firewall")}
-            className={`px-3 py-1.5 rounded-xl transition ${
+            className={`px-3 py-1.5 rounded-xl transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00A35C] focus-visible:ring-offset-1 ${
               activeTab === "firewall"
                 ? "bg-white text-[#111827] shadow-sm"
                 : "text-[#6B7280] hover:text-[#111827]"
@@ -149,7 +141,7 @@ export default function SecurityEscrowPanel({
           </button>
           <button
             onClick={() => setActiveTab("backtest")}
-            className={`px-3 py-1.5 rounded-xl transition ${
+            className={`px-3 py-1.5 rounded-xl transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1 ${
               activeTab === "backtest"
                 ? "bg-white text-[#FF5C00] shadow-sm"
                 : "text-[#6B7280] hover:text-[#111827]"
@@ -159,6 +151,35 @@ export default function SecurityEscrowPanel({
           </button>
         </div>
       </div>
+
+      {/* Scenario/API Error Banner with Retry (re-invokes the last failed call) — rendered on BOTH tabs */}
+      {lastError && (
+        <div
+          role="alert"
+          className="planora-card-interactive flex items-start justify-between gap-3 border-2 !bg-[#FEECEE] !border-[#DC2626]/40 p-3.5 animate-fadeIn"
+        >
+          <div className="flex items-start gap-2.5">
+            <AlertTriangle className="h-5 w-5 text-[#DC2626] shrink-0" />
+            <div>
+              <span className="text-xs sm:text-sm font-extrabold text-[#DC2626] block">
+                Scenario Execution Failed
+              </span>
+              <span className="text-xs text-[#111827] font-medium leading-relaxed break-words">
+                {lastError}
+              </span>
+            </div>
+          </div>
+          {onRetry && (
+            <button
+              type="button"
+              onClick={onRetry}
+              className="shrink-0 px-3.5 py-1.5 rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] text-white text-xs font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] focus-visible:ring-offset-1"
+            >
+              Retry
+            </button>
+          )}
+        </div>
+      )}
 
       {activeTab === "backtest" ? (
         /* ================================================================= */
@@ -550,7 +571,8 @@ export default function SecurityEscrowPanel({
                 href={explorerUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-between p-3 rounded-2xl border border-[#D6EBFF] bg-[#EBF5FF] hover:bg-[#D6EBFF] text-[#0284C7] text-xs font-mono transition group shadow-sm"
+                aria-label={`Verify transaction ${currentTxHash} on Blockscout Explorer (opens in a new tab)`}
+                className="flex items-center justify-between p-3 rounded-2xl border border-[#D6EBFF] bg-[#EBF5FF] hover:bg-[#D6EBFF] text-[#0284C7] text-xs font-mono transition group shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0284C7] focus-visible:ring-offset-1"
               >
                 <div className="flex items-center gap-2 truncate max-w-[220px]">
                   <Hash className="h-3.5 w-3.5 shrink-0" />

@@ -6,9 +6,9 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const data = await callPythonBackend("/api/kendra/bailout", body);
     return NextResponse.json(data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     return NextResponse.json(
-      { error: error.message || "Failed to trigger monsoon bailout" },
+      { error: error instanceof Error ? error.message : "Failed to trigger monsoon bailout" },
       { status: 500 }
     );
   }

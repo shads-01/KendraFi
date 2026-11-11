@@ -95,6 +95,42 @@ def test_state_endpoint_with_valid_hmac_returns_200(test_client):
             os.environ.pop("TEST_BYPASS_AUTH", None)
 
 
+def test_vercel_py_prefix_stripped_unauthenticated_returns_401(test_client):
+    """
+    CANARY for the VercelPyPrefixMiddleware (/api/py prefix stripper) in api/index.py:
+    a request to the production-style prefixed path /api/py/api/kendra/execute
+    without HMAC headers must reach FastAPI's auth guard (401 nested envelope),
+    NOT fall through to a 404 (which would mean the stripper regressed and the
+    rewrite's original path no longer matches any route).
+    """
+    secret = "kendra-test-secret-32-chars-long-1234"
+    orig_secret = os.environ.get("ZEROTRUST_INTERNAL_HMAC_SECRET")
+    orig_bypass = os.environ.get("TEST_BYPASS_AUTH")
+
+    try:
+        os.environ["ZEROTRUST_INTERNAL_HMAC_SECRET"] = secret
+        os.environ["TEST_BYPASS_AUTH"] = "false"
+
+        response = test_client.post(
+            "/api/py/api/kendra/execute",
+            json={"scenario": "SCENARIO_A_VALID"},
+        )
+        assert response.status_code == 401, (
+            f"expected 401 (auth guard reached through /api/py prefix), "
+            f"got {response.status_code} — prefix stripper may have regressed"
+        )
+        assert response.json()["error"]["code"] == 401
+    finally:
+        if orig_secret is not None:
+            os.environ["ZEROTRUST_INTERNAL_HMAC_SECRET"] = orig_secret
+        else:
+            os.environ.pop("ZEROTRUST_INTERNAL_HMAC_SECRET", None)
+        if orig_bypass is not None:
+            os.environ["TEST_BYPASS_AUTH"] = orig_bypass
+        else:
+            os.environ.pop("TEST_BYPASS_AUTH", None)
+
+
 def test_execute_garbage_json_returns_400_with_error_envelope(test_client):
     """
     Garbage JSON or malformed payload to /api/kendra/execute -> 400 Bad Request

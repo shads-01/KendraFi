@@ -71,6 +71,31 @@ app = FastAPI(
 # Structured JSON request logging middleware (stdout log stream with X-Request-ID)
 app.add_middleware(StructuredLoggingMiddleware)
 
+
+class VercelPyPrefixMiddleware:
+    """Vercel rewrite /api/py/:path* -> /api/index.py passes the ORIGINAL path
+    (/api/py/api/...) to the ASGI app; strip the prefix so FastAPI routes match.
+    Registered via add_middleware so `app` remains a bare FastAPI instance for
+    the Vercel Python builder's app detection. Auth unaffected: HMAC is over
+    body+timestamp, not path."""
+
+    PREFIX = "/api/py"
+
+    def __init__(self, asgi):
+        self._asgi = asgi
+
+    async def __call__(self, scope, receive, send):
+        if scope["type"] == "http" and scope.get("path", "").startswith(self.PREFIX + "/"):
+            scope = dict(scope)
+            stripped = scope["path"][len(self.PREFIX):]
+            scope["path"] = stripped
+            if "raw_path" in scope:
+                scope["raw_path"] = stripped.encode("utf-8")
+        await self._asgi(scope, receive, send)
+
+
+app.add_middleware(VercelPyPrefixMiddleware)
+
 # Enable CORS with explicit origins from environment
 app.add_middleware(
     CORSMiddleware,
@@ -322,27 +347,3 @@ async def get_system_state(
             "max_alpha_cap": 40.0,
         },
     }
-
-
-class _VercelPrefixStripper:
-    """Vercel rewrite /api/py/:path* -> /api/index.py passes the ORIGINAL path
-    (/api/py/api/...) to the ASGI app; strip the prefix so FastAPI routes match.
-    Placed last so it wraps the fully-configured app. Local uvicorn unaffected.
-    Auth is unaffected: HMAC is computed over body+timestamp, not path."""
-
-    PREFIX = "/api/py"
-
-    def __init__(self, asgi):
-        self._asgi = asgi
-
-    async def __call__(self, scope, receive, send):
-        if scope["type"] == "http" and scope.get("path", "").startswith(self.PREFIX + "/"):
-            scope = dict(scope)
-            stripped = scope["path"][len(self.PREFIX):]
-            scope["path"] = stripped
-            if "raw_path" in scope:
-                scope["raw_path"] = stripped.encode("utf-8")
-        await self._asgi(scope, receive, send)
-
-
-app = _VercelPrefixStripper(app)

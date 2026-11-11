@@ -152,6 +152,23 @@ export function getPythonRiskEngineUrl(): string {
 }
 
 /**
+ * Upstream FastAPI rejected or throttled the request (4xx/5xx). Carries the
+ * upstream HTTP status so BFF routes can propagate it instead of flattening
+ * client errors (400 validation, 429 rate limit) into a 500.
+ */
+export class PythonBackendError extends Error {
+  readonly status: number;
+  readonly upstreamBody: string;
+
+  constructor(status: number, upstreamBody: string) {
+    super(`Python backend error [${status}]: ${upstreamBody}`);
+    this.name = "PythonBackendError";
+    this.status = status;
+    this.upstreamBody = upstreamBody;
+  }
+}
+
+/**
  * Dispatches an HMAC-authenticated HTTP POST request from Next.js BFF to FastAPI.
  */
 export async function callPythonBackend<T = unknown>(
@@ -184,7 +201,7 @@ export async function callPythonBackend<T = unknown>(
 
   if (!response.ok) {
     const errorText = await response.text();
-    throw new Error(`Python backend error [${response.status}]: ${errorText}`);
+    throw new PythonBackendError(response.status, errorText);
   }
 
   return response.json() as Promise<T>;

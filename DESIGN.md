@@ -96,7 +96,7 @@ KendraFi provides three top-level views managed by `activeView` in `src/app/page
 ### 5.1 View 1: Overview (`"landing"`) — High-Impact Protocol Landing Page
 - **Component:** `src/components/ProtocolLandingView.tsx`
 - **Features:**
-  1. **Hero Badge:** "2026 Shenzhen FinTechathon • Top-Tier Weiyedai Global Submission"
+  1. **Hero Badge:** "AI Builders Congress 2026 • FinSphere AI: SME Capital Engine"
   2. **Hero Header & Value Prop:** Large high-contrast heading, clear subheader, and dual CTAs ("Launch Command Center" and "Explore Monte Carlo Backtest").
   3. **Live Protocol Metrics Ticker:** 6 metric cards (45,000 BDT facility, 12.50% APR, 1.6800x DSCR, 100% Staked, 1.50% Wholesaler MDR, +21.96% FATE AUC Uplift).
   4. **Interactive Scenario Launchpad:** 3 scenario cards with direct "Run Scenario" actions that instantly switch the app into the Command Center and trigger the scenario.
@@ -115,7 +115,7 @@ KendraFi provides three top-level views managed by `activeView` in `src/app/page
 - **Features:**
   1. Full-screen empirical simulation analysis of 1,000 Kendras / 5,000 synthetic merchants.
   2. 4 Primary KPI cards: +21.96% AUC lift (0.866 vs 0.742 baseline), -60.76% default reduction (1.1% vs 14.8%), $18.42M BDT simulated volume, 0.00% collusion escape.
-  3. WeBank FATE Hetero-LR benchmark comparison (IEEE P3652.1 citation).
+  3. Federated Hetero-LR benchmark comparison (IEEE P3652.1 citation).
   4. Feature importance ranking bar chart (Besley-Coate Peer Staking, FATE Supplier KYB, Graph Collusion Entropy, Invoice Velocity).
   5. Quick action CTA to return directly to the live Command Center.
 
@@ -136,8 +136,8 @@ All numbers across all views must strictly reconcile to the core protocol econom
   - Fatema Textiles (AGT-02): 35.0% (`15,911.82 BDT`)
   - Kamal Agro (AGT-03): 25.0% (`11,365.58 BDT`)
   - Sohel Electronics (AGT-05): 0.0% (Abstained, CV = 0.62)
-- **WeBank FATE Enterprise Score:** `98.5%` ($p_1 = 0.985$)
-- **WeBank FATE Hetero-LR AUC Lift:** `+21.96%` ($0.8769$ vs $0.7190$ Solo MFS baseline)
+- **Federated Hetero-LR Survival Score:** `98.5%` ($p_1 = 0.985$)
+- **Federated Hetero-LR AUC Lift:** `+21.96%` ($0.8769$ vs $0.7190$ Solo MFS baseline)
 
 ---
 
@@ -213,5 +213,5 @@ In the **Backtest Analytics View** (`MonteCarloAnalyticsView.tsx`), the protocol
   - **KendraFi Protocol Curve (Green):** $\text{AUC} = 0.8769$ with smooth cubic bezier curve.
   - **Solo MFS Baseline (Red Dashed):** $\text{AUC} = 0.7190$ representing traditional uncollateralized microfinance.
   - **Random Baseline (Gray Diagonal):** $\text{AUC} = 0.5000$.
-  - **Shaded Lift Area:** Soft emerald gradient fill illustrating the **+21.96% WeBank FATE Lift**.
+  - **Shaded Lift Area:** Soft emerald gradient fill illustrating the **+21.96% AUC Lift**.
 

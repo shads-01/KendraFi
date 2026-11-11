@@ -1,5 +1,7 @@
 # PROJECT_OVERVIEW_AND_ARCHITECTURE.md — KendraFi (Weiyedai-Global) Master Context & Agent Guide
 
+> **SUPERSEDED (2026-10-26):** This document belongs to the retired 2026 Shenzhen FinTechathon era and is kept for history only. The canonical master specification is now `CONTEXT.md` (International AI Builders Congress 2026 — FinSphere AI / SME Capital Engine); its directory layout supersedes the `app/` + `components/` tree below. Content below references the old competition on purpose.
+
 **Competition:** 2026 Shenzhen International FinTechathon (International Track)[cite: 1, 2]  
 **Co-Hosts:** Tsinghua University PBC School of Finance (PBCSF) & WeBank[cite: 1, 2]  
 **Official Theme:** *"AI as a Financial Participant"* — Topic E (SME Finance Copilot) + Topic F (Agent Wallet +5 Bonus)[cite: 1, 2]  

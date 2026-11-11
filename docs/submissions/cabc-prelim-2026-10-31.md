@@ -1,6 +1,6 @@
 # CABC Preliminary Submission Package — Idea to Unicorn (Team-Built Product)
 
-**Deadline:** Oct 31, 2026 · **Challenge:** FinSphere AI — SME Capital Engine · **Congress Day:** Dec 26, 2026, Daffodil International University, Dhaka
+**Deadline:** Nov 20, 2026 · **Challenge:** FinSphere AI — SME Capital Engine · **Congress Day:** Dec 26, 2026, Daffodil International University, Dhaka
 
 ## Team Roles (Participants Guide §13.2 — every role owned by a named member)
 

@@ -1,4 +1,7 @@
 # KENDRAFI_MASTER_BUILD_PROMPTS.md — Complete Next.js 15 + Supabase + Zero-Trust Master Build File
+
+> **SUPERSEDED (2026-10-26):** This build-prompt log belongs to the retired 2026 Shenzhen FinTechathon era and is kept for history only. The canonical master specification is now `CONTEXT.md` (International AI Builders Congress 2026 — FinSphere AI / SME Capital Engine); `CLAUDE.md` is the agent-memory entry point. Content below references the old competition on purpose.
+
 **Competition:** 2026 Shenzhen International FinTechathon (International Track)[cite: 2]  
 **Co-Hosts:** Tsinghua University PBC School of Finance (PBCSF) & WeBank[cite: 2]  
 **Official Theme:** *"AI as a Financial Participant"* — Topic E (SME Finance Copilot) + Topic F (Agent Wallet +5 Bonus)[cite: 2]  

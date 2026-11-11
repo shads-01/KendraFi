@@ -35,7 +35,7 @@ A merchant's AI agent borrows 45,000 BDT for 30 days at **12.50% APR** — rough
 | Platform fee | 1.20% APR component (~44.38 BDT) | Borrower | Ongoing protocol revenue |
 | Wholesaler MDR | **1.50% flat = 675.00 BDT** | Supplier | Price of instant, guaranteed, fraud-screened B2B settlement; funds the Paymaster/relayer gas |
 | Peer yield spread | 1.00% APR to guarantors (~37.40 BDT across stakes) | Protocol → peers | Cost of risk capital; the clearing mechanism (φ* = 1.00% APR) is the knob that balances supply/demand of guarantees in CNP Round 2 |
-| Co-lending tranche (roadmap) | 20% of the pool at the 12.50% − 8.50% spread | Platform capital | 20/80 joint lending mirrors WeBank's model; platform keeps co-lending economics on its tranche |
+| Co-lending tranche (roadmap) | 20% of the pool at the 12.50% − 8.50% spread | Platform capital | 20/80 joint lending; platform keeps co-lending economics on its tranche |
 
 Gross protocol take per facility today: **platform fee + 675.00 BDT MDR**, with NPL losses peer-absorbed first (backtest: 31.31% of stress absorbed by stakes) — the platform's loss exposure is behind merchant capital, not in front of it.
 

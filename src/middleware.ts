@@ -13,7 +13,7 @@ const PUBLIC_PAGES = new Set([
   "/update-password",
   "/verify-email",
 ]);
-const PUBLIC_PREFIXES = ["/api/auth/", "/api/health", "/api/kendra", "/_next"];
+const PUBLIC_PREFIXES = ["/api/auth/", "/api/health", "/api/kendra", "/api/py", "/_next"];
 
 // Exported pure for tests (tests/part4/public-routes.test.ts) — no edge
 // runtime needed to evaluate the public-route gate.

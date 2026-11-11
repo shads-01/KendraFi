@@ -49,7 +49,7 @@ engines and four-tier zero-trust security. Users (judges) watch live scenario de
 - Build: `npm run build`
 - Lint: `npm run lint`
 - Typecheck: `npx tsc --noEmit`
-- Tests: not configured yet (testing layer lands in `docs/plans/part-8-testing.md`)
+- Tests: pytest — `.venv/Scripts/python -m pytest tests/` (or `npm run test:api`) · auth — `npm run test:auth` (vitest, needs Docker) · e2e — `npm run test:e2e` (Playwright)
 - Sandbox data: `npm run generate:sandbox`
 - Contracts: `forge test` from `contracts/`
 
@@ -79,9 +79,10 @@ See `/docs/decisions/` for the ADR log of decisions and why they were made.
 
 ## Current phase
 
-SaaS-readiness plan series in `docs/plans/` (Parts 0–15). Parts 0–5 & Parts 10–11 & Parts 13–14 complete
-(0: agent memory · 1: system design · 2: architecture · 3: databases · 4: auth & BFF · 5: APIs & backend · 10: security · 11: rate limiting · 13: error tracking & logs · 14: monitoring & alerts).
-Next: Part 6 (frontend). Run parts in order.
+CABC Bangladesh pivot (`docs/plans/2026-10-26-cabc-bangladesh-pivot.md`): Phase 0 + Phase 1 complete
+(45/64 boxes; remainder = human video/submission + Task 20 items). **Preliminary deadline: Nov 20, 2026.**
+SaaS-readiness series in `docs/plans/` (Parts 0–15): Parts 0–5, 10–11, 13–14 complete; frontend (Part 6) shipped and building.
+Next: human — record 3:00 video, fill team names in `docs/submissions/cabc-prelim-2026-10-31.md`, submit by Nov 20, flip SCORECARD R6; agent — only the machine-runnable Task 20 item (`forge test` via WSL/CI).
 
 ## Subagent SOPs
 

@@ -81,7 +81,10 @@ See `/docs/decisions/` for the ADR log of decisions and why they were made.
 
 CABC Bangladesh pivot (`docs/plans/2026-10-26-cabc-bangladesh-pivot.md`): Phase 0 + Phase 1 complete
 (45/64 boxes; remainder = human video/submission + Task 20 items). **Preliminary deadline: Nov 20, 2026.**
-SaaS-readiness series in `docs/plans/` (Parts 0–15): Parts 0–5, 10–11, 13–14 complete; frontend (Part 6) shipped and building.
+SaaS-readiness series in `docs/plans/` (Parts 0–15): all 16 parts implemented — 0 memory · 1 system design ·
+2 architecture · 3 databases · 4 auth & BFF · 5 APIs & backend · 6 frontend · 7 CI/CD (`ci.yml` exists; green-run
+pending remote push) · 8 testing · 9 hosting (deployed) · 10 security · 11 rate limiting · 12 caching/CDN ·
+13 error tracking & logs · 14 monitoring & alerts · 15 scaling (k6 smoke + cost note).
 Next: human — record 3:00 video, fill team names in `docs/submissions/cabc-prelim-2026-10-31.md`, submit by Nov 20, flip SCORECARD R6; agent — only the machine-runnable Task 20 item (`forge test` via WSL/CI).
 
 ## Subagent SOPs

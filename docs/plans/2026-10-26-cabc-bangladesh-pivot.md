@@ -30,19 +30,19 @@
 **Files:**
 - Modify: `src/app/layout.tsx`
 
-- [ ] **Step 1: Create the branch**
+- [x] **Step 1: Create the branch**
 
 ```bash
 git checkout -b feat/cabc-bangladesh-pivot
 ```
 
-- [ ] **Step 2: Apply these 2 substring edits to `src/app/layout.tsx`**
+- [x] **Step 2: Apply these 2 substring edits to `src/app/layout.tsx`**
 
 Edit 1 — FIND: `title: "KendraFi | WeBank Weiyedai-Global Zero-Trust Multi-Agent Protocol",` → REPLACE: `title: "KendraFi | Zero-Trust Multi-Agent SME Finance Protocol",`
 
 Edit 2 — FIND: `"Zero-Trust Multi-Agent Cooperative Risk and Programmable B2B Escrow Protocol for WeBank Weiyedai-Global — 2026 Shenzhen International FinTechathon",` → REPLACE: `"Zero-Trust Multi-Agent Cooperative Risk and Programmable B2B Escrow Protocol for Bangladesh SME working capital — International AI Builders Congress 2026",`
 
-- [ ] **Step 3: Verify + commit**
+- [x] **Step 3: Verify + commit**
 
 ```powershell
 Select-String -Path src/app/layout.tsx -Pattern "WeBank|Shenzhen|Weiyedai"
@@ -61,7 +61,7 @@ git commit -m "chore: drop WeBank/Shenzhen from app metadata"
 **Files:**
 - Modify: `src/components/JudgeCommandHeader.tsx`
 
-- [ ] **Step 1: Apply these 15 substring edits**
+- [x] **Step 1: Apply these 15 substring edits**
 
 Edit 1 — FIND: `{ label: string; zh: string; chipBg: string;` → REPLACE: `{ label: string; bn: string; chipBg: string;`
 
@@ -93,7 +93,7 @@ Edit 14 — FIND: `<span className="text-[#FF5C00] font-semibold">Topic F: Agent
 
 Edit 15 — FIND: `text-[#D1D5DB]">+</span>` → REPLACE: `text-[#D1D5DB]">|</span>` (the separator between the two new spans)
 
-- [ ] **Step 2: Verify + commit**
+- [x] **Step 2: Verify + commit**
 
 ```powershell
 Select-String -Path src/components/JudgeCommandHeader.tsx -Pattern "zh:|WeBank|Shenzhen|Weiyedai|PBCSF"
@@ -112,7 +112,7 @@ git commit -m "feat: EN+Bangla header, CABC rebrand (JudgeCommandHeader)"
 **Files:**
 - Modify: `src/components/ProtocolLandingView.tsx`
 
-- [ ] **Step 1: Apply these 17 substring edits**
+- [x] **Step 1: Apply these 17 substring edits**
 
 Edit 1 — FIND: `{ label: "WeBank FATE AUC Uplift", value: "+21.96%", sub: "Target +12% Exceeded", color: "text-[#059669]" },` → REPLACE: `{ label: "AUC Uplift vs MFS Apps", value: "+21.96%", sub: "0.7190 → 0.8769 ROC-AUC", color: "text-[#059669]" },`
 
@@ -155,7 +155,7 @@ Edit 16 — FIND: `<span>Result: Traditional underwriting models cannot evaluate
 
 Edit 17 — FIND: `{/* 5 MODULAR LAYERS (ABCD ARCHITECTURE)                          */}` → REPLACE: `{/* 5 MODULAR PROTOCOL LAYERS                                   */}`
 
-- [ ] **Step 2: Verify + commit**
+- [x] **Step 2: Verify + commit**
 
 ```powershell
 Select-String -Path src/components/ProtocolLandingView.tsx -Pattern "WeBank|Shenzhen|Tsinghua|ABCD|Topic F|FATE"
@@ -174,7 +174,7 @@ git commit -m "feat: de-WeBank landing view for CABC (ProtocolLandingView)"
 **Files:**
 - Modify: `src/components/MonteCarloAnalyticsView.tsx`
 
-- [ ] **Step 1: Apply these 9 substring edits**
+- [x] **Step 1: Apply these 9 substring edits**
 
 Edit 1 — FIND: `{ name: "WeBank FATE Supplier KYB Consistency", weight: -0.4357, abs_pct: 20.9, category: "FATE Enterprise" },` → REPLACE: `{ name: "Federated Supplier KYB Consistency", weight: -0.4357, abs_pct: 20.9, category: "Federated Model" },`
 
@@ -194,7 +194,7 @@ Edit 8 — FIND: `<strong>WeBank FATE Supplier KYB Consistency</strong>` → REP
 
 Edit 9 — FIND: `Calibrated against Dhaka street market cash flows and WeBank FATE cold-start records.` → REPLACE: `Calibrated against Dhaka street market cash flows and MFS transaction patterns.`
 
-- [ ] **Step 2: Verify + commit**
+- [x] **Step 2: Verify + commit**
 
 ```powershell
 Select-String -Path src/components/MonteCarloAnalyticsView.tsx -Pattern "WeBank|FATE"
@@ -213,7 +213,7 @@ git commit -m "feat: re-anchor analytics to solo-MFS baseline (MonteCarloAnalyti
 **Files:**
 - Modify: `src/components/KendraArenaPanel.tsx`
 
-- [ ] **Step 1: Apply these 4 substring edits** (do NOT touch the `fateScore` identifier)
+- [x] **Step 1: Apply these 4 substring edits** (do NOT touch the `fateScore` identifier)
 
 Edit 1 — FIND: `{/* Layer-4 secp256k1 ZK Solvency & WeBank FATE Card */}` → REPLACE: `{/* Layer-4 secp256k1 ZK Solvency & Federated Scoring Card */}`
 
@@ -223,7 +223,7 @@ Edit 3 — FIND: `{/* Range Proof & FATE Score */}` → REPLACE: `{/* Range Proo
 
 Edit 4 — FIND: `WeBank FATE Hetero-LR Score:</span>` → REPLACE: `Federated Hetero-LR Score:</span>`
 
-- [ ] **Step 2: Verify + commit**
+- [x] **Step 2: Verify + commit**
 
 ```powershell
 Select-String -Path src/components/KendraArenaPanel.tsx -Pattern "WeBank|FATE"
@@ -242,7 +242,7 @@ git commit -m "feat: federated-scoring labels in ZK card (KendraArenaPanel)"
 **Files:**
 - Modify: `src/components/SecurityEscrowPanel.tsx`
 
-- [ ] **Step 1: Apply these 3 substring edits**
+- [x] **Step 1: Apply these 3 substring edits**
 
 Edit 1 — FIND: `WeBank FATE Uplift` → REPLACE: `AUC Uplift vs MFS App`
 
@@ -250,7 +250,7 @@ Edit 2 — FIND: `Empirical Synthetic Karwan Bazar Monte Carlo Backtest (1,000 K
 
 Edit 3 — FIND: `1. FATE Hetero-LR Enterprise Score:</span>` → REPLACE: `1. Federated Hetero-LR Enterprise Score:</span>`
 
-- [ ] **Step 2: Verify + commit**
+- [x] **Step 2: Verify + commit**
 
 ```powershell
 Select-String -Path src/components/SecurityEscrowPanel.tsx -Pattern "WeBank|FATE"
@@ -269,7 +269,7 @@ git commit -m "feat: de-WeBank backtest drawer (SecurityEscrowPanel)"
 **Files:**
 - Modify: `src/components/MerchantMobilePanel.tsx`
 
-- [ ] **Step 1: Apply these 7 substring edits**
+- [x] **Step 1: Apply these 7 substring edits**
 
 Edit 1 — FIND: `1. Wholesale Capital (20% WeBank / 80% Partner):</span>` → REPLACE: `1. Wholesale Capital (20/80 Co-Lending Tranche):</span>`
 
@@ -285,7 +285,7 @@ Edit 6 — FIND: `Post-Loan: 30-Day Sweep` → REPLACE: `Post-Loan: 30-Day Sweep
 
 Edit 7 — FIND: `<span>B2B Restock Invoice OCR</span>` → REPLACE: `<span>B2B Restock Invoice OCR · পাইকারি ইনভয়েস</span>`
 
-- [ ] **Step 2: Verify + commit**
+- [x] **Step 2: Verify + commit**
 
 ```powershell
 Select-String -Path src/components/MerchantMobilePanel.tsx -Pattern "WeBank"
@@ -301,39 +301,39 @@ git commit -m "feat: Bangla UI labels, 20/80 tranche line (MerchantMobilePanel)"
 
 ### Task 8: Phase-0 UI checkpoint — typecheck, build, full sweep
 
-- [ ] **Step 1: Full src sweep for forbidden strings**
+- [x] **Step 1: Full src sweep for forbidden strings**
 
 ```powershell
 Get-ChildItem -Recurse src -Include *.ts,*.tsx | Select-String -CaseSensitive -Pattern "WeBank|Weiyedai|Shenzhen|PBCSF|Tsinghua|FATE|ABCD"
 ```
 Expected: no output. (Case-sensitive so the `fateScore` identifier is not flagged.)
 
-- [ ] **Step 2: CJK sweep (no Chinese left in UI)**
+- [x] **Step 2: CJK sweep (no Chinese left in UI)**
 
 ```powershell
 Get-ChildItem -Recurse src -Include *.ts,*.tsx | Select-String -Pattern "[\u4e00-\u9fff]"
 ```
 Expected: no output.
 
-- [ ] **Step 3: Typecheck**
+- [x] **Step 3: Typecheck**
 
 ```bash
 npx tsc --noEmit
 ```
 Expected: exit 0, no errors.
 
-- [ ] **Step 4: Production build**
+- [x] **Step 4: Production build**
 
 ```bash
 npm run build
 ```
 Expected: build succeeds. If it fails, fix nothing yourself — report the error.
 
-- [ ] **Step 5: Smoke the demo**
+- [x] **Step 5: Smoke the demo**
 
 Run `npm run dev`, open `http://localhost:3000`, confirm: header shows "AI Builders Congress 2026", no Chinese anywhere, Bangla labels on the merchant panel, landing page loads. Then stop the dev server.
 
-- [ ] **Step 6: Commit checkpoint (nothing to commit if Steps 1–5 clean — tag instead)**
+- [x] **Step 6: Commit checkpoint (nothing to commit if Steps 1–5 clean — tag instead)**
 
 ```bash
 git tag phase0-ui-clean
@@ -346,13 +346,13 @@ git tag phase0-ui-clean
 **Files:**
 - Modify: `docs/PITCH_SCRIPT_CLOUDDAMP.md`
 
-- [ ] **Step 1: Insert this line directly AFTER the line ending in `~14 teams per panel.`**
+- [x] **Step 1: Insert this line directly AFTER the line ending in `~14 teams per panel.`**
 
 ```markdown
 **Preliminary video (due Oct 31):** same 3:00 runtime, official segment map (Participants Guide §9.2) — Problem 0:00–0:30 · Solution 0:30–1:00 · Demo 1:00–2:00 · AI Approach 2:00–2:30 · Impact & Next 2:30–3:00.
 ```
 
-- [ ] **Step 2: Replace the two final beats.** FIND this exact block:
+- [x] **Step 2: Replace the two final beats.** FIND this exact block:
 ```markdown
 **[2:00–2:40] Results + proof.**
 > "In a 5,000-merchant Monte Carlo backtest: default-detection AUC rises **0.72 to 0.88** — a 22% uplift, versus WeBank's own published 12% federated-learning benchmark — net bank losses drop **61%**, because peers absorb 31% of stress before the lender is touched. Approval rate barely moves — 63.7 versus 69.1 — this is **better risk pricing, not rationing**.
@@ -371,7 +371,7 @@ REPLACE WITH:
 > "Measured on a 5,000-merchant Monte Carlo backtest: default-detection AUC rises **0.72 to 0.88** — a 22% uplift; net bank losses drop **61%**, because peers absorb 31% of stress before the lender is touched. Approval barely moves — 63.7 versus 69.1 — **better risk pricing, not rationing**. Rahim repays **1,515 taka a day** from his mobile wallet — half the price of microfinance, because agents and peers replaced the motorbike. Next step: a live pilot with one MRA-licensed MFI and one Karwan Bazar wholesaler on real MFS data. 10 million SMEs. A $2.8 billion gap. KendraFi — **we don't predict credit; we negotiate it.** *(End exactly on time.)*"
 ```
 
-- [ ] **Step 3: Verify + commit**
+- [x] **Step 3: Verify + commit**
 
 ```powershell
 Select-String -Path docs/PITCH_SCRIPT_CLOUDDAMP.md -Pattern "WeBank"
@@ -391,7 +391,7 @@ git commit -m "docs: pitch script to CABC prelim segment structure"
 **Files:**
 - Create: `docs/submissions/cabc-prelim-2026-10-31.md`
 
-- [ ] **Step 1: Create the file with EXACTLY this content** (then the team fills the `<FILL>` names — the only human input in this plan):
+- [x] **Step 1: Create the file with EXACTLY this content** (then the team fills the `<FILL>` names — the only human input in this plan):
 
 ```markdown
 # CABC Preliminary Submission Package — Idea to Unicorn (Team-Built Product)
@@ -442,7 +442,7 @@ Zero-LLM-math gate (no hallucination surface on financial numbers), Tier-0 promp
 - [ ] Ends on the Blockscout verification click
 ```
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add docs/submissions/cabc-prelim-2026-10-31.md
@@ -713,7 +713,7 @@ git commit -m "docs: archive Shenzhen-era pitch docs with banners"
 
 ## Completion Check
 
-- [ ] Phase 0: Tasks 1–10 committed, `npx tsc --noEmit` clean, `npm run build` clean, both sweeps empty
+- [x] Phase 0: Tasks 1–10 committed, `npx tsc --noEmit` clean, `npm run build` clean, both sweeps empty
 - [ ] Preliminary submitted by Oct 31 (Task 11)
 - [ ] Phase 1: Tasks 12–19 committed; root docs sweep clean except `AI_USE_LOG.md` history and the 3 bannered archives
 - [ ] Final sweep over live surfaces:

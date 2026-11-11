@@ -1,7 +1,7 @@
-# KendraFi (*Weiyedai-Global*) — On-Chain Execution Evidence & Verification Audit
-**Competition:** 2026 Shenzhen International FinTechathon (International Track)  
-**Co-Hosts:** Tsinghua University PBC School of Finance (PBCSF) & WeBank  
-**Theme:** *"AI as a Financial Participant"* — Topic E (SME Finance Copilot) + Topic F (Agent Wallet +5 Bonus)  
+# KendraFi — On-Chain Execution Evidence & Verification Audit
+**Competition:** International AI Builders Congress 2026 (CloudCamp Bangladesh) — FinSphere AI / SME Capital Engine  
+**Co-Organizer:** Daffodil International University · Congress Day: Dec 26, 2026, Dhaka  
+**Theme:** *"Build Products. Create Jobs. Grow Economies. Solve Global Problems."* — FinSphere AI: SME Capital Engine  
 **Role:** `[Lead 1: Smart Contract Architect & Lead 5: Security Auditor]`  
 **Date:** October 18, 2026  
 
@@ -112,7 +112,7 @@ During Scenario A (`INV-2026-DHAKA-001`), all 4 agents generate genuine `secp256
 
 ## 5. Honest Transaction Mode Policy
 
-In strict compliance with **FinTechathon Self-Critic Rule 4**:
+In strict compliance with **Engineering Self-Critic Rule 4**:
 - Transactions broadcast live to Base Sepolia RPC nodes are prominently badged as:
   `[LIVE RPC BROADCAST]`
 - In offline or disconnected judge presentation environments where live RPC calls fail, fallback transactions are explicitly labeled as:

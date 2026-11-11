@@ -1,5 +1,7 @@
 # PROJECT_FILES_MANIFEST.md — KendraFi (*Weiyedai-Global*) Complete File Registry & Technical Blueprint
 
+> **SUPERSEDED (2026-10-26):** This manifest belongs to the retired 2026 Shenzhen FinTechathon era and is kept for history only. The canonical file registry is now `CONTEXT.md` §2 (International AI Builders Congress 2026 — FinSphere AI / SME Capital Engine). Content below references the old competition on purpose.
+
 **Project:** KendraFi (*Weiyedai-Global*)  
 **Competition:** 2026 Shenzhen International FinTechathon (International Track)  
 **Co-Hosts:** Tsinghua University PBC School of Finance (PBCSF) & WeBank  

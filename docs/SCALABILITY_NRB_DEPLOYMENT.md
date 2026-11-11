@@ -34,7 +34,7 @@ Each module is independently testable (the 72-pass suite maps 1:1 to these files
 ## 3. NRB / Global Collaboration Readiness
 
 1. **NRB capital collaboration (rubric's explicit ask).** Bangladesh Bank's FY2024-25 remittance inflows hit a **record USD 30.32 billion** (~7.39% of GDP; official Quarterly Remittance Report). KendraFi's syndicate structure gives diaspora capital a *screened* destination: NRB-funded wholesale tranches (see `UNITECONOMICS.md` §3) backed by peer-guarantee stakes and an immutable on-chain audit trail — answering the trust question that keeps NRB savings in hundi channels. *(Roadmap: requires BSEC/Bangladesh Bank instrument approval — labeled, not claimed.)*
-2. **NRB Builder Framework alignment.** The congress's own framework exists to position Bangladesh's diaspora and global builders as production-grade AI exporters; KendraFi is exactly such an export artifact — an English/中文/Bangla trilingual demo of a Bangladeshi team building on global standards (below).
+2. **NRB Builder Framework alignment.** The congress's own framework exists to position Bangladesh's diaspora and global builders as production-grade AI exporters; KendraFi is exactly such an export artifact — an English/Bangla bilingual demo of a Bangladeshi team building on global standards (below).
 3. **Bank-grade consortium path.** FISCO BCOS v3 compatibility means a foreign partner bank joins as a consortium-node operator — collaboration without forcing a public-chain stance.
 4. **Global dataset humility.** Today's evidence is a calibrated synthetic Karwan Bazar dataset; the cross-border collab plan is a joint pilot with one international MFS/bank on live data before claiming global generalization (risk, tracked in `SCORECARD.md`).
 
@@ -46,7 +46,7 @@ Each module is independently testable (the 72-pass suite maps 1:1 to these files
 | **ERC-4337** account abstraction | `AgentSessionAccount.sol` | Session-key risk bounds are a first-class primitive |
 | **EIP-55** checksums | Every wallet (`Web3.to_checksum_address()`) | Eliminates malformed-address loss |
 | **ACT/365** day-count | `risk_engine.py` | Industry-standard interest convention, auditable |
-| **IEEE P3652.1 / FATE** | Hetero-LR survival model | Federated-learning benchmark lineage (WeBank) |
+| **IEEE P3652.1 / FATE** | Hetero-LR survival model | Federated-learning benchmark lineage (federated Hetero-LR) |
 | **HMAC-SHA256 + 30s anti-replay** | Zero-trust gateway | Standard request-authentication posture |
 | **secp256k1 / CDS94** | ZK range proofs | Textbook cryptographic primitives, no exotic trust assumptions |
 

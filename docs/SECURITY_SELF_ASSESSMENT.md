@@ -1,7 +1,7 @@
-# KendraFi (*Weiyedai-Global*) — Comprehensive Security Self-Assessment
-**Competition:** 2026 Shenzhen International FinTechathon (International Track)  
-**Co-Hosts:** Tsinghua University PBC School of Finance (PBCSF) & WeBank  
-**Theme:** *"AI as a Financial Participant"* — Topic E (SME Finance Copilot) + Topic F (Agent Wallet +5 Bonus)  
+# KendraFi — Comprehensive Security Self-Assessment
+**Competition:** International AI Builders Congress 2026 (CloudCamp Bangladesh) — FinSphere AI / SME Capital Engine  
+**Co-Organizer:** Daffodil International University · Congress Day: Dec 26, 2026, Dhaka  
+**Theme:** *"Build Products. Create Jobs. Grow Economies. Solve Global Problems."* — FinSphere AI: SME Capital Engine  
 **Role:** `[Lead 5: Security Auditor & Submission Director]`  
 **Date:** October 18, 2026  
 
@@ -11,7 +11,7 @@
 
 Autonomous AI agents executing direct financial transactions introduce unique threat vectors not present in traditional human-operated banking systems: **prompt injection exploits**, **hallucinated credit underwriting**, **unbounded session-key theft**, **sybil wash-trading rings**, and **unauthorized smart contract drains**.
 
-KendraFi (*Weiyedai-Global*) addresses these systemic risks through a **Four-Tier Zero-Trust Security Architecture** backed by cryptographic guarantees, on-chain session key bounds, database-enforced row level security (RLS), and zero-knowledge privacy.
+KendraFi addresses these systemic risks through a **Four-Tier Zero-Trust Security Architecture** backed by cryptographic guarantees, on-chain session key bounds, database-enforced row level security (RLS), and zero-knowledge privacy.
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
@@ -150,7 +150,7 @@ FOR EACH ROW EXECUTE FUNCTION prevent_security_log_mutation();
 To guarantee seamless execution on both **Base Sepolia (Chain ID 84532)** and **FISCO BCOS v3.x**:
 - `foundry.toml` specifies `evm_version = "paris"`.
 - Modern `shanghai` opcodes (such as `PUSH0`, `0x5f`) are completely prohibited in compiled bytecode.
-- Bytecode inspection confirms zero instances of `PUSH0`, ensuring 100% EVM compatibility with Tsinghua and WeBank enterprise consortium chains.
+- Bytecode inspection confirms zero instances of `PUSH0`, ensuring 100% EVM compatibility with FISCO BCOS v3 and enterprise consortium chains.
 
 ---
 

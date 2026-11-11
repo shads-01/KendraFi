@@ -163,9 +163,11 @@ export async function callPythonBackend<T = unknown>(
   const baseUrl = getPythonRiskEngineUrl();
   const cleanEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
   const url = `${baseUrl}${cleanEndpoint}`;
-  const signed = signZeroTrustPayload(body);
-
   const method = (options.method || "POST").toUpperCase();
+  // bodyless GET/HEAD sends no body — Python verifies over request.body() == b"", so sign "" not "{}"
+  const signed = (method === "GET" || method === "HEAD")
+    ? signZeroTrustPayload("")
+    : signZeroTrustPayload(body);
   const fetchOptions: RequestInit = {
     ...options,
     method,

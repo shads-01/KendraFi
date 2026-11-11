@@ -1,4 +1,5 @@
 # VIDEO_STORYBOARD_180S.md — KendraFi (*Weiyedai-Global*) 180-Second Demonstration Video Script
+> **ARCHIVED (2026-10-26):** This document was written for the retired 2026 Shenzhen FinTechathon and is kept for history only. Current target: International AI Builders Congress 2026 — see `docs/PITCH_SCRIPT_CLOUDDAMP.md`, `SCORECARD.md`, and `docs/plans/2026-10-26-cabc-bangladesh-pivot.md`. Content below references the old competition on purpose.
 
 **Competition:** 2026 Shenzhen International FinTechathon (International Track)  
 **Co-Hosts:** Tsinghua University PBC School of Finance (PBCSF) & WeBank  

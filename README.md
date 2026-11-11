@@ -1,6 +1,6 @@
-# KendraFi (*Weiyedai-Global*)
+# KendraFi
 
-Zero-Trust Multi-Agent Cooperative Risk and Programmable B2B Escrow Protocol for WeBank Weiyedai-Global — 2026 Shenzhen International FinTechathon (Topic E + F, SME Finance Copilot).
+Zero-Trust Multi-Agent Cooperative Risk and Programmable B2B Escrow Protocol for Bangladesh SME working capital — International AI Builders Congress 2026 (FinSphere AI · SME Capital Engine).
 
 ## Stack
 

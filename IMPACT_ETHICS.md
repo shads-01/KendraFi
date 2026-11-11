@@ -13,7 +13,7 @@ The congress challenge names two asks. KendraFi answers both with numbers:
 
 | Challenge Ask | KPI (1,000 Kendras / 5,000 merchants, seed-2026 synthetic Karwan Bazar dataset) | Solo MFS Baseline | KendraFi | Evidence |
 | :--- | :--- | :---: | :---: | :--- |
-| **Lower defaults** | ROC-AUC (default discrimination) | 0.7190 | **0.8769** (+21.96% rel.; WeBank's published FATE target: +12%) | `docs/backtest_results.json` |
+| **Lower defaults** | ROC-AUC (default discrimination) | 0.7190 | **0.8769** (+21.96% rel. vs solo MFS apps) | `docs/backtest_results.json` |
 | | PR-AUC (high-default-rate precision) | 0.5903 | **0.8233** (+0.2330) | same |
 | | Brier calibration error | 0.2018 | **0.1338** (−33.71% error) | same |
 | | Net bank portfolio NPL loss | 27.21% | **10.68%** (−60.76%) | same |

@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "KendraFi | WeBank Weiyedai-Global Zero-Trust Multi-Agent Protocol",
+  title: "KendraFi | Zero-Trust Multi-Agent SME Finance Protocol",
   description:
-    "Zero-Trust Multi-Agent Cooperative Risk and Programmable B2B Escrow Protocol for WeBank Weiyedai-Global — 2026 Shenzhen International FinTechathon",
+    "Zero-Trust Multi-Agent Cooperative Risk and Programmable B2B Escrow Protocol for Bangladesh SME working capital — International AI Builders Congress 2026",
 };
 
 export default function RootLayout({

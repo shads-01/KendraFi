@@ -1,6 +1,6 @@
-# KendraFi (*Weiyedai-Global*) — Comprehensive Technical Documentation
-**Competition:** 2026 Shenzhen International FinTechathon (International Track)  
-**Co-Hosts:** Tsinghua University PBC School of Finance (PBCSF) & WeBank  
+# KendraFi — Comprehensive Technical Documentation
+**Competition:** International AI Builders Congress 2026 (CloudCamp Bangladesh) — FinSphere AI / SME Capital Engine  
+**Co-Organizer:** Daffodil International University · Congress Day: Dec 26, 2026, Dhaka  
 **Theme:** *"AI as a Financial Participant"* — Topic E (SME Finance Copilot) + Topic F (Agent Wallet +5 Bonus)  
 **Specification:** `CONTEXT.md` & `PROJECT_FILES_MANIFEST.md`  
 
@@ -8,7 +8,7 @@
 
 ## 1. Executive Protocol Architecture
 
-KendraFi (*Weiyedai-Global*) bridges **Grameen Bank's Nobel-winning 5-member peer syndicate (*Kendra*) economics** with **WeBank's AI-Native ABCD (AI, Blockchain, Cloud, Data) architecture**. The protocol enables informal micro-merchants in emerging Belt-and-Road corridors (Karwan Bazar, Dhaka) to access uncollateralized restocking capital at **12.50% APR** (displacing traditional 24%–27% predatory MFI rates) while providing institutional balance sheets (WeBank & partner banks) with zero-compromise cryptographic risk protection.
+KendraFi bridges **Grameen Bank's Nobel-winning 5-member peer syndicate (*Kendra*) economics** with **autonomous AI-agent wallets on a zero-trust architecture**. The protocol enables informal micro-merchants in emerging Belt-and-Road corridors (Karwan Bazar, Dhaka) to access uncollateralized restocking capital at **12.50% APR** (displacing traditional 24%–27% predatory MFI rates) while providing institutional balance sheets (partner banks) with zero-compromise cryptographic risk protection.
 
 ```
 ┌───────────────────────────────────────────────────────────────────────────────┐
@@ -37,11 +37,11 @@ KendraFi (*Weiyedai-Global*) bridges **Grameen Bank's Nobel-winning 5-member pee
 └──────────────────────────────────────┬────────────────────────────────────────┘
                                        │ Pedersen Commitments
 ┌──────────────────────────────────────▼────────────────────────────────────────┐
-│             LAYER 4: ZERO-KNOWLEDGE PRIVACY & WEBANK FATE HETERO-LR           │
+│             LAYER 4: ZERO-KNOWLEDGE PRIVACY & FEDERATED HETERO-LR             │
 │   secp256k1 Curve Prover • 16-Bit CDS94 Disjunctive OR-Sigma Proof (<15ms)    │
 │   - Proves Excess Solvency: Delta_v = v - T = 76,376 - 56,828 = 19,548 in [0, 2^16-1]│
 │   - Supabase Server-Side RLS Isolation on Raw MFS Cashflows                   │
-│   - WeBank FATE Hetero-LR Score: p_1 = 0.985 (12% Published AUC Uplift)       │
+│   - Federated Hetero-LR  Score: p_1 = 0.985 (Solo MFS Baseline Uplift)       │
 └──────────────────────────────────────┬────────────────────────────────────────┘
                                        │ 4-of-5 Quorum Signatures
 ┌──────────────────────────────────────▼────────────────────────────────────────┐
@@ -165,14 +165,14 @@ For each bit $i$, the prover generates a CDS94 disjunctive zero-knowledge proof 
 
 ## 5. Empirical Karwan Bazar Monte Carlo Backtest (5,000 Merchants)
 
-To provide Tsinghua University PBCSF and WeBank judges with empirical validation rather than synthetic marketing claims, KendraFi implements an empirical Monte Carlo backtester (`api/scripts/monte_carlo_backtest.py`).
+To provide judges with empirical validation rather than synthetic marketing claims, KendraFi implements an empirical Monte Carlo backtester (`api/scripts/monte_carlo_backtest.py`).
 
 ### 5.1 Simulation Methodology
 - **Sample Size:** 1,000 synthetic Kendras (5,000 informal nano-merchants).
 - **Latent Drivers:** Ground-truth default events $Y_i \in \{0, 1\}$ generated from latent merchant capability $\theta_i$, cashflow volatility $CV_i$, circular wash-trading propensity $W_i$, assortative syndicate quality (Ghatak 1999), and 10% covariant monsoon weather shocks.
 - **Models Evaluated:**
   - **Model A (Solo MFS Mobile App Baseline):** Fits `scikit-learn` Logistic Regression using unverified consumer MFS mobile features only ($X_A$: transaction count, noisy daily inflow, average wallet balance, SIM tenure).
-  - **Model B (KendraFi FATE Hetero-LR + Besley-Coate Protocol):** Fits Logistic Regression using WeBank FATE enterprise wholesale invoice data ($X_B$), Besley-Coate peer staking shares ($\alpha_j^*$), Spatio-Temporal collusion entropy ($H_{st}$), and monsoon buffer capacity ($ySCT$).
+  - **Model B (KendraFi FATE Hetero-LR + Besley-Coate Protocol):** Fits Logistic Regression using federated wholesale invoice data ($X_B$), Besley-Coate peer staking shares ($\alpha_j^*$), Spatio-Temporal collusion entropy ($H_{st}$), and monsoon buffer capacity ($ySCT$).
 
 ### 5.2 Empirical Benchmark Results
 
@@ -182,7 +182,7 @@ KENDRAFI EMPIRICAL MONTE CARLO BACKTEST RESULTS (1,000 KENDRAS / 5,000 MERCHANTS
 ================================================================================
 Performance Metric               | Solo MFS Baseline  | KendraFi (Ours)    | Empirical Uplift
 --------------------------------------------------------------------------------
-ROC-AUC Score                    | 0.7190             | 0.8769             | +21.96% (WeBank Target: +12%)
+ROC-AUC Score                    | 0.7190             | 0.8769             | +21.96% (vs Solo MFS Baseline)
 PR-AUC (Precision-Recall)        | 0.5903             | 0.8233             | +0.2330
 Borrower Stress / Raw Default    | 27.21%             | 15.54%             | Stressed nodes detected
 Net Bank Portfolio NPL Loss      | 27.21%             | 10.68%             | -60.76% (Peer Absorption: 31.3%)
@@ -190,15 +190,15 @@ Approved Borrower Share          | 69.10%             | 63.70%             | Hig
 ================================================================================
 Official Benchmark Citation:
 "Empirical Synthetic Karwan Bazar Monte Carlo Backtest (1,000 Kendras / 5,000 Merchants) -
- benchmarked against WeBank's published +12% FATE Hetero-LR AUC uplift (IEEE P3652.1)."
+ default discrimination +21.96% ROC-AUC over the solo-MFS baseline; federated Hetero-LR scoring (IEEE P3652.1)."
 ```
 
 ### 5.3 Key Data Science Findings
-1. **+21.96% Relative AUC Uplift:** KendraFi's multi-agent architecture significantly outperforms WeBank's published benchmark target of **+12% FATE Hetero-LR AUC uplift**, demonstrating that combining wholesale supply chain verification with Grameen peer staking breaks the emerging market "Cold-Start Data Wall".
+1. **+21.96% Relative AUC Uplift:** KendraFi's multi-agent architecture significantly outperforms the solo-MFS baseline (**+21.96% ROC-AUC**), demonstrating that combining wholesale supply chain verification with Grameen peer staking breaks the emerging market "Cold-Start Data Wall".
 2. **Besley-Coate Collateral Protection:** Even when stressed borrowers experience cashflow shortfalls, the 4-of-5 locked peer stakes absorb default liabilities, shielding the bank's balance sheet from catastrophic NPLs.
 3. **Top Feature Importance Weights:**
    - Besley-Coate Peer Staking Stake ($\alpha_j^*$): `weight = -0.7325`
-   - WeBank FATE Wholesale KYB Consistency: `weight = -0.4357`
+   - Wholesale KYB Consistency: `weight = -0.4357`
    - Spatio-Temporal Graph Entropy ($H_{st}$): `weight = -0.3064`
    - Wholesale Invoice Volume Velocity: `weight = -0.2779`
 
@@ -209,7 +209,7 @@ Official Benchmark Citation:
 The smart contract layer (`contracts/src/KendraEscrow.sol`, `MockBDTc.sol`, `AgentSessionAccount.sol`) is compiled with `solc 0.8.20` using `evm_version = "paris"`.
 
 ### 6.1 FISCO BCOS v3.x Dual-Compatibility
-In strict accordance with the FinTechathon guidelines:
+In strict accordance with the congress guidelines:
 - **Zero Push0 Opcode:** Modern Solidity compilers defaulting to `shanghai` emit the `PUSH0` opcode (`0x5f`), which causes immediate transaction reverts on FISCO BCOS v3.x and older enterprise EVM nodes. KendraFi explicitly locks `evm_version = "paris"`, ensuring identical bytecode execution on both Base Sepolia and FISCO BCOS.
 - **On-Chain EIP-712 Verification:** `KendraEscrow.sol` recovers all 4 agent session-key signers on-chain using native `ECDSA.recover`, strictly enforcing that quorum consensus is proven cryptographically before escrow funds are released to the supplier.
 

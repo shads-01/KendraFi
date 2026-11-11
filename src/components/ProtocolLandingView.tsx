@@ -47,7 +47,7 @@ export default function ProtocolLandingView({
     { label: "Deterministic DSCR", value: "1.6800x", sub: "Threshold >= 1.25x", color: "text-[#0284C7]" },
     { label: "Peer Collateral Staked", value: "100.0%", sub: "45,462.33 BDT Locked", color: "text-[#7C3AED]" },
     { label: "Wholesaler MDR Rebate", value: "1.50% Flat", sub: "-675.00 BDT funds gas & reserve", color: "text-[#FF5C00]" },
-    { label: "WeBank FATE AUC Uplift", value: "+21.96%", sub: "Target +12% Exceeded", color: "text-[#059669]" },
+    { label: "AUC Uplift vs MFS Apps", value: "+21.96%", sub: "0.7190 → 0.8769 ROC-AUC", color: "text-[#059669]" },
   ];
 
   const agents = [
@@ -129,9 +129,9 @@ export default function ProtocolLandingView({
     },
     {
       number: "L4",
-      title: "secp256k1 ZK Range Proof & FATE",
-      tech: "Pedersen CDS94 + WeBank FATE",
-      desc: "Zero-knowledge excess solvency range proof Delta_v = 19,548 in [0, 65535] (<15ms) paired with WeBank FATE Hetero-LR credit scoring.",
+      title: "secp256k1 ZK Range Proof & Federated Scoring",
+      tech: "Pedersen CDS94 + Federated Hetero-LR",
+      desc: "Zero-knowledge excess solvency range proof Delta_v = 19,548 in [0, 65535] (<15ms) paired with federated Hetero-LR credit scoring (IEEE P3652.1).",
     },
     {
       number: "L5",
@@ -154,10 +154,10 @@ export default function ProtocolLandingView({
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#FF5C00]"></span>
           </span>
           <span className="text-xs sm:text-sm font-bold text-[#111827]">
-            2026 Shenzhen International FinTechathon · International Track
+            International AI Builders Congress 2026 · FinSphere AI
           </span>
           <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-[#FFF0E6] text-[#FF5C00]">
-            Tsinghua PBCSF &times; WeBank
+            CloudCamp Bangladesh &times; Daffodil International University
           </span>
         </div>
 
@@ -171,7 +171,7 @@ export default function ProtocolLandingView({
 
         {/* Subtitle */}
         <p className="text-base sm:text-xl text-[#4B5563] max-w-3xl leading-relaxed">
-          Bridging Nobel-winning <strong>Grameen 5-member peer syndicate economics</strong> with <strong>WeBank&apos;s AI-native ABCD architecture</strong>. Autonomous AI agents act as direct financial participants—guaranteeing restocking credit at <strong>12.50% APR</strong> while shielding institutional balance sheets.
+          Bridging Nobel-winning <strong>Grameen 5-member peer syndicate economics</strong> with <strong>autonomous AI-agent wallets</strong>. Autonomous AI agents act as direct financial participants—guaranteeing restocking credit at <strong>12.50% APR</strong> while shielding institutional balance sheets.
         </p>
 
         {/* Action Buttons */}
@@ -377,7 +377,7 @@ export default function ProtocolLandingView({
                   <div className="p-3.5 rounded-2xl bg-white border border-[#E5E7EB] shadow-sm space-y-1">
                     <span className="text-[11px] font-semibold text-[#6B7280] block">Solvency Score</span>
                     <div className="text-xl font-extrabold text-[#FF5C00]">1.6800x</div>
-                    <span className="text-[10px] text-[#FF5C00] font-semibold">98.5% FATE Hetero-LR</span>
+                    <span className="text-[10px] text-[#FF5C00] font-semibold">98.5% Federated Score</span>
                   </div>
                 </div>
 
@@ -492,7 +492,7 @@ export default function ProtocolLandingView({
             </p>
           </div>
           <span className="text-xs font-mono text-[#6B7280]">
-            Targeting Shenzhen Grand Finals Evaluation
+            Congress Day: Dec 26, 2026 · Daffodil International University, Dhaka
           </span>
         </div>
 
@@ -596,7 +596,7 @@ export default function ProtocolLandingView({
             The Dual Problem Statement We Solve
           </h2>
           <p className="text-sm sm:text-base text-[#4B5563]">
-            How KendraFi bridges Dhaka street realities with WeBank&apos;s international expansion frontiers.
+            How KendraFi bridges Dhaka street realities with autonomous agent economics.
           </p>
         </div>
 
@@ -625,7 +625,7 @@ export default function ProtocolLandingView({
             </div>
           </div>
 
-          {/* Problem B: WeBank Cold-Start Data Wall */}
+          {/* Problem B: The Cold-Start Data Wall */}
           <div className="p-6 rounded-2xl bg-white border border-[#E5E7EB] shadow-sm flex flex-col justify-between space-y-4">
             <div className="space-y-3">
               <div className="flex items-center gap-3">
@@ -634,18 +634,18 @@ export default function ProtocolLandingView({
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-[#111827]">
-                    Perspective B: WeBank Cold-Start Data Wall
+                    Perspective B: The Cold-Start Data Wall
                   </h3>
-                  <span className="text-xs text-[#0284C7] font-semibold">Overseas Expansion Frontier</span>
+                  <span className="text-xs text-[#0284C7] font-semibold">Why Credit Tech Cannot See Informal Merchants</span>
                 </div>
               </div>
               <p className="text-sm text-[#4B5563] leading-relaxed">
-                WeBank serves <strong>424M retail users and 1.6M+ MSMEs</strong> at an astonishing annual IT O&amp;M cost of <strong>RMB 2 (~$0.30 USD)</strong> per account with a 1.46% overall NPL ratio. But when expanding across Belt-and-Road economies, WeBank hits a <strong>&quot;Cold-Start Data Wall&quot;</strong>: 85%–90% of informal merchants have <strong>zero digital VAT tax filings</strong> and <strong>zero central credit bureau histories</strong>.
+                Every digital lender entering cash economies hits the same wall: 85%–90% of informal merchants have <strong>zero digital VAT tax filings</strong> and <strong>zero central credit bureau histories</strong> — no bank statements, no invoice trail. Traditional underwriting simply cannot see them, while their neighbors know exactly who repays.
               </p>
             </div>
             <div className="pt-4 border-t border-[#E5E7EB] text-xs font-semibold text-[#0284C7] flex items-center gap-2">
               <AlertTriangle className="h-4 w-4" />
-              <span>Result: Traditional underwriting models cannot evaluate informal merchants</span>
+              <span>Result: The data wall locks 85%–90% of merchants out of formal credit</span>
             </div>
           </div>
         </div>
@@ -686,7 +686,7 @@ export default function ProtocolLandingView({
             </p>
           </div>
           <span className="text-xs font-mono text-[#6B7280]">
-            Topic F (+5 Agent Wallet Bonus)
+            ERC-4337 Agent Wallets
           </span>
         </div>
 
@@ -747,7 +747,7 @@ export default function ProtocolLandingView({
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════ */}
-      {/* 5 MODULAR LAYERS (ABCD ARCHITECTURE)                          */}
+      {/* 5 MODULAR PROTOCOL LAYERS                                   */}
       {/* ═══════════════════════════════════════════════════════════════ */}
       <section className="space-y-6">
         <div className="text-center max-w-2xl mx-auto space-y-2">

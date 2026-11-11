@@ -25,9 +25,9 @@ export default function MonteCarloAnalyticsView({
 
   const features = [
     { name: "Besley-Coate Peer Guarantee Stake (alpha_j*)", weight: -0.7325, abs_pct: 35.2, category: "Peer Staking" },
-    { name: "WeBank FATE Supplier KYB Consistency", weight: -0.4357, abs_pct: 20.9, category: "FATE Enterprise" },
+    { name: "Federated Supplier KYB Consistency", weight: -0.4357, abs_pct: 20.9, category: "Federated Model" },
     { name: "Spatio-Temporal Graph Collusion Entropy (H_st)", weight: -0.3064, abs_pct: 14.7, category: "Zero-Trust Graph" },
-    { name: "Wholesale Restock Invoice Volume Velocity", weight: -0.2779, abs_pct: 13.4, category: "FATE Enterprise" },
+    { name: "Wholesale Restock Invoice Volume Velocity", weight: -0.2779, abs_pct: 13.4, category: "Federated Model" },
     { name: "Cashflow Volatility (CV = sigma/mu)", weight: 0.2451, abs_pct: 11.8, category: "NumPy Risk Engine" },
     { name: "Monsoon Flash Bailout Buffer (ySCT)", weight: -0.0820, abs_pct: 4.0, category: "Parametric Reserve" },
   ];
@@ -117,11 +117,11 @@ export default function MonteCarloAnalyticsView({
           <div className="space-y-1">
             <div className="flex items-center gap-2 flex-wrap">
               <span className="chip-info text-xs">Official Benchmark Citation</span>
-              <span className="text-xs font-bold text-[#059669]">WeBank Target Exceeded</span>
+              <span className="text-xs font-bold text-[#059669]">+21.96% vs Solo MFS Apps</span>
               <span className="text-xs font-mono text-[#6B7280]">IEEE P3652.1 Reference</span>
             </div>
             <p className="text-base sm:text-lg font-bold text-[#111827]">
-              &ldquo;Empirical Synthetic Karwan Bazar Monte Carlo Backtest (1,000 Kendras / 5,000 Merchants) &mdash; benchmarked against WeBank&apos;s published +12% FATE Hetero-LR AUC uplift (IEEE P3652.1).&rdquo;
+              &ldquo;Empirical Synthetic Karwan Bazar Monte Carlo Backtest (1,000 Kendras / 5,000 Merchants) &mdash; default discrimination lifted +21.96% ROC-AUC over the solo-MFS nano-loan-app baseline, with federated Hetero-LR scoring (IEEE P3652.1).&rdquo;
             </p>
             <p className="text-xs text-[#4B5563]">
               Simulation executed on active monorepo using <code className="font-mono font-bold text-[#0284C7]">api/scripts/monte_carlo_backtest.py</code> with genuine scikit-learn Logistic Regression models.
@@ -152,7 +152,7 @@ export default function MonteCarloAnalyticsView({
             <div className="bg-[#059669] h-2.5 rounded-full" style={{ width: "87.7%" }}></div>
           </div>
           <span className="text-xs text-[#4B5563] block font-medium">
-            Exceeds WeBank&apos;s published +12% FATE target by <strong>+9.96%</strong>.
+            +21.96% relative ROC-AUC uplift over the solo-MFS baseline.
           </span>
         </div>
 
@@ -242,7 +242,7 @@ export default function MonteCarloAnalyticsView({
               </h2>
             </div>
             <p className="text-xs sm:text-sm text-[#4B5563] mt-1">
-              Visualizing the <strong>+21.96% empirical lift</strong> between KendraFi FATE + Besley-Coate Syndicate vs. Solo MFS Baseline App.
+              Visualizing the <strong>+21.96% empirical lift</strong> between the KendraFi Besley-Coate Syndicate vs. the Solo MFS Baseline App.
             </p>
           </div>
 
@@ -494,7 +494,7 @@ export default function MonteCarloAnalyticsView({
           <div className="flex flex-wrap items-center gap-4 text-xs font-semibold">
             <div className="flex items-center gap-2">
               <span className="h-3 w-3 rounded-full bg-[#059669]"></span>
-              <span className="text-[#111827]">KendraFi FATE + Besley (0.8769)</span>
+              <span className="text-[#111827]">KendraFi Syndicate (0.8769)</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="h-3 w-3 rounded-full bg-[#0284C7]"></span>
@@ -598,7 +598,7 @@ export default function MonteCarloAnalyticsView({
           </div>
 
           <div className="p-4 rounded-xl bg-[#FAFBFD] border border-[#E5E7EB] text-xs text-[#4B5563] space-y-1">
-            <strong>Key Data Science Takeaway:</strong> Negative weights represent protective factors reducing default probability. Notice that <strong>Besley-Coate Peer Guarantee Staking</strong> (<code className="font-mono font-bold">-0.7325</code>) and <strong>WeBank FATE Supplier KYB Consistency</strong> (<code className="font-mono font-bold">-0.4357</code>) constitute over 55% of total predictive power!
+            <strong>Key Data Science Takeaway:</strong> Negative weights represent protective factors reducing default probability. Notice that <strong>Besley-Coate Peer Guarantee Staking</strong> (<code className="font-mono font-bold">-0.7325</code>) and <strong>Federated Supplier KYB Consistency</strong> (<code className="font-mono font-bold">-0.4357</code>) constitute over 55% of total predictive power!
           </div>
         </div>
 
@@ -663,7 +663,7 @@ export default function MonteCarloAnalyticsView({
                 Synthetic Kendra Cohort Dataset Explorer (1,000 Kendras)
               </h2>
               <p className="text-xs text-[#6B7280]">
-                Calibrated against Dhaka street market cash flows and WeBank FATE cold-start records.
+                Calibrated against Dhaka street market cash flows and MFS transaction patterns.
               </p>
             </div>
           </div>

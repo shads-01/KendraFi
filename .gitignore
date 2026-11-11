@@ -63,3 +63,6 @@ test-results/
 # Extraction files
 extraction_*.md
 extraction_1792747023602.md
+
+.vercel
+.env*

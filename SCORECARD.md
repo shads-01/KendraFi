@@ -1,9 +1,10 @@
 # SCORECARD.md — KendraFi Win Optimization Scorecard
 
 **Competition:** International AI Builders Congress 2026 (CloudCamp Bangladesh) — FinSphere AI / *SME Capital Engine*
-**Congress Day:** Dec 26, 2026, Daffodil International University, Ashulia, Dhaka · **Idea-to-Unicorn preliminary submission closes Oct 31, 2026 (8 days from writing)**
+**Congress Day:** Dec 26, 2026, Daffodil International University, Ashulia, Dhaka · **Idea-to-Unicorn preliminary submission closes Nov 20, 2026 (extended from Oct 31)**
 **Format:** 1 min transition + 3 min pitch + 1 min scoring · min 5 judges · final normalized 0–100
 **Rubric source:** `.firecrawl/cabc-congress.md` (official congress page, scraped)
+**Rubric note (2026-10-26):** the Participants Guide §11 defines FIVE 20-point components — Innovation & AI-Native Design · Technical Excellence & Architecture · Business Value & Commercial Viability · Global Scalability & Real-World Impact · Responsible AI, Data Sovereignty & Presentation. This ledger's six criteria fold into them: Scalability+NRB evidence counts inside Technical Excellence and Global Scalability; Presentation counts inside Responsible AI & Presentation. Re-weight the composite table before Congress Day.
 **Baseline (internal estimate):** Innovation 16 · Technical 17 · Business 15 · Impact 16 · Scalability 12 · Presentation 14 — composite ≈ 77
 
 ---
@@ -11,7 +12,7 @@
 ## Per-Criterion Ledger
 
 ### 1. Innovation (20%) — baseline 16 → projected 18–20
-- **What capped it:** no explicit artifact explaining *why* agents-as-participants beats the reference set; demo narrative buried in Shenzhen-branded docs.
+- **What capped it:** no explicit artifact explaining *why* agents-as-participants beats the reference set; demo narrative buried in retired-competition-branded docs.
 - **Change:** `POSITIONING.md` — the non-obvious leap vs Kabbage / Fundbox / Konfío / Lidya / OakNorth (all: AI underwrites humans) and vs chatbot copilots (LLM suggests, human liable); CNP Round 1 session-key cap (51.6% → 40.0%) staged as *the* demo moment.
 - **Evidence (3 lines):** ① Positioning table maps each incumbent to "AI's role / who holds liability / cold-start answer" (`POSITIONING.md` §1). ② Cold-start + peer-economics structural claims tie to `docs/backtest_results.json` (NPL −60.76%, peer absorption 31.31%). ③ Demo moment numbers (40/35/25 = 100% of 45,462.33 BDT) are locked `CONTEXT.md` §2 constants, not invented.
 - **Remaining risk:** judges may file "agent wallets" under already-seen DeFi; the *guarantee-negotiation* framing must be spoken first — pitch script does this at [1:00].
@@ -41,7 +42,7 @@
 - **Remaining risk:** NRB wholesale instrument is roadmap-labeled (BSEC/Bangladesh Bank approval required) — do not oversell it in Q&A; FISCO BCOS path is code-compatible but unproven with a production partner.
 
 ### 6. Presentation (10%) — baseline 14 → projected 9
-- **What capped it:** existing deck/storyboard were Shenzhen-branded 180s videos; no script for *this* congress's exact format (1 min transition + 3 min pitch + 1 min scoring), no demo run-sheet ending in Blockscout, no one-pager.
+- **What capped it:** existing deck/storyboard were retired-competition-branded 180s videos; no script for *this* congress's exact format (1 min transition + 3 min pitch + 1 min scoring), no demo run-sheet ending in Blockscout, no one-pager.
 - **Change:** `docs/PITCH_SCRIPT_CLOUDDAMP.md` (transition script + ~430-word timed pitch + 10-step Scenario A demo flow ending in the Blockscout click + red-team pocket card) and `docs/INVESTOR_ONE_PAGER.md`.
 - **Evidence (3 lines):** ① Format matched to the official schedule scraped from the congress page. ② Every spoken number is a `CONTEXT.md` §2 constant or backtest output — the script annotates where each appears on screen. ③ Demo ends in an *audience-verifiable* on-chain artifact (Blockscout), which is the strongest possible close for a 1-min scoring window.
 - **Remaining risk:** un-rehearsed timing (3:00 hard limit) and venue-RPC reliability — mitigation already built: honest `[REPLAY OF VERIFIED TESTNET TX]` badging, which must be *said aloud* if shown.
@@ -66,12 +67,12 @@
 
 | # | Risk | Severity | Mitigation / owner |
 | :--- | :--- | :--- | :--- |
-| R1 | `forge test` never executed on this machine | High (Technical) | Run in WSL/CI before Oct 31; paste output into `TECHNICAL_DOCUMENTATION.md` §7.1 |
+| R1 | `forge test` never executed on this machine | High (Technical) | Run in WSL/CI before Nov 20; paste output into `TECHNICAL_DOCUMENTATION.md` §7.1 |
 | R2 | No signed merchant/wholesaler LOIs | High (Business) | Opportunity Connect 1:1s, Dec 26; pitch "Ask" is written for it |
 | R3 | Synthetic-only validation dataset | Medium (Impact) | Joint pilot on live MFS data; stated in all docs, never hidden |
 | R4 | US$73B gap figure is secondary-cited | Low (Business) | Verify against IFC MSME Finance Gap 2025 PDF before investor use |
 | R5 | Venue RPC blocks live tx | Low (all) | Honest replay badge (RULE 4); rehearsed disclosure line in pitch |
-| R6 | Oct 31 preliminary deadline (8 days) | Operational | Submit current repo + this scorecard's evidence set; do not wait for R1–R2 |
+| R6 | Nov 20 preliminary deadline (extended) | Operational | Submit current repo + this scorecard's evidence set; do not wait for R1–R2 |
 
 ## Deliverables Index (created by this optimization)
 
@@ -85,4 +86,4 @@
 | `docs/PITCH_SCRIPT_CLOUDDAMP.md` + `docs/INVESTOR_ONE_PAGER.md` | Presentation |
 | `SCORECARD.md` (this file) | Definition of done |
 
-*Pre-existing evidence reused, not regenerated from scratch: `docs/traces/scenario_{a,b,c}_trace.json`, `docs/backtest_results.json`, `docs/ONCHAIN_EXECUTION_EVIDENCE.md`, `docs/PRESENTATION_DECK_SLIDES.md`, `docs/VIDEO_STORYBOARD_180S.md`, `docs/SHENZHEN_QA_DEFENSE_PLAYBOOK.md` (Shenzhen-branded, still valid source material). Verification run date: 2026-10-23, repo `adb2927`.*
+*Pre-existing evidence reused, not regenerated from scratch: `docs/traces/scenario_{a,b,c}_trace.json`, `docs/backtest_results.json`, `docs/ONCHAIN_EXECUTION_EVIDENCE.md`, `docs/PRESENTATION_DECK_SLIDES.md`, `docs/VIDEO_STORYBOARD_180S.md`, `docs/SHENZHEN_QA_DEFENSE_PLAYBOOK.md` (retired-competition-branded, still valid source material). Verification run date: 2026-10-23, repo `adb2927`.*

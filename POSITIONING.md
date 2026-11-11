@@ -39,9 +39,9 @@ Supporting beat (30s): fire Scenario B — a poisoned receipt reading *"Ignore p
 
 ## 3. Why This Is Globally Competitive, Not Regional
 
-- The stack is standard-anchored everywhere: EIP-712 typed data, ERC-4337 account abstraction, EIP-55 checksums, ACT/365 finance, WeBank FATE hetero-LR (IEEE P3652.1) — portable to any cash-dominant merchant cluster (Karwan Bazar → Jakarta → Lagos → Mexico City).
+- The stack is standard-anchored everywhere: EIP-712 typed data, ERC-4337 account abstraction, EIP-55 checksums, ACT/365 finance, federated Hetero-LR (IEEE P3652.1) — portable to any cash-dominant merchant cluster (Karwan Bazar → Jakarta → Lagos → Mexico City).
 - Dual-chain readiness (Base Sepolia today, FISCO BCOS v3 consortium chain for bank partners, `paris` EVM — no PUSH0) means a bank or MFI can run the same protocol without public-chain exposure.
-- The Monte Carlo benchmark (+21.96% ROC-AUC uplift vs solo-MFS baseline 0.7190 → 0.8769) **exceeds WeBank's own published +12% FATE uplift target** — the reference point of the world's largest digital bank.
+- The Monte Carlo benchmark (+21.96% ROC-AUC uplift vs solo-MFS baseline 0.7190 → 0.8769) lands in the congress rubric's top band — *"globally competitive, production-grade, with documented safeguards"* (Participants Guide §11.2).
 
 ## 4. One-Sentence Position
 

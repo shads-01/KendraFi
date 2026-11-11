@@ -1,15 +1,15 @@
-# CONTEXT.md — KendraFi (*Weiyedai-Global*) Master Specification & Monorepo Constitution
+# CONTEXT.md — KendraFi Master Specification & Monorepo Constitution
 
-**Competition:** 2026 Shenzhen International FinTechathon (International Track) — Co-hosted by Tsinghua University PBC School of Finance (PBCSF) & WeBank
-**Theme:** *"AI as a Financial Participant"* — Topic E (SME Finance Copilot) + Topic F (Agent Wallet, +5 Bonus)
-**Submission Deadline:** October 20, 2026, 23:59 UTC+8 | **Contact:** `wangyr@pbcsf.tsinghua.edu.cn`
+**Competition:** International AI Builders Congress 2026 (CloudCamp Bangladesh) — FinSphere AI / SME Capital Engine
+**Theme:** FinSphere AI — *SME Capital Engine* (working-capital & lending intelligence for small businesses)
+**Preliminary Submission:** Nov 20, 2026 | **Congress Day:** Dec 26, 2026 — Daffodil International University, Dhaka
 **Owner of this file:** `[Lead 5: Security Auditor & Submission Director]`
 
 > **PRECEDENCE:** This file is the single source of truth for all agents, prompts, and teammates. Where `KendraFi_PROJECT-OVERVIEW-AND-SYSTEM-ARCHITECTURE.md` §2.1 shows an `app/` + `components/` tree, that layout is **superseded** by the canonical layout in §3 below (`src/` for Next.js, `api/` for Python serverless). Where any document, prompt, or UI string conflicts with the constants in §2, **§2 wins**. Never hardcode a number that is not in §2.
 
 ---
 
-## 1. The 5 Mandatory FinTechathon Self-Critic Rules
+## 1. The 5 Mandatory Engineering Self-Critic Rules
 
 ### RULE 1 — ZERO LLM MATH
 LLMs in Tier 0 may only transcribe audio or parse OCR text into raw JSON strings/floats. **100%** of DSCR, Besley-Coate Nash utility, staking weights, and entropy calculations MUST execute in `api/core/risk_engine.py` using pure NumPy. No LLM call may ever touch a financial number after Tier 0 emission.
@@ -45,7 +45,7 @@ Tier map: Tier 0 = untrusted perception (Gemini 2.5 Flash / Whisper, no network/
 | Staking formula | $w_j = p_j \cdot \max(0, B_j)$; $\alpha_j^{\text{raw}} = w_j / \sum_{k \in \mathcal{N}_{-i}} w_k$; cap $\alpha_j \le 0.40$; residual redistributed **proportionally** to uncapped weights (preserves the 7:5 `AGT-02`:`AGT-03` ratio). $E[U_j] = p_i(\phi \alpha_j^* L_i + \delta V_j) - (1-p_i)\alpha_j^* R_i - \lambda_{\text{vol}} CV_j^2 \alpha_j^* R_i$ with $\delta V_j = 0.95 \cdot \frac{0.240-0.125}{365}\Delta\tau \cdot (1.5 B_j) \cdot \alpha_j^*$, clearing yield $\phi^* = 1.00\%$ APR |
 | Collusion entropy | $H_{st} = 0.45H_{\text{sup}} + 0.25H_{\text{time}} + 0.30H_{\text{sender}} - 0.50\rho_{\max} = \mathbf{1.12} \ge 0.65$ (normal ops), $\rho_{\max} \le 0.85$, circular wash ratio ≤ 5% |
 | ZK range proof | $v = \lfloor \text{CF}_{\text{proj},1} \rfloor = 76{,}376$, $T = \mathrm{round}(1.25 R_1) = 56{,}828$, $\Delta v = v - T = 19{,}548 \in [0, 2^{16}-1]$; `secp256k1` Pedersen $C_i = vG + r_iH$, $C_{\text{excess}} = C_i - TG$; 16-bit CDS94 OR-Sigma bit-proofs; $\sum 2^k C_{b_k} == C_i - TG$ |
-| FATE Hetero-LR | $p_1 = \mathbf{98.5\%}$ survival probability |
+| Federated Hetero-LR (IEEE P3652.1) | $p_1 = \mathbf{98.5\%}$ survival probability |
 
 ---
 
@@ -64,7 +64,7 @@ kendrafi/
 │   ├── perception_sandbox.py                   # Tier 0: Gemini 2.5 Flash OCR / Whisper Bangla + parallel
 │   │                                           #   prompt-injection + x402 KYB firewall (zero wallet/DB access)
 │   ├── risk_engine.py                          # Tier 2: 100% ZERO-LLM-MATH NumPy DSCR, Besley-Coate, H_st (Rule 1)
-│   ├── zk_fate_privacy.py                      # Layer 4: secp256k1 Pedersen + 16-bit CDS94 range proof + FATE Hetero-LR
+│   ├── zk_fate_privacy.py                      # Layer 4: secp256k1 Pedersen + 16-bit CDS94 range proof + Federated Hetero-LR
 │   ├── syndicate_fsm.py                        # Layer 2: 5-state LangGraph FSM + 3-round CNP + Supabase Realtime emit
 │   └── chain_executor.py                       # Layer 5: ZeroTrustSessionKeySigner (EIP-712) + KendraChainRelayer
 │                                               #   (serverless-safe nonces, LIVE vs REPLAY tx_mode)
@@ -77,7 +77,7 @@ kendrafi/
 ├── src/app/page.tsx                            # 3-Panel Judge Command Center master layout
 ├── src/app/api/kendra/{execute,bailout,repay,state}/route.ts   # Zero-Trust BFF (HMAC-signs every call)
 ├── src/components/
-│   ├── JudgeCommandHeader.tsx                  # bilingual EN+中文 HUD, FSM pill, tx-mode badge, 2.5x zoom bar
+│   ├── JudgeCommandHeader.tsx                  # bilingual EN+Bangla HUD, FSM pill, tx-mode badge, 2.5x zoom bar
 │   ├── MerchantMobilePanel.tsx                 # LEFT: persona-synced phone, waveform, invoice, 4 action buttons
 │   ├── KendraArenaPanel.tsx                    # CENTER: 5-agent pentagon, CNP rounds, ZK card, Besley-Coate table
 │   └── SecurityEscrowPanel.tsx                 # RIGHT: 4-tier firewall badges, EIP-712 feed, settlement, Blockscout
@@ -268,7 +268,7 @@ interface IKendraEscrow {
 All displayed numbers bind **dynamically** to the `EscrowExecutionResult` JSON from `risk_engine.py` — zero hardcoded literals in components.
 
 ### Header — `JudgeCommandHeader.tsx`
-Bilingual `EN + 中文` badges (*Weiyedai-Global 微业贷全球版*, *FATE Hetero-LR 联邦学习异构逻辑回归*, *20/80 Joint Lending 20/80联合贷款*, *Zero LLM Math 零大模型算术幻觉*, *ERC-4337 Escrow 智能合约托管*); live 5-state FSM pill; latency counter; **Tx Mode Badge** (`LIVE TESTNET BROADCAST` vs `VERIFIED TESTNET REPLAY`); **2.5x Judge Camera Zoom bar**.
+Bilingual `EN + Bangla` badges (*SME Capital Engine*, *Federated Hetero-LR*, *20/80 Joint Lending*, *Zero LLM Math শূন্য LLM গণিত*, *ERC-4337 Escrow এসক্রো*); live 5-state FSM pill; latency counter; **Tx Mode Badge** (`LIVE TESTNET BROADCAST` vs `VERIFIED TESTNET REPLAY`); **2.5x Judge Camera Zoom bar**.
 
 ### LEFT — `MerchantMobilePanel.tsx` (persona-synced phone)
 - **Scenario A:** header = **Rahim Store (`AGT-01`)**; Bangla voice waveform ("45,000 BDT, 50 sacks Miniket rice"); stamped Meghna Group invoice.
@@ -297,4 +297,4 @@ Bilingual `EN + 中文` badges (*Weiyedai-Global 微业贷全球版*, *FATE Hete
 5. **RLS + Realtime:** `merchant_private_cashflows` has **zero** anon policies; `kendra_fsm_events` / `zk_solvency_commitments` / others need explicit `FOR SELECT TO anon, authenticated USING (true)` or Supabase Realtime silently drops rows.
 6. **Immutability:** `BEFORE UPDATE OR DELETE` trigger on `zerotrust_security_intercepts` — Red-Team logs are tamper-proof.
 7. **Parallel screening:** never short-circuit Tier-0 injection check before the x402 lookup (Scenario B needs both badges).
-8. **Bilingual HUD:** keep `EN + 中文` badges throughout for Shenzhen judges.
+8. **Bilingual HUD:** keep `EN + Bangla` badges throughout for Dhaka judges.

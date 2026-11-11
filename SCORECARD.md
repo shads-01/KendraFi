@@ -1,7 +1,7 @@
 # SCORECARD.md — KendraFi Win Optimization Scorecard
 
 **Competition:** International AI Builders Congress 2026 (CloudCamp Bangladesh) — FinSphere AI / *SME Capital Engine*
-**Congress Day:** Dec 26, 2026, Daffodil International University, Ashulia, Dhaka · **Idea-to-Unicorn preliminary submission closes Oct 31, 2026 (8 days from writing)**
+**Congress Day:** Dec 26, 2026, Daffodil International University, Ashulia, Dhaka · **Idea-to-Unicorn preliminary submission closes Nov 20, 2026 (extended from Oct 31)**
 **Format:** 1 min transition + 3 min pitch + 1 min scoring · min 5 judges · final normalized 0–100
 **Rubric source:** `.firecrawl/cabc-congress.md` (official congress page, scraped)
 **Baseline (internal estimate):** Innovation 16 · Technical 17 · Business 15 · Impact 16 · Scalability 12 · Presentation 14 — composite ≈ 77
@@ -66,12 +66,12 @@
 
 | # | Risk | Severity | Mitigation / owner |
 | :--- | :--- | :--- | :--- |
-| R1 | `forge test` never executed on this machine | High (Technical) | Run in WSL/CI before Oct 31; paste output into `TECHNICAL_DOCUMENTATION.md` §7.1 |
+| R1 | `forge test` never executed on this machine | High (Technical) | Run in WSL/CI before Nov 20; paste output into `TECHNICAL_DOCUMENTATION.md` §7.1 |
 | R2 | No signed merchant/wholesaler LOIs | High (Business) | Opportunity Connect 1:1s, Dec 26; pitch "Ask" is written for it |
 | R3 | Synthetic-only validation dataset | Medium (Impact) | Joint pilot on live MFS data; stated in all docs, never hidden |
 | R4 | US$73B gap figure is secondary-cited | Low (Business) | Verify against IFC MSME Finance Gap 2025 PDF before investor use |
 | R5 | Venue RPC blocks live tx | Low (all) | Honest replay badge (RULE 4); rehearsed disclosure line in pitch |
-| R6 | Oct 31 preliminary deadline (8 days) | Operational | Submit current repo + this scorecard's evidence set; do not wait for R1–R2 |
+| R6 | Nov 20 preliminary deadline (extended) | Operational | Submit current repo + this scorecard's evidence set; do not wait for R1–R2 |
 
 ## Deliverables Index (created by this optimization)
 

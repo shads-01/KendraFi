@@ -23,7 +23,7 @@
 
 ---
 
-# PHASE 0 — Judge-visible surfaces + preliminary submission (by Oct 31)
+# PHASE 0 — Judge-visible surfaces + preliminary submission (by Nov 20)
 
 ### Task 1: Branch + `src/app/layout.tsx` metadata
 
@@ -349,7 +349,7 @@ git tag phase0-ui-clean
 - [x] **Step 1: Insert this line directly AFTER the line ending in `~14 teams per panel.`**
 
 ```markdown
-**Preliminary video (due Oct 31):** same 3:00 runtime, official segment map (Participants Guide §9.2) — Problem 0:00–0:30 · Solution 0:30–1:00 · Demo 1:00–2:00 · AI Approach 2:00–2:30 · Impact & Next 2:30–3:00.
+**Preliminary video (due Nov 20):** same 3:00 runtime, official segment map (Participants Guide §9.2) — Problem 0:00–0:30 · Solution 0:30–1:00 · Demo 1:00–2:00 · AI Approach 2:00–2:30 · Impact & Next 2:30–3:00.
 ```
 
 - [x] **Step 2: Replace the two final beats.** FIND this exact block:
@@ -396,7 +396,7 @@ git commit -m "docs: pitch script to CABC prelim segment structure"
 ```markdown
 # CABC Preliminary Submission Package — Idea to Unicorn (Team-Built Product)
 
-**Deadline:** Oct 31, 2026 · **Challenge:** FinSphere AI — SME Capital Engine · **Congress Day:** Dec 26, 2026, Daffodil International University, Dhaka
+**Deadline:** Nov 20, 2026 · **Challenge:** FinSphere AI — SME Capital Engine · **Congress Day:** Dec 26, 2026, Daffodil International University, Dhaka
 
 ## Team Roles (Participants Guide §13.2 — every role owned by a named member)
 
@@ -451,7 +451,7 @@ git commit -m "docs: CABC preliminary submission package"
 
 ---
 
-### Task 11: HUMAN — Record the 180-second video and submit (by Oct 31)
+### Task 11: HUMAN — Record the 180-second video and submit (by Nov 20)
 
 **Owner: the team.** The agent cannot do this task.
 
@@ -459,7 +459,7 @@ git commit -m "docs: CABC preliminary submission package"
 - [ ] Record the 3:00 video following `docs/PITCH_SCRIPT_CLOUDDAMP.md` (screen-record the live demo; the beats already match the required segment map)
 - [ ] Optional: have a native Bangla speaker glance at the new Bangla UI strings (list: Task 2 Edit 2–8, Task 7 Edit 2–7)
 - [ ] Push the branch, merge to main, confirm the Vercel deployment is clean (the video shows the live demo)
-- [ ] Submit on the CloudCamp BD portal before Oct 31, 2026, 23:59 (video URL + submission package content)
+- [ ] Submit on the CloudCamp BD portal before Nov 20, 2026, 23:59 (video URL + submission package content)
 - [ ] Update `SCORECARD.md` risk R6 to "submitted"
 
 ---
@@ -714,7 +714,7 @@ git commit -m "docs: archive Shenzhen-era pitch docs with banners"
 ## Completion Check
 
 - [x] Phase 0: Tasks 1–10 committed, `npx tsc --noEmit` clean, `npm run build` clean, both sweeps empty
-- [ ] Preliminary submitted by Oct 31 (Task 11)
+- [ ] Preliminary submitted by Nov 20 (Task 11)
 - [ ] Phase 1: Tasks 12–19 committed; root docs sweep clean except `AI_USE_LOG.md` history and the 3 bannered archives
 - [ ] Final sweep over live surfaces:
 

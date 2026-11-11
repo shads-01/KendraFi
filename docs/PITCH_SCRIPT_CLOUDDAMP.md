@@ -1,7 +1,7 @@
 # PITCH_SCRIPT_CLOUDDAMP.md — 1-Minute Transition + 3-Minute Pitch + Scenario A Demo Flow
 
 **Format (from the official schedule):** 1 min transition → 3 min pitch → 1 min scoring. Judges: min 5 per panel, ~14 teams per panel.
-**Preliminary video (due Oct 31):** same 3:00 runtime, official segment map (Participants Guide §9.2) — Problem 0:00–0:30 · Solution 0:30–1:00 · Demo 1:00–2:00 · AI Approach 2:00–2:30 · Impact & Next 2:30–3:00.
+**Preliminary video (due Nov 20):** same 3:00 runtime, official segment map (Participants Guide §9.2) — Problem 0:00–0:30 · Solution 0:30–1:00 · Demo 1:00–2:00 · AI Approach 2:00–2:30 · Impact & Next 2:30–3:00.
 **Rule:** every number spoken is a locked `CONTEXT.md` §2 constant or a `docs/backtest_results.json` output. No number is spoken that cannot be shown on screen in the same second.
 
 ---

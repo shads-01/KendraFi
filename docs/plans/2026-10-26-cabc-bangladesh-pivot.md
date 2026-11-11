@@ -470,7 +470,7 @@ git commit -m "docs: CABC preliminary submission package"
 
 ### Task 12: `CLAUDE.md` — agent memory header
 
-- [ ] **Step 1: Apply these 3 substring edits**
+- [x] **Step 1: Apply these 3 substring edits**
 
 Edit 1 — FIND: `# Project: KendraFi (Weiyedai-Global)` → REPLACE: `# Project: KendraFi`
 
@@ -478,7 +478,7 @@ Edit 2 — FIND: `(2026 Shenzhen International FinTechathon, Topic E + F)` → R
 
 Edit 3 — FIND: `Keep UI strings bilingual \`EN + 中文\` for judge-facing surfaces.` → REPLACE: `Keep UI strings bilingual \`EN + Bangla\` for judge-facing surfaces.`
 
-- [ ] **Step 2: Verify + commit**
+- [x] **Step 2: Verify + commit**
 
 ```powershell
 Select-String -Path CLAUDE.md -Pattern "Shenzhen|Weiyedai|中文"
@@ -494,7 +494,7 @@ git commit -m "docs: CLAUDE.md target -> CABC 2026"
 
 ### Task 13: `AGENTS.md` — constitution header + benchmark labels
 
-- [ ] **Step 1: Apply these 13 substring edits**
+- [x] **Step 1: Apply these 13 substring edits**
 
 Edit 1 — FIND: `# AGENTS.md — KendraFi (*Weiyedai-Global*) Multi-Agent Autonomous Protocol & Coordination Architecture` → REPLACE: `# AGENTS.md — KendraFi Multi-Agent Autonomous Protocol & Coordination Architecture`
 
@@ -522,7 +522,7 @@ Edit 12 — FIND: `Bilingual \`EN + 中文\` badges (*Weiyedai-Global 微业贷�
 
 Edit 13 — FIND: `8. **Bilingual HUD:** keep \`EN + 中文\` badges throughout for Shenzhen judges.` → REPLACE: `8. **Bilingual HUD:** keep \`EN + Bangla\` badges throughout for Dhaka judges.`
 
-- [ ] **Step 2: Verify + commit**
+- [x] **Step 2: Verify + commit**
 
 ```powershell
 Select-String -Path AGENTS.md -Pattern "Shenzhen|WeBank|Tsinghua|PBCSF|FATE|中文|Weiyedai"
@@ -538,7 +538,7 @@ git commit -m "docs: AGENTS.md target -> CABC 2026, EN+Bangla rule"
 
 ### Task 14: `CONTEXT.md` — master spec header
 
-- [ ] **Step 1: Apply these 7 substring edits**
+- [x] **Step 1: Apply these 7 substring edits**
 
 Edit 1 — FIND: `# CONTEXT.md — KendraFi (*Weiyedai-Global*) Master Specification & Monorepo Constitution` → REPLACE: `# CONTEXT.md — KendraFi Master Specification & Monorepo Constitution`
 
@@ -554,7 +554,7 @@ Edit 6 — FIND: `| FATE Hetero-LR | $p_1 = \mathbf{98.5\%}$ survival probabilit
 
 Edit 7 — FIND: `8. **Bilingual HUD:** keep \`EN + 中文\` badges throughout for Shenzhen judges.` → REPLACE: `8. **Bilingual HUD:** keep \`EN + Bangla\` badges throughout for Dhaka judges.`
 
-- [ ] **Step 2: Verify + commit**
+- [x] **Step 2: Verify + commit**
 
 ```powershell
 Select-String -Path CONTEXT.md -Pattern "Shenzhen|WeBank|Tsinghua|PBCSF|FinTechathon|中文|Weiyedai|FATE Hetero"
@@ -570,7 +570,7 @@ git commit -m "docs: CONTEXT.md header -> CABC 2026"
 
 ### Task 15: `AI_USE_LOG.md` — header only (history entries stay)
 
-- [ ] **Step 1: Apply these 5 substring edits to the header block only (lines 1–10). Do not touch any log entry below line 10 — it is history.**
+- [x] **Step 1: Apply these 5 substring edits to the header block only (lines 1–10). Do not touch any log entry below line 10 — it is history.**
 
 Edit 1 — FIND: `# AI_USE_LOG.md — KendraFi (*Weiyedai-Global*) Agent Workflow & Execution History` → REPLACE: `# AI_USE_LOG.md — KendraFi Agent Workflow & Execution History`
 
@@ -582,7 +582,7 @@ Edit 4 — FIND: `**Co-Hosts:** Tsinghua University PBC School of Finance (PBCSF
 
 Edit 5 — FIND: `**Theme:** *"AI as a Financial Participant"* — Topic E (SME Finance Copilot) + Topic F (Agent Wallet +5 Bonus)` → REPLACE: `**Theme:** FinSphere AI — SME Capital Engine`
 
-- [ ] **Step 2: Verify + commit**
+- [x] **Step 2: Verify + commit**
 
 ```powershell
 Get-Content AI_USE_LOG.md -TotalCount 10 | Select-String -Pattern "Shenzhen|WeBank|PBCSF|Weiyedai"
@@ -598,13 +598,13 @@ git commit -m "docs: AI_USE_LOG header -> CABC 2026 (history preserved)"
 
 ### Task 16: `README.md` — public face
 
-- [ ] **Step 1: Apply these 2 substring edits**
+- [x] **Step 1: Apply these 2 substring edits**
 
 Edit 1 — FIND: `# KendraFi (*Weiyedai-Global*)` → REPLACE: `# KendraFi`
 
 Edit 2 — FIND: `Zero-Trust Multi-Agent Cooperative Risk and Programmable B2B Escrow Protocol for WeBank Weiyedai-Global — 2026 Shenzhen International FinTechathon (Topic E + F, SME Finance Copilot).` → REPLACE: `Zero-Trust Multi-Agent Cooperative Risk and Programmable B2B Escrow Protocol for Bangladesh SME working capital — International AI Builders Congress 2026 (FinSphere AI · SME Capital Engine).`
 
-- [ ] **Step 2: Verify + commit**
+- [x] **Step 2: Verify + commit**
 
 ```powershell
 Select-String -Path README.md -Pattern "Shenzhen|WeBank|Weiyedai"
@@ -625,7 +625,7 @@ git commit -m "docs: README -> CABC 2026"
 - Modify: `IMPACT_ETHICS.md`
 - Modify: `docs/TECHNICAL_DOCUMENTATION.md`
 
-- [ ] **Step 1: Apply these 5 substring edits**
+- [x] **Step 1: Apply these 5 substring edits**
 
 `POSITIONING.md`:
 Edit 1 — FIND: `ACT/365 finance, WeBank FATE hetero-LR (IEEE P3652.1)` → REPLACE: `ACT/365 finance, federated Hetero-LR (IEEE P3652.1)`
@@ -640,7 +640,7 @@ Edit 4 — FIND: `KendraFi (*Weiyedai-Global*) bridges` → REPLACE: `KendraFi b
 
 Edit 5 — FIND: `with **WeBank's AI-Native ABCD (AI, Blockchain, Cloud, Data) architecture**.` → REPLACE: `with **autonomous AI-agent wallets on a zero-trust architecture**.`
 
-- [ ] **Step 2: Verify + commit**
+- [x] **Step 2: Verify + commit**
 
 ```powershell
 Select-String -Path POSITIONING.md,IMPACT_ETHICS.md,docs/TECHNICAL_DOCUMENTATION.md -Pattern "WeBank|ABCD|Weiyedai"
@@ -656,13 +656,13 @@ git commit -m "docs: strip WeBank vestiges from strategy docs"
 
 ### Task 18: `SCORECARD.md` — rubric-version note (5×20 mapping)
 
-- [ ] **Step 1: Insert this note directly AFTER the line `**Rubric source:** \`.firecrawl/cabc-congress.md\` (official congress page, scraped)`**
+- [x] **Step 1: Insert this note directly AFTER the line `**Rubric source:** \`.firecrawl/cabc-congress.md\` (official congress page, scraped)`**
 
 ```markdown
 **Rubric note (2026-10-26):** the Participants Guide §11 defines FIVE 20-point components — Innovation & AI-Native Design · Technical Excellence & Architecture · Business Value & Commercial Viability · Global Scalability & Real-World Impact · Responsible AI, Data Sovereignty & Presentation. This ledger's six criteria fold into them: Scalability+NRB evidence counts inside Technical Excellence and Global Scalability; Presentation counts inside Responsible AI & Presentation. Re-weight the composite table before Congress Day.
 ```
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add SCORECARD.md
@@ -678,13 +678,13 @@ git commit -m "docs: SCORECARD rubric mapping note (Guide 5x20)"
 - Modify: `docs/VIDEO_STORYBOARD_180S.md`
 - Modify: `docs/SHENZHEN_QA_DEFENSE_PLAYBOOK.md`
 
-- [ ] **Step 1: Insert this banner as the SECOND line of each of the three files (directly under the existing `#` title)**
+- [x] **Step 1: Insert this banner as the SECOND line of each of the three files (directly under the existing `#` title)**
 
 ```markdown
 > **ARCHIVED (2026-10-26):** This document was written for the retired 2026 Shenzhen FinTechathon and is kept for history only. Current target: International AI Builders Congress 2026 — see `docs/PITCH_SCRIPT_CLOUDDAMP.md`, `SCORECARD.md`, and `docs/plans/2026-10-26-cabc-bangladesh-pivot.md`. Content below references the old competition on purpose.
 ```
 
-- [ ] **Step 2: Verify + commit**
+- [x] **Step 2: Verify + commit**
 
 ```powershell
 Select-String -Path docs/PRESENTATION_DECK_SLIDES.md,docs/VIDEO_STORYBOARD_180S.md,docs/SHENZHEN_QA_DEFENSE_PLAYBOOK.md -Pattern "ARCHIVED"
@@ -715,8 +715,8 @@ git commit -m "docs: archive Shenzhen-era pitch docs with banners"
 
 - [x] Phase 0: Tasks 1–10 committed, `npx tsc --noEmit` clean, `npm run build` clean, both sweeps empty
 - [ ] Preliminary submitted by Nov 20 (Task 11)
-- [ ] Phase 1: Tasks 12–19 committed; root docs sweep clean except `AI_USE_LOG.md` history and the 3 bannered archives
-- [ ] Final sweep over live surfaces:
+- [x] Phase 1: Tasks 12–19 committed; root docs sweep clean except `AI_USE_LOG.md` history and the 3 bannered archives
+- [x] Final sweep over live surfaces:
 
 ```powershell
 Select-String -Path AGENTS.md,CLAUDE.md,CONTEXT.md,README.md,POSITIONING.md,UNITECONOMICS.md,IMPACT_ETHICS.md,SCORECARD.md -Pattern "Shenzhen|WeBank|Tsinghua|PBCSF|Weiyedai"

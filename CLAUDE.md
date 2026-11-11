@@ -1,11 +1,11 @@
-# Project: KendraFi (Weiyedai-Global)
+# Project: KendraFi
 
 > Single source of truth for agent memory. Keep `AGENTS.md` pointing here; update this
 > file every time a stack decision, command, or project phase changes.
 
 ## What this product does
 
-KendraFi is a competition entry (2026 Shenzhen International FinTechathon, Topic E + F)
+KendraFi is a competition entry (International AI Builders Congress 2026 — FinSphere AI / SME Capital Engine)
 for SME micro-guarantee lending in Bangladesh: five autonomous AI merchant agents form a
 peer-guarantee syndicate (*Kendra*), clear liability through a 3-round Contract Net
 Protocol, and settle on-chain via a 4-of-5 EIP-712 escrow — with zero-LLM-math risk
@@ -41,7 +41,7 @@ engines and four-tier zero-trust security. Users (judges) watch live scenario de
 - Ask before adding a new dependency (`api/requirements.txt` excludes scipy/sklearn deliberately).
 - Prefer small, reviewable changes. One feature per branch.
 - Wallet addresses must be EIP-55 checksummed before any web3 use.
-- Keep UI strings bilingual `EN + 中文` for judge-facing surfaces.
+- Keep UI strings bilingual `EN + Bangla` for judge-facing surfaces.
 
 ## Commands
 

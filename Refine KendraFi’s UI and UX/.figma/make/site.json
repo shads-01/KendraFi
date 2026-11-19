@@ -1,0 +1,11 @@
+{
+  "title": "KendraFi — SME Capital, Clearly",
+  "description": "A calm, zero-trust capital dashboard for Bangladesh's small businesses and the peer syndicates backing them.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

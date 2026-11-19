@@ -3,9 +3,6 @@
 import { useEffect, useState } from "react";
 import { getAuthBrowserClient } from "@/lib/supabase-auth-browser";
 
-// Minimal auth-aware header for the landing page: shows login/signup links
-// when signed out, the account email + sign-out when signed in. UI signal
-// only — the server (middleware + getAuthContext) enforces everything.
 export default function AuthNav() {
   const [email, setEmail] = useState<string | null>(null);
 
@@ -26,20 +23,22 @@ export default function AuthNav() {
   }
 
   return (
-    <nav aria-label="Account" className="flex items-center justify-end gap-3 bg-white border-b border-gray-200 px-6 py-2">
+    <div className="flex items-center gap-2 pl-3 border-l border-[#DFD5C7]/70">
       {email ? (
         <>
           <a
             href="/team"
-            className="text-xs font-bold text-gray-700 border border-gray-300 rounded-lg px-3 py-1.5 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1"
+            className="text-xs font-semibold text-[#52423A] hover:text-[#241915] transition-colors"
           >
             Dashboard
           </a>
-          <span className="text-xs font-semibold text-gray-600">{email}</span>
+          <span className="text-[11px] font-mono text-[#756359] max-w-[120px] truncate" title={email}>
+            {email}
+          </span>
           <button
             type="button"
             onClick={handleSignOut}
-            className="text-xs font-bold text-gray-700 border border-gray-300 rounded-lg px-3 py-1.5 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1"
+            className="text-xs font-semibold text-[#756359] hover:text-[#9E2B3B] transition-colors"
           >
             Sign out
           </button>
@@ -48,18 +47,18 @@ export default function AuthNav() {
         <>
           <a
             href="/login"
-            className="text-xs font-bold text-gray-700 hover:text-[#FF5C00] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1 rounded"
+            className="text-xs font-medium text-[#52423A] hover:text-[#C0502B] px-2 py-1 transition-colors"
           >
             Log in
           </a>
           <a
             href="/signup"
-            className="text-xs font-bold text-white bg-[#FF5C00] hover:bg-[#E65200] rounded-lg px-3 py-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5C00] focus-visible:ring-offset-1"
+            className="text-xs font-semibold text-[#C0502B] bg-[#F8EBE4] hover:bg-[#F0DDD2] border border-[#E5C2B3] px-2.5 py-1 rounded-[7px] transition-colors shadow-2xs"
           >
             Sign up
           </a>
         </>
       )}
-    </nav>
+    </div>
   );
 }

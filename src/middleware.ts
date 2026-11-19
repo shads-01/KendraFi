@@ -21,7 +21,10 @@ export function isPublic(pathname: string): boolean {
   return (
     PUBLIC_PAGES.has(pathname) ||
     PUBLIC_PREFIXES.some((p) => pathname.startsWith(p)) ||
-    pathname === "/favicon.ico"
+    pathname === "/favicon.ico" ||
+    pathname === "/favicon.png" ||
+    pathname.startsWith("/audio/") ||
+    /\.(png|jpg|jpeg|gif|svg|ico|webp|mp3|wav|ogg)$/i.test(pathname)
   );
 }
 

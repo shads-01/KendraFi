@@ -1,0 +1,79 @@
+:root {
+  /* Typography */
+  --font-display: "Instrument Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif-accent: "Instrument Serif", Georgia, serif;
+  --font-sans: "Instrument Sans", "Hind Siliguri", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Warm Complementary Palette: Muslin Sand + Soft Ivory + Espresso + Terracotta & Ultramarine */
+  --bg-canvas: #f4eee6;
+  --bg-subtle: #e8e0d5;
+  --surface-card: #fcf9f4;
+  --surface-warm: #f6f1ea;
+  --surface-vault: #efe6da;
+  --surface-ink: #241915;
+  --surface-ink-soft: #33241f;
+
+  /* Warm Stone Borders */
+  --border-subtle: #dfd5c7;
+  --border-strong: #c5b6a3;
+
+  /* Roasted Espresso Ink (WCAG AAA / AA+ on Soft Ivory #FCF9F4) */
+  --ink-primary: #241915;
+  --ink-secondary: #52423a;
+  --ink-muted: #756359;
+
+  /* Primary Brand: Terracotta Sienna (Warm Bengal Earth) */
+  --accent-primary: #c0502b;
+  --accent-hover: #a3401f;
+  --accent-soft: #f8ebe4;
+  --accent-border: #e5c2b3;
+
+  /* Complementary Secondary: French Ultramarine Cobalt (Clean True Complement — Zero Green) */
+  --complement-primary: #3653a5;
+  --complement-soft: #edf1fb;
+  --complement-border: #c5d1f0;
+
+  /* Button Word-Accent Highlights (Warm Champagne on Terracotta) */
+  --btn-word-warm: #ffe4d1;
+  --btn-word-aqua: #dce6ff;
+  --btn-word-rose: #ffd9df;
+
+  /* Semantic Status Palette (Ultramarine + Claret + Ochre-Bronze) */
+  --status-valid: #3653a5;
+  --status-valid-bg: #edf1fb;
+  --status-valid-border: #c5d1f0;
+
+  --status-danger: #9e2b3b;
+  --status-danger-bg: #f8eaec;
+  --status-danger-border: #e5c0c6;
+
+  --status-warn: #8a5a2b;
+  --status-warn-bg: #f5ece0;
+  --status-warn-border: #dfc8ad;
+
+  --status-info: #3653a5;
+  --status-info-bg: #edf1fb;
+  --status-info-border: #c5d1f0;
+
+  /* Type Scale (>= 12px minimum) */
+  --text-hero: clamp(2rem, 3.1vw, 2.75rem);
+  --text-title: clamp(1.6rem, 2.4vw, 2.15rem);
+  --text-kpi: clamp(1.55rem, 2.1vw, 2.05rem);
+  --text-h3: 1.125rem;
+  --text-body: 0.9375rem;
+  --text-ui: 0.875rem;
+  --text-meta: 0.75rem;
+
+  /* Radii & Warm Shadows */
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+
+  --shadow-card: 0 12px 28px -16px rgba(36, 25, 21, 0.08), 0 1px 3px rgba(36, 25, 21, 0.04);
+  --shadow-elevated: 0 24px 48px -20px rgba(36, 25, 21, 0.14), 0 4px 12px rgba(36, 25, 21, 0.05);
+
+  /* Motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}

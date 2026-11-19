@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
 
+const isProd = process.env.NODE_ENV === "production";
+
 const securityHeaders = [
   { key: "X-Frame-Options", value: "DENY" },
   { key: "X-Content-Type-Options", value: "nosniff" },
@@ -16,13 +18,18 @@ const nextConfig: NextConfig = {
       {
         source: "/_next/static/:path*",
         headers: [
-          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+          {
+            key: "Cache-Control",
+            value: isProd
+              ? "public, max-age=31536000, immutable"
+              : "no-cache, no-store, must-revalidate",
+          },
         ],
       },
       {
         source: "/",
         headers: [
-          { key: "Cache-Control", value: "public, s-maxage=300, stale-while-revalidate=600" },
+          { key: "Cache-Control", value: "no-cache, no-store, must-revalidate" },
         ],
       },
       {

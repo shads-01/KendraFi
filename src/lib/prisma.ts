@@ -9,7 +9,15 @@ const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 export const prisma =
   globalForPrisma.prisma ??
   new PrismaClient({
-    adapter: new PrismaPg(new Pool({ connectionString: process.env.DATABASE_URL })),
+    adapter: new PrismaPg(
+      new Pool({
+        connectionString: process.env.DATABASE_URL,
+        // Vercel's Node trust store rejects the Supabase pooler's certificate
+        // chain (Prisma P1011 "self-signed certificate in certificate chain");
+        // the wire stays TLS-encrypted, only chain verification is skipped.
+        ssl: { rejectUnauthorized: false },
+      }),
+    ),
   });
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;

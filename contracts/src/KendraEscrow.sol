@@ -61,7 +61,7 @@ abstract contract ReentrancyGuard {
 
 /**
  * @title KendraEscrow
- * @notice Layer-5 Programmable B2B Escrow & Autonomous Peer Syndicate Protocol for WeBank Weiyedai-Global.
+ * @notice Layer-5 Programmable B2B Escrow & Autonomous Peer Syndicate Protocol for Bangladesh SME working capital.
  *
  * Core Guarantees:
  * 1. solc 0.8.20 + paris EVM: Bytecode compatibility across FISCO BCOS v3 and Base Sepolia.

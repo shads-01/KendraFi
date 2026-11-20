@@ -7,7 +7,7 @@
 **Competition:** International AI Builders Congress 2026 (CloudCamp Bangladesh) — FinSphere AI / SME Capital Engine  
 **Co-Organizer:** Daffodil International University · Congress Day: Dec 26, 2026, Dhaka  
 **Theme:** *"Build Products. Create Jobs. Grow Economies. Solve Global Problems."* — FinSphere AI: SME Capital Engine  
-**Specification Reference:** `CONTEXT.md` & `PROJECT_FILES_MANIFEST.md`  
+**Specification Reference:** `CONTEXT.md` (§2 is authoritative)  
 
 ---
 

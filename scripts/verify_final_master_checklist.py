@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
 scripts/verify_final_master_checklist.py
-KendraFi (Weiyedai-Global) Final Master Verification Script (Section 4)
-Competition: 2026 Shenzhen International FinTechathon (Tsinghua PBCSF & WeBank)
+KendraFi Final Master Verification Script (Section 4)
+Competition: International AI Builders Congress 2026 (CloudCamp Bangladesh)
 Author: Lead 5 (Security Auditor & Submission Director)
 """
 
@@ -21,7 +21,7 @@ if sys.stdout.encoding.lower() != "utf-8":
 def run_master_verification():
     print("=" * 80)
     print("KENDRAFI (WEIYEDAI-GLOBAL) FINAL MASTER VERIFICATION AUDIT")
-    print("Co-Hosts: Tsinghua University PBCSF & WeBank • 2026 Shenzhen FinTechathon")
+    print("Co-Organizer: CloudCamp Bangladesh - Daffodil International University, Dhaka")
     print("=" * 80)
 
     all_passed = True
@@ -200,16 +200,15 @@ def run_master_verification():
         "TECHNICAL_DOCUMENTATION.md",
         "SECURITY_SELF_ASSESSMENT.md",
         "ONCHAIN_EXECUTION_EVIDENCE.md",
-        "PRESENTATION_DECK_SLIDES.md",
-        "VIDEO_STORYBOARD_180S.md",
-        "SHENZHEN_QA_DEFENSE_PLAYBOOK.md",
+        "PITCH_SCRIPT_CLOUDDAMP.md",
+        "INVESTOR_ONE_PAGER.md",
         "backtest_results.json"
     ]
     missing = [d for d in deliverables if not os.path.exists(os.path.join(docs_dir, d))]
     check(
         "Mandatory Competition Deliverables in docs/ (Prompts 10-11)",
         len(missing) == 0,
-        f"Verified all 7 submission files in docs/ (Missing: {missing})"
+        f"Verified all {len(deliverables)} submission files in docs/ (Missing: {missing})"
     )
 
     # =========================================================================

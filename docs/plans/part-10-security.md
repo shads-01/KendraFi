@@ -10,7 +10,7 @@
 
 ### Task 1: Fix the known holes
 
-- [x] **Rotate the HMAC secret:** replace the literal `kendra_zt_hmac_2026_shenzhen_fintechathon_secret_key` in `.env.example` with `change-me-32-bytes`; generate a new value into local `.env` AND Vercel env vars (both sides of the BFF↔FastAPI hop together, or calls 401).
+- [x] **Rotate the HMAC secret:** replace the literal `kendra_zt_hmac_2026_competition_secret_key` in `.env.example` with `change-me-32-bytes`; generate a new value into local `.env` AND Vercel env vars (both sides of the BFF↔FastAPI hop together, or calls 401).
 - [x] **Gate the bypass:** in `api/index.py:64` the `TEST_BYPASS_AUTH` / empty-secret path must refuse to run when `KENDRA_ENV == "production"` — raise at startup. Empty secret in production = crash, not open.
 - [x] **CORS:** if Part 5 hasn't landed: explicit origins per that plan (`api/index.py:40`).
 - [x] **Dependency audit (one-shot):** `pip-audit -r api/requirements.txt` + `npm audit --audit-level=high`. Upgrade fixable highs; append unfixed ones (with reason) to `docs/SECURITY_SELF_ASSESSMENT.md`. Skip Dependabot/Renovate config.

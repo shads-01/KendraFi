@@ -1,8 +1,8 @@
 # KendraFi — Comprehensive Technical Documentation
 **Competition:** International AI Builders Congress 2026 (CloudCamp Bangladesh) — FinSphere AI / SME Capital Engine  
 **Co-Organizer:** Daffodil International University · Congress Day: Dec 26, 2026, Dhaka  
-**Theme:** *"AI as a Financial Participant"* — Topic E (SME Finance Copilot) + Topic F (Agent Wallet +5 Bonus)  
-**Specification:** `CONTEXT.md` & `PROJECT_FILES_MANIFEST.md`  
+**Theme:** FinSphere AI — *SME Capital Engine*  
+**Specification:** `CONTEXT.md` & `AGENTS.md`  
 
 ---
 

@@ -4,7 +4,7 @@ pragma solidity 0.8.20;
 /**
  * @title MockBDTc
  * @notice Mock Digital Bangladeshi Taka (BDTc) ERC-20 token for KendraFi escrow settlement.
- * 2026 Shenzhen International FinTechathon — Tsinghua PBCSF & WeBank.
+ * International AI Builders Congress 2026 — FinSphere AI / SME Capital Engine.
  */
 contract MockBDTc {
     string public constant name = "Bangladeshi Taka Digital Coin";

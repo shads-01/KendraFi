@@ -2,9 +2,9 @@
 """
 KendraFi Empirical Synthetic Karwan Bazar Monte Carlo Backtester
 ===============================================================
-Competition: 2026 Shenzhen International FinTechathon (International Track)
-Co-Hosts: Tsinghua University PBC School of Finance (PBCSF) & WeBank
-Theme: "AI as a Financial Participant" - Topic E (SME Finance Copilot) + Topic F (Agent Wallet)
+Competition: International AI Builders Congress 2026 (CloudCamp Bangladesh)
+Co-Organizer: Daffodil International University · Congress Day: Dec 26, 2026, Dhaka
+Theme: FinSphere AI - SME Capital Engine (working-capital & lending intelligence for small businesses)
 Location: api/scripts/monte_carlo_backtest.py
 
 Requirements & Scientific Methodology:
@@ -339,7 +339,7 @@ def export_and_print_results():
     """Executes backtest, writes JSON output artifacts, and prints executive summary table."""
     print("=" * 80)
     print("KENDRAFI EMPIRICAL MONTE CARLO BACKTESTER (1,000 KENDRAS / 5,000 MERCHANTS)")
-    print("Theme: 2026 Shenzhen International FinTechathon (Tsinghua PBCSF & WeBank)")
+    print("Theme: International AI Builders Congress 2026 (CloudCamp Bangladesh)")
     print("=" * 80)
     print("Generating 1,000 synthetic Kendras with Ghatak assortative clustering & 10% monsoon shocks...")
     

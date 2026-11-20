@@ -5,7 +5,7 @@
 **Preliminary Submission:** Nov 20, 2026 | **Congress Day:** Dec 26, 2026 — Daffodil International University, Dhaka
 **Owner of this file:** `[Lead 5: Security Auditor & Submission Director]`
 
-> **PRECEDENCE:** This file is the single source of truth for all agents, prompts, and teammates. Where `KendraFi_PROJECT-OVERVIEW-AND-SYSTEM-ARCHITECTURE.md` §2.1 shows an `app/` + `components/` tree, that layout is **superseded** by the canonical layout in §3 below (`src/` for Next.js, `api/` for Python serverless). Where any document, prompt, or UI string conflicts with the constants in §2, **§2 wins**. Never hardcode a number that is not in §2.
+> **PRECEDENCE:** This file is the single source of truth for all agents, prompts, and teammates. The canonical layout in §2 below (`src/` for Next.js, `api/` for Python serverless) supersedes any other directory tree in the repo. Where any document, prompt, or UI string conflicts with the constants in §2, **§2 wins**. Never hardcode a number that is not in §2.
 
 ---
 
@@ -101,7 +101,7 @@ kendrafi/
 ├── docs/
 │   ├── traces/scenario_{a,b,c}_trace.json      # exported FSM state traces
 │   ├── TECHNICAL_DOCUMENTATION.md, SECURITY_SELF_ASSESSMENT.md, ONCHAIN_EXECUTION_EVIDENCE.md,
-│   ├── PRESENTATION_DECK_SLIDES.md, VIDEO_STORYBOARD_180S.md, SHENZHEN_QA_DEFENSE_PLAYBOOK.md
+│   ├── PITCH_SCRIPT_CLOUDDAMP.md, INVESTOR_ONE_PAGER.md
 ├── public/                                     # Bangla voice .mp3, Meghna & Patuatuli receipt scans
 ├── test-invoices/                              # valid Karwan Bazar invoices + Red-Team OCR injection photos
 └── types/index.ts                              # shared TS types (FSMState, ZKCommitmentProof, PeerAgentVote)

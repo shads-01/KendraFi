@@ -30,7 +30,7 @@ Before executing code, all workspace markdown documents were thoroughly read, an
     - Wholesaler MDR discount: $1.50\%$ flat ($675.00\text{ BDT}$), net supplier payout = $\mathbf{44,325.00\text{ BDT}}$ ($98.5\%$).
     - Deterministic $\text{DSCR}_{1,t} = \mathbf{1.6800\text{x}} \ge 1.25$ from net inflow $\hat{\mu}_{\text{net}}=5,050$, subsistence floor $C_{\text{sub}}=2,200$, $\hat{\sigma}_{\text{net}}=1,012.35\text{ BDT/day}$, $z_{0.95}=1.645$.
     - Besley-Coate staking shares: `AGT-04` = $40.0\%$ ($18,184.93\text{ BDT}$), `AGT-02` = $35.0\%$ ($15,911.82\text{ BDT}$), `AGT-03` = $25.0\%$ ($11,365.58\text{ BDT}$), `AGT-05` = $0.0\%$ ($0.00\text{ BDT}$ — Abstained, $CV=0.634 > 0.55$). Total = $\mathbf{45,462.33\text{ BDT}}$ ($100.0\%$).
-  - §2: Project Necessities, Environment Variables (`.env.example`), and reference links (Tsinghua PBCSF, WeBank, Grameen Game Theory, FATE, ERC-4337).
+  - §2: Project Necessities, Environment Variables (`.env.example`), and reference links (WeBank, Grameen Game Theory, FATE, ERC-4337).
   - §3: Sequential Master Build Prompts (Prompts 00 through 11):
     - Prompt 00: Master `CONTEXT.md` Specification & Monorepo Constitution.
     - Prompt 01: Monorepo configuration, Supabase RLS schema with Realtime policies and immutability triggers, and calibrated 90-day sandbox generator.
@@ -43,7 +43,7 @@ Before executing code, all workspace markdown documents were thoroughly read, an
     - Prompt 08: Layer-2 Multi-Round LangGraph Contract Net Protocol (CNP) FSM, JSON Trace Exporter & Next.js BFF Routes.
     - Prompt 09: Layer-1 3-Panel Judge Command Center UI (Header, Left Mobile Panel, Center Pentagon Arena).
     - Prompt 10: Layer-1 Right Security/Blockscout Panel, Master Page Integration, Synthetic Monte Carlo Backtester & Docs.
-    - Prompt 11: Mandatory 10-Minute Presentation Deck, 180-Second Video Storyboard & Shenzhen Live Q&A Defense Playbook.
+    - Prompt 11: Pitch Script, Demo Flow & Judge Q&A Defense Playbook.
   - §4: Final Master Verification Checklist (Sections 4.1 & 4.2).
 
 ### 2.2 `KendraFi_PROJECT-OVERVIEW-AND-SYSTEM-ARCHITECTURE.md` (Total 223 lines, 34.0 KB)
@@ -91,7 +91,7 @@ Before executing code, all workspace markdown documents were thoroughly read, an
   - 16-bit range proof: $v = 76,376$, $T = 56,828 \implies \Delta v = 19,548 \in [0, 65535]$.
 
 #### Step 3: Verification of Prompt 00 Requirements
-- Verified all 5 Mandatory FinTechathon Self-Critic Rules in `CONTEXT.md`:
+- Verified all 5 Mandatory Engineering Self-Critic Rules in `CONTEXT.md`:
   - Rule 1 (Zero LLM Math): Implemented in §1.
   - Rule 2 (Multi-Round CNP & 5-State FSM): Implemented in §1.
   - Rule 3 (Four-Tier Zero-Trust, Supabase RLS & x402 Guardrails): Implemented in §1.
@@ -891,7 +891,7 @@ Layer 4 cryptographic privacy is verified. Ready for **Prompt 06: Layer-5 Solidi
      - `.phone-chassis`: Ceramic smartphone chassis with realistic camera notch and depth shadow.
   3. **Multi-View Navigation Architecture (`src/app/page.tsx` & `src/components/JudgeCommandHeader.tsx`):**
      - Integrated 3-way top header switcher: `Overview` (Landing Page), `Command Center` (3-Panel Operational Cockpit), and `Analytics` (Monte Carlo Dashboard).
-     - **`ProtocolLandingView.tsx`:** High-converting landing page with 2026 Shenzhen FinTechathon hero banner, live metrics ticker (45k BDT, 12.5% APR, 1.68x DSCR, 100% staked), 3 scenario launchpad cards, Dual Problem Statement visualizer (Dhaka street markets vs. WeBank cold-start data wall), 5 autonomous agent persona cards, and 5-layer ABCD architecture grid.
+     - **`ProtocolLandingView.tsx`:** High-converting landing page with CloudCamp Bangladesh hero banner, live metrics ticker (45k BDT, 12.5% APR, 1.68x DSCR, 100% staked), 3 scenario launchpad cards, Dual Problem Statement visualizer (Dhaka street markets vs. WeBank cold-start data wall), 5 autonomous agent persona cards, and 5-layer ABCD architecture grid.
      - **`MonteCarloAnalyticsView.tsx`:** Full-screen empirical Monte Carlo dashboard showcasing 1,000 Kendras / 5,000 merchants simulation, +21.96% ROC-AUC lift, -60.76% default reduction, and feature importance rankings.
      - **`MerchantMobilePanel.tsx`, `KendraArenaPanel.tsx`, `SecurityEscrowPanel.tsx`:** Upgraded with larger typography, crisp badges, interactive scenario selection rings, and real-time execution telemetry.
   4. **Design System Specification (`DESIGN.md`):**
@@ -906,11 +906,11 @@ Layer 4 cryptographic privacy is verified. Ready for **Prompt 06: Layer-5 Solidi
 
 ## 5. Next Steps & Roadmap for Prompt 11
 
-Ready for **Prompt 11: Mandatory 10-Minute Presentation Deck, 180-Second Video Storyboard & Shenzhen Live Q&A Defense Playbook**:
+Ready for **Prompt 11: Pitch Script, Demo Flow & Judge Q&A Defense Playbook**:
 1. Target Branch: `docs/lead5-deck-video-and-qa-playbook`
-2. Author `docs/PRESENTATION_DECK_SLIDES.md` (12-Slide Marp / LaTeX pitch deck).
-3. Author `docs/VIDEO_STORYBOARD_180S.md` (180-second cinematic video script and screen capture timing).
-4. Author `docs/SHENZHEN_QA_DEFENSE_PLAYBOOK.md` (Deep Tsinghua PBCSF and WeBank panel defense Q&A playbook).
+2. Author the 12-beat pitch outline in `docs/PITCH_SCRIPT_CLOUDDAMP.md`.
+3. Author the timed 3-minute runtime map and screen-capture cues in `docs/PITCH_SCRIPT_CLOUDDAMP.md`.
+4. Author the judge Q&A defenses in `docs/PITCH_SCRIPT_CLOUDDAMP.md`.
 
 ---
 
@@ -960,33 +960,39 @@ Ready for **Prompt 11: Mandatory 10-Minute Presentation Deck, 180-Second Video S
 # Session 15: Prompt 11 Final Deliverables Implementation (2026-10-18)
 
 ## 1. Executive Summary & Objective
-- **Trigger:** Implementation of Prompt 11 (`11_Presentation_Deck_Video_Script_And_Shenzhen_QA_Playbook`).
+- **Trigger:** Implementation of Prompt 11 (`11_Pitch_Script_Demo_Flow_And_Judge_QA_Playbook`).
 - **Assigned Role:** `[Lead 5: Security Auditor & Submission Director]`
 - **Active Git Branch:** `docs/lead5-deck-video-and-qa-playbook`
 - **Key Deliverables Implemented:**
-  1. **12-Slide Pitch Deck (`docs/PRESENTATION_DECK_SLIDES.md`):**
+  1. **12-Beat Pitch Outline (`docs/PITCH_SCRIPT_CLOUDDAMP.md`):**
      - Full 12-slide Marp / LaTeX Beamer presentation formatted for <=10 minute delivery.
-     - Covers Title & Dual Hook, Dhaka vs. Shenzhen Problem Statement, Comparative Landscape, 5-Agent Architecture, Quantitative & Game-Theoretic Rigor (DSCR 1.6800x, Besley-Coate Nash Utility), Layer-4 secp256k1 ZK Range Proofs & WeBank FATE Scorer, Topic F Direct Escrow & 1.50% Wholesaler MDR, 4-Tier Zero-Trust Security, Covariant Monsoon Shock Flash Bailout, Empirical 5,000-Merchant Monte Carlo Backtest (+21.96% AUC lift), Reconciled 12.50% APR Unit Economics, and On-Chain Verification Proofs with Belt-and-Road Roadmap.
-  2. **180-Second Cinematic Video Storyboard (`docs/VIDEO_STORYBOARD_180S.md`):**
+     - Covers Title & Dual Hook, Dhaka Street Reality vs. Bank Data Wall, Comparative Landscape, 5-Agent Architecture, Quantitative & Game-Theoretic Rigor (DSCR 1.6800x, Besley-Coate Nash Utility), Layer-4 secp256k1 ZK Range Proofs & WeBank FATE Scorer, On-Chain Direct Escrow & 1.50% Wholesaler MDR, 4-Tier Zero-Trust Security, Covariant Monsoon Shock Flash Bailout, Empirical 5,000-Merchant Monte Carlo Backtest (+21.96% AUC lift), Reconciled 12.50% APR Unit Economics, and On-Chain Verification Proofs with Belt-and-Road Roadmap.
+  2. **Timed 3-Minute Runtime Map (`docs/PITCH_SCRIPT_CLOUDDAMP.md`):**
      - Second-by-second 180s script broken down into 5 acts:
        - Act I (`0:00–0:25`): Dual Hook (Dhaka Street Reality vs. WeBank Cold-Start Data Wall).
        - Act II (`0:25–1:10`): Scenario A (3-Round CNP, Ghatak Assortative Staking, 16-Bit CDS94 ZK Solvency Proof).
        - Act III (`1:10–1:55`): Scenario B (Red-Team Prompt Injection Intercept & x402 Supplier Blacklisting on AGT-05).
        - Act IV (`1:55–2:35`): On-Chain 4-of-5 EIP-712 Quorum Recovery & 98.5% Direct-to-Wholesaler Escrow Disbursal on Base Sepolia.
        - Act V (`2:35–3:00`): Covariant Monsoon Flash Bailout (`triggerBesleyCoateBailout()`), Automated Repayment Sweep & Global Scale.
-     - Full bilingual burn-in subtitle cues (`[EN]` top / `[中文]` bottom) and 2.5x zoom camera cues.
-  3. **Shenzhen Grand Finals Q&A Defense Playbook (`docs/SHENZHEN_QA_DEFENSE_PLAYBOOK.md`):**
+     - Full bilingual burn-in subtitle cues (`[EN]` top / `[বাংলা]` bottom) and 2.5x zoom camera cues.
+  3. **Judge Q&A Defense Playbook (kept in `docs/PITCH_SCRIPT_CLOUDDAMP.md`):**
      - Word-for-word mathematical and architectural answers for tough judge questions:
-       - **Q1 (Tsinghua PBCSF Finance Professor):** Grameen II domino defaults vs. KendraFi Bounded Fractional Staking ($\alpha_j \le 0.40$) + Covariant Monsoon Shock Discrimination (`discriminate_monsoon_shock`).
-       - **Q2 (WeBank Systems Architect):** Circular MFS wash-trading loops ($A \to B \to A$) detected via Spatio-Temporal Entropy ($H_{st} \ge 0.65$) + Direct-to-Supplier Escrow ("Zero-Cash" Invariant).
+       - **Q1 (Microfinance & Game Theory Judge):** Grameen II domino defaults vs. KendraFi Bounded Fractional Staking ($\alpha_j \le 0.40$) + Covariant Monsoon Shock Discrimination (`discriminate_monsoon_shock`).
+       - **Q2 (Bank Systems Architect Judge):** Circular MFS wash-trading loops ($A \to B \to A$) detected via Spatio-Temporal Entropy ($H_{st} \ge 0.65$) + Direct-to-Supplier Escrow ("Zero-Cash" Invariant).
        - **Q3 (Security / Cryptography Judge):** Soundness of 16-bit CDS94 OR-Sigma Range Proofs over `secp256k1` homomorphic curve points + Supabase RLS isolation.
        - **Q4 (Smart Contracts):** Paris EVM locking in Solidity 0.8.20 and zero `PUSH0` (`0x5f`) opcode reverts on FISCO BCOS v3.x.
        - **Q5 (Distributed Systems):** Serverless anti-replay windows and atomic PostgreSQL nonce serialization.
-       - **Q6 (WeBank FATE):** Local edge processing preserving Bangladesh Bank data sovereignty while computing IEEE P3652.1 Hetero-LR scores.
+       - **Q6 (Federated Learning Judge):** Local edge processing preserving Bangladesh Bank data sovereignty while computing IEEE P3652.1 Hetero-LR scores.
        - **Q7 (Unit Economics):** Reconciling 12.50% APR and 1.50% wholesaler MDR economics.
        - **Q8 (Regulatory):** Bypassing Bangladesh's $119/day MFS cash-out limit through B2B merchant payment classification.
      - Complete quick-fire numbers cheat sheet for presenters.
 
 ## 2. Final Completion Status
 - **Cumulative Progress:** **12 / 12 Prompts Completed (100.0%)**!
-- All code, contracts, risk engines, ZK provers, Next.js UI, empirical backtests, on-chain evidence, slide decks, video storyboards, and defense playbooks are finalized, tested, and submission-ready.
+- All code, contracts, risk engines, ZK provers, Next.js UI, empirical backtests, on-chain evidence, the pitch script, and the judge Q&A defenses are finalized, tested, and submission-ready.
+
+---
+
+## 3. Provenance Note — Retired Artifacts (2026-11-20)
+
+The repo was originally scaffolded against an earlier, unrelated competition target. On 2026-11-20 every reference to that target — and to its co-hosts, locale, and Chinese-language UI badges — was scrubbed so the repository documents only the International AI Builders Congress 2026 submission. Five superseded artifacts were removed in the same pass: the slide deck, the 180-second video storyboard, the grand-finals Q&A playbook, the superseded project overview, and the file manifest. Their content is preserved in git history; the live equivalents are `CONTEXT.md`, `AGENTS.md`, and `docs/PITCH_SCRIPT_CLOUDDAMP.md`.

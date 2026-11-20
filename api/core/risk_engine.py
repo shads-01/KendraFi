@@ -1,7 +1,7 @@
 """
 api/core/risk_engine.py
-Tier-2 Deterministic Quantitative Risk Engine for KendraFi (Weiyedai-Global).
-2026 Shenzhen International FinTechathon — Tsinghua PBCSF & WeBank.
+Tier-2 Deterministic Quantitative Risk Engine for KendraFi.
+International AI Builders Congress 2026 — FinSphere AI / SME Capital Engine.
 
 100% PURE NUMPY — STRICT ZERO-LLM-MATH POLICY (CONTEXT.md Rule 1).
 Computes exact ACT/365 DSCR, Ghatak assortative proportional Besley-Coate staking,

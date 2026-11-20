@@ -1,5 +1,13 @@
 {
   "$schema": "https://opencode.ai/config.json",
   // Inject the master spec into every session so no agent has to discover it.
-  "instructions": ["CONTEXT.md"]
+  "instructions": ["CONTEXT.md"],
+  // KendraFi FSM MCP server: run_scenario / get_trace / get_backtest_summary
+  "mcp": {
+    "kendrafi": {
+      "type": "local",
+      "command": ["python", "mcp-server/kendrafi_mcp.py"],
+      "enabled": true
+    }
+  }
 }

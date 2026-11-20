@@ -52,6 +52,7 @@ engines and four-tier zero-trust security. Users (judges) watch live scenario de
 - Tests: pytest — `.venv/Scripts/python -m pytest tests/` (or `npm run test:api`) · auth — `npm run test:auth` (vitest, needs Docker) · e2e — `npm run test:e2e` (Playwright)
 - Sandbox data: `npm run generate:sandbox`
 - Contracts: `forge test` from `contracts/`
+- MCP server: `python mcp-server/kendrafi_mcp.py` (stdio; `pip install mcp`; registered in `opencode.jsonc`)
 
 ## Working loop (every non-trivial task)
 

@@ -54,7 +54,7 @@ Gross protocol take per facility today: **platform fee + 675.00 BDT MDR**, with 
 | Updated estimate | **USD 73 billion** | IFC MSME Finance Gap Report 2025 (secondary citation; verify against the report PDF before investor use) |
 | SME count / GDP share | **~10 million SMEs**, **~25% of GDP** | Same IFC 2023 release |
 | Global context | USD 5.2T formal MSME gap (USD 5.7T incl. informal) | IFC MSME Finance factsheet |
-| Binding constraint today | Bangladesh's **USD 119/day mobile cash-out limit** | Repo docs (`docs/VIDEO_STORYBOARD_180S.md` §1.1) — daily-sweep-friendly, but caps single-day settlement velocity |
+| Binding constraint today | Bangladesh's **USD 119/day mobile cash-out limit** | Repo docs (`docs/SECURITY_SELF_ASSESSMENT.md` §threat vectors) — daily-sweep-friendly, but caps single-day settlement velocity |
 
 **Serviceable wedge:** cash-dense wholesale-market merchants (grocery/rice, textiles, pharma depo, electronics, cold storage) — precisely the five calibrated Karwan Bazar cluster personas. At 12.50% APR × 30-day tenor, annualized protocol fee revenue per 1,000 active 45,000-BDT facilities ≈ 1.20% × 45,000 × 12 cycles ≈ **6.48M BDT/yr** in platform fees plus 675 × 12,000 = **8.1M BDT/yr** in MDR — a single market cluster (Karwan Bazar has thousands of such stalls) is a viable launch P&L; the 10M-SME universe is the expansion story.
 

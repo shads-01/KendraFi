@@ -2,7 +2,7 @@
 api/core/zk_fate_privacy.py
 Layer-4 Cryptographic Privacy: secp256k1 Pedersen Commitments, 16-Bit CDS94
 Disjunctive Range Proofs, Private Set Intersection (PSI), and WeBank FATE Hetero-LR.
-2026 Shenzhen International FinTechathon — Tsinghua PBCSF & WeBank.
+International AI Builders Congress 2026 — FinSphere AI / SME Capital Engine.
 
 Guarantees:
 1. secp256k1 Pedersen Commitments C_i = v*G + r_i*H with nothing-up-my-sleeve secondary generator H.
@@ -343,7 +343,7 @@ class Secp256k1PedersenRangeProver:
 # PRIVATE SET INTERSECTION (PSI) SUPPLIER REGISTRY TOKEN
 # ==============================================================================
 
-PSI_SALT_SECRET = "kendra_kyb_psi_merkle_blinding_key_2026_shenzhen"
+PSI_SALT_SECRET = "kendra_kyb_psi_merkle_blinding_key_2026_cabc"
 
 
 def compute_psi_supplier_token(supplier_wallet: str, secret_key: str = PSI_SALT_SECRET) -> str:

@@ -1,4 +1,4 @@
-// KendraFi (Weiyedai-Global) Prisma Schema
+// KendraFi Prisma Schema
 // Configured for Supabase PostgreSQL (IPv4 Session & Transaction Poolers)
 //
 // Multi-tenant SaaS evolution (Part 3 — Databases & storage, Task 1).

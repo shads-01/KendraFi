@@ -407,7 +407,7 @@ def test_shared_test_vector_cross_runtime():
     Fixed deterministic test vector executed across both Python and TypeScript runtimes.
     Guarantees byte-for-byte identical HMAC-SHA256 digest calculation.
     """
-    FIXED_SECRET = "kendra_shared_test_vector_key_2026_fintechathon"
+    FIXED_SECRET = "kendra_shared_test_vector_key_2026_cabc"
     FIXED_TIMESTAMP = "1773500000.000"
     FIXED_BODY = '{"facility_id":"FAC-TEST-001","amount_bdt":45000.0,"borrower":"AGT-01"}'
 

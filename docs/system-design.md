@@ -47,7 +47,7 @@ Bangladesh's SME base (~10M micro-enterprises ≈ 25% of GDP) carries a document
 - **FR-3 Deterministic Audit:** DSCR ≥ 1.25 gate; Besley-Coate clearing yield φ\* = 1.00% APR; 40% agent session-key cap (maxAlphaBps = 4000).
 - **FR-4 3-Round CNP:** CFP → deficit reallocation → Nash quorum lock as a genuine loop; abstention rule for agents with CV > 0.55.
 - **FR-5 Escrow & honesty:** 4-of-5 EIP-712 quorum via on-chain `ECDSA.recover` (solc 0.8.20, `paris`); `LIVE_RPC_BROADCAST` vs `REPLAY_OF_VERIFIED_TESTNET_TX` never disguised.
-- **FR-6 Bilingual HUD:** `EN + 中文` badges on judge-facing surfaces.
+- **FR-6 Bilingual HUD:** `EN + Bangla` badges on judge-facing surfaces.
 
 ## 6. Non-Functional Requirements
 

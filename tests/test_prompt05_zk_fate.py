@@ -2,7 +2,7 @@
 tests/test_prompt05_zk_fate.py
 Automated Test Suite for Prompt 05: Layer-4 Cryptographic Privacy, secp256k1 Pedersen Commitments,
 16-Bit CDS94 Range Proofs, Private Set Intersection (PSI), and WeBank FATE Hetero-LR Scorer.
-2026 Shenzhen International FinTechathon — Tsinghua PBCSF & WeBank.
+International AI Builders Congress 2026 — FinSphere AI / SME Capital Engine.
 
 Verifies:
 1. Deterministic nothing-up-my-sleeve secondary generator H on secp256k1.

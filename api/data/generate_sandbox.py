@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
 api/data/generate_sandbox.py
-Deterministic 90-Day Karwan Bazar Sandbox Generator for KendraFi (Weiyedai-Global).
-2026 Shenzhen International FinTechathon — Tsinghua PBCSF & WeBank.
+Deterministic 90-Day Karwan Bazar Sandbox Generator for KendraFi.
+International AI Builders Congress 2026 — FinSphere AI / SME Capital Engine.
 
 This script uses np.random.default_rng(seed=2026) to generate 90 days (July 15 - October 12, 2026)
 of calibrated MFS cash flows, transfer graphs, circular wash-trading loops, and monsoon shocks.
@@ -268,7 +268,7 @@ def generate_90d_sandbox() -> Dict[str, Any]:
         "metadata": {
             "dataset_name": "Dhaka Karwan Bazar 90-Day MFS Sandbox",
             "seed": 2026,
-            "generated_for": "2026 Shenzhen International FinTechathon (Topic E & F)",
+            "generated_for": "International AI Builders Congress 2026 — FinSphere AI / SME Capital Engine",
             "start_date": "2026-07-15",
             "end_date": "2026-10-12",
             "total_days": 90,

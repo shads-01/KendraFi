@@ -8,7 +8,7 @@ import "../src/AgentSessionAccount.sol";
 /**
  * @title DeployKendraScript
  * @notice Deterministic deployment script for KendraFi Layer-5 contracts on Base Sepolia & FISCO BCOS.
- * 2026 Shenzhen International FinTechathon.
+ * International AI Builders Congress 2026.
  */
 contract DeployKendraScript {
     MockBDTc public bdtc;

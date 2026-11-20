@@ -3,7 +3,7 @@
 > **Owner:** the team. Tasks marked **[H]** need a human (total ≈ 3–4 hours across 8 weeks, in 3 optional sessions). Tasks marked **[A]** the agent does on request.
 > **Constraints honored (2026-10-26):** remote-only · zero warm connections · near-zero weekly time. The plan is sized for that, not for an ideal world.
 > **Window:** Nov 1 → Dec 19 freeze. Congress Day Dec 26 — Opportunity Connect 1:1s run 9:00–11:00 and 14:00–15:00, Daffodil International University.
-> **Do NOT start before Nov 1.** This week belongs to the preliminary video (`docs/plans/2026-10-26-cabc-bangladesh-pivot.md` Phase 0).
+> **Do NOT start before Nov 1.** This week belongs to the preliminary video (the CABC pivot Phase 0, now complete).
 
 ---
 
@@ -151,5 +151,5 @@ Title: **KendraFi পাইলটে যোগ দিন / Join the KendraFi pil
 - Cold outreach with near-zero follow-up time ≈ **at most 1 warm conversation expected**; a signed MFI LOI by Dec 26 is possible but unlikely — the fallback evidence (documented pipeline + interest list + pilot protocol + official anchors) is sized for that reality.
 - **Never** claim interest-list signups as "merchant demand" unless the signers are merchants. Label it "pilot interest list".
 - The association WhatsApp number is not published in the plan — find it on the market office or the association's Facebook page; do not invent one.
-- `docs/INVESTOR_ONE_PAGER.md` is the attachment for all emails; if it still carries Shenzhen framing, finish pivot Task 9–10 before Session 1.
+- `docs/INVESTOR_ONE_PAGER.md` is the attachment for all emails; if it still carries retired-competition framing, finish the branding cleanup before Session 1.
 - No paying for signatures, no overclaiming: an LOI says "interest to explore", nothing more — the honest-tx-badge brand depends on it.

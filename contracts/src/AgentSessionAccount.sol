@@ -31,7 +31,7 @@ interface IAccount {
  * @title AgentSessionAccount
  * @notice ERC-4337 compliant smart contract wallet with bounded session key policies.
  * Enforces a strict 40.0% (4,000 bps) maxAlphaBps joint-liability staking cap per session key.
- * 2026 Shenzhen International FinTechathon (Topic F: +5 Bonus Agent Wallet).
+ * International AI Builders Congress 2026 — FinSphere AI / SME Capital Engine.
  */
 contract AgentSessionAccount is IAccount {
     struct SessionPolicy {

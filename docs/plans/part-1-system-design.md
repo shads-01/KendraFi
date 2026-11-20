@@ -24,7 +24,7 @@
 ## Current State Findings (grounded, verified 2026-10-23)
 
 - No `/docs/system-design.md` exists; `docs/` holds pitch, technical, security, on-chain, investor, scalability, storyboard, QA docs — no system design.
-- Product framing is competition- and protocol-centric (FinTechathon demo), not written down as a SaaS problem statement with user personas.
+- Product framing is competition- and protocol-centric (competition demo), not written down as a SaaS problem statement with user personas.
 
 ## Weaknesses / What Went Wrong
 

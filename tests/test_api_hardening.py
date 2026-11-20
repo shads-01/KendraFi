@@ -257,12 +257,12 @@ def test_production_mode_refuses_empty_secret_at_startup():
 def test_env_example_clean_of_old_hmac_literal():
     """
     Part 10 verification: .env.example greps clean for the old literal
-    'kendra_zt_hmac_2026_shenzhen_fintechathon_secret_key'.
+    'kendra_zt_hmac_2026_competition_secret_key'.
     """
     env_example_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env.example")
     with open(env_example_path, "r", encoding="utf-8") as f:
         content = f.read()
 
-    assert "kendra_zt_hmac_2026_shenzhen_fintechathon_secret_key" not in content
+    assert "kendra_zt_hmac_2026_competition_secret_key" not in content
     assert "change-me-32-bytes" in content
 

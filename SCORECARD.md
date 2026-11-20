@@ -86,4 +86,4 @@
 | `docs/PITCH_SCRIPT_CLOUDDAMP.md` + `docs/INVESTOR_ONE_PAGER.md` | Presentation |
 | `SCORECARD.md` (this file) | Definition of done |
 
-*Pre-existing evidence reused, not regenerated from scratch: `docs/traces/scenario_{a,b,c}_trace.json`, `docs/backtest_results.json`, `docs/ONCHAIN_EXECUTION_EVIDENCE.md`, `docs/PRESENTATION_DECK_SLIDES.md`, `docs/VIDEO_STORYBOARD_180S.md`, `docs/SHENZHEN_QA_DEFENSE_PLAYBOOK.md` (retired-competition-branded, still valid source material). Verification run date: 2026-10-23, repo `adb2927`.*
+*Pre-existing evidence reused, not regenerated from scratch: `docs/traces/scenario_{a,b,c}_trace.json`, `docs/backtest_results.json`, `docs/ONCHAIN_EXECUTION_EVIDENCE.md`. Verification run date: 2026-10-23, repo `adb2927`.*

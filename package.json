@@ -2,7 +2,7 @@
   "name": "kendrafi",
   "version": "1.0.0",
   "private": true,
-  "description": "Zero-Trust Multi-Agent Cooperative Risk and Programmable B2B Escrow Protocol for WeBank Weiyedai-Global",
+  "description": "Zero-Trust Multi-Agent Cooperative Risk and Programmable B2B Escrow Protocol for Bangladesh SME working capital",
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",

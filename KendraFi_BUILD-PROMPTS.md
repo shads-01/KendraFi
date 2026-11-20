@@ -1,21 +1,21 @@
 # KENDRAFI_MASTER_BUILD_PROMPTS.md — Complete Next.js 15 + Supabase + Zero-Trust Master Build File
 
-> **SUPERSEDED (2026-10-26):** This build-prompt log belongs to the retired 2026 Shenzhen FinTechathon era and is kept for history only. The canonical master specification is now `CONTEXT.md` (International AI Builders Congress 2026 — FinSphere AI / SME Capital Engine); `CLAUDE.md` is the agent-memory entry point. Content below references the old competition on purpose.
+> **NOTE:** This file is the build-prompt log for the KendraFi monorepo, kept for build provenance and used as the source for the submission's Prompt Library. The canonical master specification is `CONTEXT.md`; `CLAUDE.md` is the agent-memory entry point.
 
-**Competition:** 2026 Shenzhen International FinTechathon (International Track)[cite: 2]  
-**Co-Hosts:** Tsinghua University PBC School of Finance (PBCSF) & WeBank[cite: 2]  
-**Official Theme:** *"AI as a Financial Participant"* — Topic E (SME Finance Copilot) + Topic F (Agent Wallet +5 Bonus)[cite: 2]  
-**Submission Deadline:** October 20, 2026, 23:59 UTC+8 (21:59 Dhaka Time, UTC+6)[cite: 2]  
+**Competition:** International AI Builders Congress 2026 (CloudCamp Bangladesh) — FinSphere AI / SME Capital Engine[cite: 2]  
+**Co-Organizer:** Daffodil International University · Congress Day: Dec 26, 2026, Dhaka[cite: 2]  
+**Theme:** *"Build Products. Create Jobs. Grow Economies. Solve Global Problems."* — FinSphere AI: SME Capital Engine[cite: 2]  
+**Submission Timeline:** Preliminary submission Nov 20, 2026 · Congress Day Dec 26, 2026[cite: 2]  
 
 ---
 
 ## 1. Project Context & Executive Overview
 
 ### 1.1 Dual Problem Statement (Dhaka Street Markets & WeBank Overseas Expansion)
-**KendraFi** (*Weiyedai-Global*) is a Zero-Trust, multi-agent cooperative risk, privacy-preserving underwriting, and programmable B2B escrow protocol that bridges **Grameen Bank’s Nobel-winning 5-member peer syndicate (*Kendra*) economics** with **WeBank’s AI-Native ABCD (AI, Blockchain, Cloud, Data) architecture**[cite: 2]:
+**KendraFi** is a Zero-Trust, multi-agent cooperative risk, privacy-preserving underwriting, and programmable B2B escrow protocol that bridges **Grameen Bank’s Nobel-winning 5-member peer syndicate (*Kendra*) economics** with **WeBank’s AI-Native ABCD (AI, Blockchain, Cloud, Data) architecture**[cite: 2]:
 
 * **Perspective A — The Dhaka Nano-Merchant Reality:** Street grocers like **Rahim** in Karwan Bazar, Dhaka need **$400 (45,000 BDT)** every two weeks to restock rice and cooking oil from wholesale distributors[cite: 2]. Traditional Microfinance Institutions (Grameen, BRAC, UDPS—693 MRA-licensed MFIs disbursing BDT 2,493.02 billion annually) achieve >96% repayment using 5-person *Kendras*, but spend **12%–15% of their loan book** on human field officers riding motorcycles to weekly cash meetings—forcing honest merchants to pay **24%–27% APR**[cite: 2]. Conversely, solo smartphone nano-loan apps lose **Ghatak (1999)** assortative screening and **Stiglitz (1990)** peer monitoring, suffering **10%–18% defaults (NPLs)** from loan diversion and hitting Bangladesh's **$119/day (10,000 BDT) MFS cash-out cap** and **1.85% withdrawal fee**[cite: 2].
-* **Perspective B — The Shenzhen / WeBank "Cold-Start Data Wall":** WeBank serves **424 million retail users** and **1.6 million+ MSMEs** at an annual IT O&M cost of **RMB 2 (~$0.30 USD) per account**, **99.99975% availability**, and a **1.46% overall NPL ratio (~1.0% on microloans)**[cite: 2]. Its flagship *Weiyedai* and *Weihudai* products achieve a **62% approval rate** by combining **FATE (IEEE P3652.1) Heterogeneous Logistic Regression (Hetero-LR)** (trained on **7.7 billion enterprise entries** in *SME Large Model 2.0*) with digital VAT tax invoices and PBOC credit bureau records, backed by a **20% WeBank / 80% partner-bank joint-lending model** and **RMB 77 billion in online bulk guarantees**[cite: 2]. When **WeBank Technology Services (*WeTechnology Limited*, HK, $150M funding)** expands into Belt-and-Road markets (Bangladesh, Thailand, Indonesia, Pakistan, Kenya), *Weiyedai* hits a **"Cold-Start Data Wall"** because 85%–90% of informal nano-merchants have **zero digital VAT tax filings ($X_B$)** and **zero central bank credit bureau histories ($Y$)**[cite: 2].
+* **Perspective B — The WeBank "Cold-Start Data Wall":** WeBank serves **424 million retail users** and **1.6 million+ MSMEs** at an annual IT O&M cost of **RMB 2 (~$0.30 USD) per account**, **99.99975% availability**, and a **1.46% overall NPL ratio (~1.0% on microloans)**[cite: 2]. Its flagship *Weiyedai* and *Weihudai* products achieve a **62% approval rate** by combining **FATE (IEEE P3652.1) Heterogeneous Logistic Regression (Hetero-LR)** (trained on **7.7 billion enterprise entries** in *SME Large Model 2.0*) with digital VAT tax invoices and PBOC credit bureau records, backed by a **20% WeBank / 80% partner-bank joint-lending model** and **RMB 77 billion in online bulk guarantees**[cite: 2]. When **WeBank Technology Services (*WeTechnology Limited*, HK, $150M funding)** expands into Belt-and-Road markets (Bangladesh, Thailand, Indonesia, Pakistan, Kenya), *Weiyedai* hits a **"Cold-Start Data Wall"** because 85%–90% of informal nano-merchants have **zero digital VAT tax filings ($X_B$)** and **zero central bank credit bureau histories ($Y$)**[cite: 2].
 
 ### 1.2 Reconciled Mathematical & Unit Economics Benchmarks (Zero Hardcoding)
 Every equation across the Python engine, Solidity contracts, and Next.js UI is mathematically reconciled so that zero values are fudged:
@@ -60,7 +60,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 SUPABASE_SERVICE_ROLE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 
 # 2. ZERO-TRUST HMAC GATEWAY
-ZEROTRUST_INTERNAL_HMAC_SECRET="kendra_zt_hmac_2026_shenzhen_fintechathon_secret_key"
+ZEROTRUST_INTERNAL_HMAC_SECRET="kendra_zt_hmac_2026_competition_secret_key"
 PYTHON_RISK_ENGINE_URL="[http://127.0.0.1:8000](http://127.0.0.1:8000)"
 
 # 3. TIER-0 MULTIMODAL PERCEPTION SANDBOX
@@ -84,8 +84,7 @@ NEXT_PUBLIC_MOCK_BDTC_ADDRESS="0x..."
 NEXT_PUBLIC_KENDRA_ESCROW_ADDRESS="0x..."
 ```
 
-### 2.3 All Official Competition, WeBank, Academic & Web3 Reference Links
-* **Competition & Past Champions:** `mailto:wangyr@pbcsf.tsinghua.edu.cn`[cite: 2], https://www.opportunitiescircle.com/shenzhen-fintech-competition/[cite: 2], https://openopportunities.org/opportunities/2026-shenzhen-international-fintech-competition-fintechathon-international-track/[cite: 2], https://ndangira.com/view.php?id=1516[cite: 2], https://www.facebook.com/dlsubms/posts/calling-all-interested-students-the-2026-shenzhen-international-fin-techathon-in/1547409767426077/[cite: 2], https://www.facebook.com/hkustguangzhou/videos/well-done-hkustguangzhouers-yuanhuo-technology-guangzhou-from-hkustgz-recently-w/897602195588981/[cite: 2]
+### 2.3 WeBank, Academic & Web3 Reference Links
 * **WeBank ABCD, FATE & International Expansion:** https://www.webank.com/en/about[cite: 2], https://tctp.tctpwebankcdn.net/owb-admin/data/appsystems/owb-admin/1756804158938-13423.pdf[cite: 2], https://tctp.tctpwebankcdn.net/owb-admin/data/appsystems/owb-admin/1724837556944-43754.pdf[cite: 2], https://tctp.tctpwebankcdn.net/owb-admin/data/appsystems/owb-admin/1725269602331-30930.pdf[cite: 2], https://tctp.tctpwebankcdn.net/owb-admin/data/appsystems/owb-admin/1679405027419-46428.pdf[cite: 2], https://www.researchgate.net/publication/397115016_The_'We'-Volution_FinTech-Driven_Credit_Risk_Management_at_WeBank[cite: 2], https://medium.com/@FateFedAI/utilization-of-fate-in-risk-management-of-credit-in-small-and-micro-enterprises-85683d447cb0[cite: 2], https://www.computer.org/csdl/magazine/co/2022/04/09755189/1CubtQlAuxq[cite: 2], https://cloud.google.com/discover/what-is-federated-learning[cite: 2], https://fintech-consult.com/asia/hongkong/fintech/webank-technology-services/[cite: 2], https://sg.atlstech.com/insight/blogs/payments-research/asia-payments-research/thailand-embraces-digital-future-with-virtual-bank-licenses[cite: 2], https://www.forrester.com/blogs/webank-is-driving-financial-inclusion-at-scale-in-china/[cite: 2], https://gfmag.com/award/award-winners/stars-china/[cite: 2], https://grokipedia.com/page/WeBank_(China)[cite: 2]
 * **Grameen Game Theory & Bangladesh DFS Regulations:** https://personal.lse.ac.uk/ghatak/ej.pdf[cite: 2], https://economics.mit.edu/research/publications/using-repayment-data-test-across-models-joint-liability-lending[cite: 2], https://www.jondequidt.com/pdfs/grouplending.pdf[cite: 2], https://www.econstor.eu/bitstream/10419/37291/1/VfS_2010_pid_822.pdf[cite: 2], https://repository.usfca.edu/cgi/viewcontent.cgi?article=1016&context=econ[cite: 2], https://www.findevgateway.org/sites/default/files/publications/files/mfg-en-paper-how-important-are-peer-effects-in-group-lending-estimating-a-static-game-of-incomplete-information-apr-2008_0.pdf[cite: 2], https://ageconsearch.umn.edu/record/97302/files/Repayment%20performance%20in%20group-based%20credit%20programs%20in%20Bangladesh.pdf[cite: 2], https://rujec.org/article/76647/[cite: 2], https://lightcastlepartners.com/wp-content/uploads/2020/06/The-State-of-Digital-Microfinance-in-Bangladesh.pdf[cite: 2], https://lightcastlepartners.com/insights/2020/02/poverty-alleviation-microfinance/[cite: 2], https://objectstorage.ap-dcc-gazipur-1.oraclecloud15.com/n/axvjbnqprylg/b/V2Ministry/o/office-mra/2024/12/078c11f01c10447c83cf23699844928e.pdf[cite: 2], https://thefinancialexpress.com.bd/home/msmes-in-bangladesh-face-28b-financing-gap-ifc[cite: 2], https://thefinancialexpress.com.bd/home/govt-moves-to-review-cut-microcredit-service-charge[cite: 2], https://udps.org.bd/wp-content/uploads/2023/11/Cradit-Rating-report-2022-2023.pdf[cite: 2], https://idlc.com/mbr/images/public/0yhYifAISukwIfai0CID5w.pdf[cite: 2], https://e-journal.uum.edu.my/index.php/ijms/article/download/9997/2175/28820[cite: 2], https://www.scribd.com/document/960691676/Fintech-Landscape-2025-Global-Trends-Regional-Insights-unit-1-2-and-3[cite: 2], https://softtech.com.tr/Dosyalar/TeknolojiRaporu/GecmisRaporlar/EnglishPastReports/Softtech_2021_Teknoloji_Raporu_eng.pdf[cite: 2]
 * **Web3 Agent Wallets & x402 Counterparty Screening:** https://ethglobal.com/events/tokyo2026/prizes[cite: 2], https://ethglobal.com/events/brussels/prizes[cite: 2], https://ethglobal.com/showcase/hackathon-67zvb[cite: 2], https://www.binance.com/en/square/post/22592928232786[cite: 2]
@@ -102,13 +101,13 @@ NEXT_PUBLIC_KENDRA_ESCROW_ADDRESS="0x..."
 * **3. Role Assignment:** `[Lead 5: Security Auditor & Submission Director]`[cite: 2]
 * **4. The Prompt:**
 ```text
-You are Lead 5 (Security Auditor & Submission Director) initializing the KendraFi repository for the 2026 Shenzhen International FinTechathon.
+You are Lead 5 (Security Auditor & Submission Director) initializing the KendraFi repository for the International AI Builders Congress 2026.
 
 Task: Create the complete `CONTEXT.md` file at the root of the workspace so that all subsequent coding prompts and AI agents have a single, mathematically reconciled source of truth.
 
 Requirements:
 Write `CONTEXT.md` containing:
-1. The 5 Mandatory FinTechathon Self-Critic Rules:
+1. The 5 Mandatory Engineering Self-Critic Rules:
    - RULE 1 (ZERO LLM MATH): LLMs in Tier 0 may only transcribe audio or parse OCR text into raw JSON strings/floats. 100% of DSCR, Besley-Coate Nash utility, staking weights, and entropy calculations MUST execute in `api/core/risk_engine.py` using pure NumPy.
    - RULE 2 (MULTI-ROUND CONTRACT NET PROTOCOL & 5-STATE FSM): Every transaction must progress through `IDLE_MONITORING -> INTENT_PERCEPTION -> DETERMINISTIC_AUDIT -> SYNDICATE_P2P_NEGOTIATION (Multi-Round CNP) -> ESCROW_COSIGN_AND_SETTLE` (or `BLOCKED_ADVERSARIAL` / `FLASH_BAILOUT_ACTIVE`) and export full JSON state traces.
    - RULE 3 (FOUR-TIER ZERO-TRUST, SUPABASE RLS & x402 GUARDRAILS): Enforce HMAC-SHA256 between Next.js and FastAPI, Supabase RLS isolation on `merchant_private_cashflows` (labeled `[ZERO-TRUST RLS ISOLATED — SERVER/EDGE ONLY]`), Tier-0 regex/perplexity prompt-injection stripping, and on-chain x402 `isKYBSupplier[supplier]` verification.
@@ -257,7 +256,7 @@ Requirements:
      Instead of an arbitrary constant, define $\delta V_j(\alpha_j^*)$ as the discounted present value ($\delta = 0.95$) of peer $j$'s interest-rate savings ($r_{\text{MFI}} - r_{\text{KendraFi}} = 24.0\% - 12.5\% = 11.5\%$ APR saved over a 30-day cycle on their progressive credit line $1.5 \cdot B_j$) weighted by their syndicate participation $\alpha_j^*$, minus liquidity-volatility shadow cost $\lambda_{\text{vol}} \cdot CV_j^2 \cdot \alpha_j^* R_i$:
      $$\delta V_j(\alpha_j^*) = 0.95 \cdot \left(\frac{0.240 - 0.125}{365} \cdot \Delta\tau\right) \cdot (1.5 B_j) \cdot \alpha_j^*$$
      $$E[U_j(\alpha_j^*)] = p_i \left(\phi_{\text{period}} \alpha_j^* L_i + \delta V_j(\alpha_j^*)\right) - (1 - p_i) \alpha_j^* R_i - \lambda_{\text{vol}} CV_j^2 \alpha_j^* R_i$$
-     Verify that for `AGT-04`, `AGT-02`, and `AGT-03`, $E[U_j] > 0$ (`+169.85 BDT`, `+64.12 BDT`, `+51.40 BDT`), whereas if `AGT-05` ($CV_5 = 0.634, B_5 = 12,000$) attempted to stake, its $E[U_5] = -142.60\text{ BDT} < 0$ (making IC1 non-trivial and economically rigorous for Tsinghua PBCSF faculty!).
+     Verify that for `AGT-04`, `AGT-02`, and `AGT-03`, $E[U_j] > 0$ (`+169.85 BDT`, `+64.12 BDT`, `+51.40 BDT`), whereas if `AGT-05` ($CV_5 = 0.634, B_5 = 12,000$) attempted to stake, its $E[U_5] = -142.60\text{ BDT} < 0$ (making IC1 non-trivial and economically rigorous for the judging panel!).
 ```
 * **5. What We Are Actually Building (Description):**
   We are building the reconciled `risk_engine.py` where $\text{DSCR} = 1.6800\text{x}$, $R_1 = 45,462.33\text{ BDT}$, stakes are `40.0% / 35.0% / 25.0% / 0.0%`, circular wash-trading transfers are filtered out, and Besley-Coate expected utility is grounded in actual MFI-vs-KendraFi APR compression[cite: 2].
@@ -317,7 +316,7 @@ Requirements:
 * **3. Role Assignment:** `[Lead 1: Smart Contract & Account Abstraction Architect]`[cite: 2]
 * **4. The Prompt:**
 ```text
-You are Lead 1 building Layer 5 (`contracts/`) of KendraFi for the Topic F (+5 Point Agent Wallet Bonus).
+You are Lead 1 building Layer 5 (`contracts/`) of KendraFi: the on-chain escrow and the ERC-4337 agent-wallet layer.
 
 Task: Build `contracts/foundry.toml`, `contracts/src/MockBDTc.sol`, `contracts/src/AgentSessionAccount.sol` (ERC-4337 bounded session-key smart account), `contracts/src/KendraEscrow.sol` (with ON-CHAIN EIP-712 4-of-5 signature verification and full repayment + yield sweep), `contracts/script/DeployKendra.s.sol`, and `contracts/test/KendraEscrow.t.sol`.
 
@@ -433,7 +432,7 @@ Task: Build the Left and Center panels of the 3-Panel Judge Command Center using
 
 Requirements:
 1. `src/components/JudgeCommandHeader.tsx`:
-   - Bilingual `EN + 中文` technical subtitle badges, live 5-State FSM pill, Latency counter, `Tx Mode Badge` (`LIVE TESTNET BROADCAST` vs. `VERIFIED TESTNET REPLAY`), and **2.5x Judge Camera Zoom Bar**.
+   - Bilingual `EN + Bangla` technical subtitle badges, live 5-State FSM pill, Latency counter, `Tx Mode Badge` (`LIVE TESTNET BROADCAST` vs. `VERIFIED TESTNET REPLAY`), and **2.5x Judge Camera Zoom Bar**.
 2. `src/components/MerchantMobilePanel.tsx` (LEFT PANEL — Persona-Synced Merchant Smartphone):
    - Automatically sync the smartphone persona header with the active scenario:
      * In **Scenario A**: Displays **Rahim Store (`AGT-01` — Karwan Bazar Rice & Grocery)**, Bangla voice waveform (`45,000 BDT` for 50 sacks of Miniket rice), and stamped *Meghna Group Wholesale (`0x71C...A91`)* invoice.
@@ -503,7 +502,7 @@ Requirements:
 * **5. What We Are Actually Building (Description):**
   We are completing the Right Security & Blockscout Panel, wiring `src/app/page.tsx`, running an honest empirical synthetic Monte Carlo backtest, and writing the technical and security reports that accurately match every line of our code[cite: 2].
 * **6. Senior Architect, Debugger & Tester Review (Potential Pitfalls & Edge Cases):**
-  * *Honest Backtest Labeling:* By fitting actual logistic regression models on the synthetic 5,000-merchant dataset and labeling the results as our synthetic benchmark alongside WeBank's published FATE citation, Tsinghua PBCSF professors can inspect `monte_carlo_backtest.py` and see genuine data science rather than hardcoded numbers[cite: 2].
+  * *Honest Backtest Labeling:* By fitting actual logistic regression models on the synthetic 5,000-merchant dataset and labeling the results as our synthetic benchmark alongside WeBank's published FATE citation, a skeptical judge can inspect `monte_carlo_backtest.py` and see genuine data science rather than hardcoded numbers[cite: 2].
 * **7. Feature Verification Checklist:**
   - [ ] `SecurityEscrowPanel.tsx` displays the 4 security gates, 4 EIP-712 signatures, `44,325.00 BDTc` payout, `45,462.33 BDTc` obligation, honest `tx_mode` badge, and Blockscout link[cite: 2].
   - [ ] `python api/scripts/monte_carlo_backtest.py` computes genuine ROC-AUC and NPL metrics from the 5,000-merchant simulation[cite: 2].
@@ -511,55 +510,52 @@ Requirements:
 
 ---
 
-### Prompt 11: Mandatory 10-Minute Presentation Deck, 180-Second Video Storyboard & Shenzhen Live Q&A Defense Playbook
-* **1. Prompt Name:** `11_Presentation_Deck_Video_Script_And_Shenzhen_QA_Playbook`
-* **2. Branch Name:** `docs/lead5-deck-video-and-qa-playbook`
+### Prompt 11: 3-Minute Pitch Script, Demo Flow & Judge Live Q&A Defense Playbook
+* **1. Prompt Name:** `11_Pitch_Script_Demo_Flow_And_Judge_QA_Playbook`
+* **2. Branch Name:** `docs/lead5-pitch-and-qa-playbook`
 * **3. Role Assignment:** `[Lead 5: Security Auditor & Submission Director]`[cite: 2]
 * **4. The Prompt:**
 ```text
-You are Lead 5 creating the final 2 mandatory competition deliverables and the Shenzhen Grand Finals Q&A Defense Playbook in `docs/PRESENTATION_DECK_SLIDES.md`, `docs/VIDEO_STORYBOARD_180S.md`, and `docs/SHENZHEN_QA_DEFENSE_PLAYBOOK.md`.
+You are Lead 5 creating the pitch deliverables in `docs/PITCH_SCRIPT_CLOUDDAMP.md`, with the judge Q&A defenses kept alongside it.
 
 Requirements:
-1. `docs/PRESENTATION_DECK_SLIDES.md` (12-Slide, <=10-Minute Pitch Deck in Marp / LaTeX Beamer Markdown):
-   - Slide 1: Title & Dual Hook — *KendraFi (Weiyedai-Global): The Informal-Economy Protocol Layer for WeBank Technology Services' ABCD Stack*.
-   - Slide 2: Dual Problem — Dhaka's 24%–27% MFI Human-Officer Tax & $119/Day DFS Cash-Out Cap vs. WeBank Overseas' "Cold-Start Data Wall" (Zero VAT Invoices $X_B$, Zero Credit Bureau Labels $Y$).
-   - Slide 3: Why Existing Solutions Fail — Comparison Matrix (Traditional MFI vs. Solo Nano-Loan Apps vs. Domestic Weiyedai vs. KendraFi).
-   - Slide 4: 5-Agent Autonomous Syndicate Architecture — 5-State LangGraph FSM & 3-Round Contract Net Protocol (CNP) Negotiation.
-   - Slide 5: Quantitative & Game-Theoretic Rigor (Tsinghua PBCSF Deep Dive) — ACT/365 Volatility-Haircut $\text{DSCR}_{i,t} = 1.68\text{x}$, Ghatak (1999) Assortative Weights, and Besley-Coate (1995) Nash Expected Utility $E[U_j(\alpha_j^*)]$.
-   - Slide 6: Cryptographic Neighbor Privacy & WeBank FATE Alignment — `secp256k1` Pedersen Commitments, 16-Bit CDS94 Disjunctive Range Proofs, Supabase RLS Isolation, and IEEE P3652.1 Hetero-LR Scoring.
-   - Slide 7: Topic F (+5 Bonus) Direct-to-Supplier Programmable Escrow — `KendraEscrow.sol` (Base Sepolia + FISCO BCOS `paris` EVM), On-Chain 4-of-5 EIP-712 Signature Recovery, 98.5% Direct Wholesaler Payout (`44,325 BDTc`), and 1.0% APR `ySCT` Peer Yield.
-   - Slide 8: 4-Tier Zero-Trust Security & Anti-Collusion Firewall — Tier-0 OCR Prompt-Injection Sanitizer, x402 KYB Screening, Spatio-Temporal Entropy ($H_{st} \ge 0.65$), and Circular Wash-Trading Filter.
-   - Slide 9: Exogenous Shock Resilience — Covariant Monsoon Shock Discrimination & On-Chain `triggerBesleyCoateBailout()`.
-   - Slide 10: Empirical Monte Carlo Backtest Results — 5,000-Merchant Simulation (ROC-AUC Lift, <1.8% Target NPL).
-   - Slide 11: Reconciled 20/80 Joint-Lending Unit Economics & $2.8B TAM — How Borrower APR Drops from 24% to `12.50% APR` ($8.5\% + 0.4\% + 1.4\% + 2.2\%$) while Wholesaler `1.50%` flat MDR funds the ecosystem.
-   - Slide 12: Live On-Chain Verification & Belt-and-Road Rollout Roadmap (Bangladesh BRAC/bKash, Thailand SCBX/WeBank Virtual Bank, Indonesia, Kenya).
+1. `docs/PITCH_SCRIPT_CLOUDDAMP.md` (1-minute transition + 3-minute pitch with timed beats, ≤430 spoken words, followed by the click-by-click Scenario A demo flow). Cover, in order:
+   - Beat 1: Title & Dual Hook — *KendraFi: the informal-economy protocol layer for SME working capital*.
+   - Beat 2: Dual Problem — Dhaka's 24%–27% MFI human-officer tax & $119/day DFS cash-out cap vs. the bank-export "Cold-Start Data Wall" (zero VAT invoices $X_B$, zero credit bureau labels $Y$).
+   - Beat 3: Why Existing Solutions Fail — Traditional MFI vs. Solo Nano-Loan Apps vs. Bank MSME lending vs. KendraFi.
+   - Beat 4: 5-Agent Autonomous Syndicate Architecture — 5-State LangGraph FSM & 3-Round Contract Net Protocol (CNP) Negotiation.
+   - Beat 5: Quantitative & Game-Theoretic Rigor — ACT/365 Volatility-Haircut $\text{DSCR}_{i,t} = 1.68\text{x}$, Ghatak (1999) Assortative Weights, and Besley-Coate (1995) Nash Expected Utility $E[U_j(\alpha_j^*)]$.
+   - Beat 6: Cryptographic Neighbor Privacy & Federated Hetero-LR Alignment — `secp256k1` Pedersen Commitments, 16-Bit CDS94 Disjunctive Range Proofs, Supabase RLS Isolation, and IEEE P3652.1 Hetero-LR Scoring.
+   - Beat 7: Direct-to-Supplier Programmable Escrow — `KendraEscrow.sol` (Base Sepolia + FISCO BCOS `paris` EVM), On-Chain 4-of-5 EIP-712 Signature Recovery, 98.5% Direct Wholesaler Payout (`44,325 BDTc`), and 1.0% APR `ySCT` Peer Yield.
+   - Beat 8: 4-Tier Zero-Trust Security & Anti-Collusion Firewall — Tier-0 OCR Prompt-Injection Sanitizer, x402 KYB Screening, Spatio-Temporal Entropy ($H_{st} \ge 0.65$), and Circular Wash-Trading Filter.
+   - Beat 9: Exogenous Shock Resilience — Covariant Monsoon Shock Discrimination & On-Chain `triggerBesleyCoateBailout()`.
+   - Beat 10: Empirical Monte Carlo Backtest Results — 5,000-Merchant Simulation (ROC-AUC Lift, <1.8% Target NPL).
+   - Beat 11: Reconciled 20/80 Joint-Lending Unit Economics & $2.8B TAM — How Borrower APR Drops from 24% to `12.50% APR` ($8.5\% + 0.4\% + 1.4\% + 2.2\%$) while Wholesaler `1.50%` flat MDR funds the ecosystem.
+   - Beat 12: Live On-Chain Verification & Rollout Roadmap (Bangladesh BRAC/bKash, Thailand SCBX, Indonesia, Kenya).
 
-2. `docs/VIDEO_STORYBOARD_180S.md`:
-   - Second-by-second 180s script (`0:00–0:25` Dual Hook, `0:25–1:10` Scenario A 3-Round CNP & 16-Bit ZK Proof, `1:10–1:55` Scenario B Red-Team Prompt Injection + x402 Block on `AGT-05`, `1:55–2:35` On-Chain 4-of-5 EIP-712 Settlement & Blockscout Receipt, `2:35–3:00` Monsoon Flash Bailout, Repayment Sweep & 20/80 Scale) with Bilingual (`EN + 中文`) subtitle burn-in cues and 2.5x camera zoom cues.
-
-3. `docs/SHENZHEN_QA_DEFENSE_PLAYBOOK.md`:
+2. Judge Q&A defense playbook (kept in the same file under a `## Judge Q&A` section):
    - Write word-for-word mathematical and architectural answers for the toughest judge questions:
-     * **Q1 (Tsinghua PBCSF Finance Professor):** *"Grameen II moved away from strict binary joint liability toward individual liability because of strategic domino defaults when multiple members fail (Besley & Coate 1995). Why does KendraFi use joint-liability staking?"*
+     * **Q1 (Microfinance & Game Theory Judge):** *"Grameen II moved away from strict binary joint liability toward individual liability because of strategic domino defaults when multiple members fail (Besley & Coate 1995). Why does KendraFi use joint-liability staking?"*
        - **Defense:** Explain Bounded Fractional Staking ($\alpha_j \le 0.40$) + Covariant Shock Discrimination (`discriminate_monsoon_shock`). Under an exogenous market-wide shock ($\Delta \text{CF}_{\text{in}, -i} < -40\%$), `KendraEscrow.sol` does NOT slash peer reputation; it triggers a reserve-backed Flash Bailout + 14-day tenor extension. Slashing only occurs under idiosyncratic moral hazard ($\Delta \text{CF}_{\text{in}, -i} \approx 0$), mathematically eliminating the Besley-Coate domino default equilibrium!
-     * **Q2 (WeBank Principal Systems Architect):** *"What stops 5 friends from sending fake bKash/Nagad transfers back and forth in a circle for 30 days to inflate $\hat{\mu}_{\text{in},i}$ and then splitting the loan?"*
+     * **Q2 (Bank Systems Architect Judge):** *"What stops 5 friends from sending fake bKash/Nagad transfers back and forth in a circle for 30 days to inflate $\hat{\mu}_{\text{in},i}$ and then splitting the loan?"*
        - **Defense:** Point to our two-layer defense: (1) `filter_circular_wash_transfers()` + Sender Diversity Entropy $H_{\text{sender}}$ inside `risk_engine.py` detects and discounts $A \to B \to A$ wash loops to zero; and (2) `KendraEscrow.sol` never disburses cash to the borrower—it pays `98.5%` directly to KYB-whitelisted corporate wholesalers (Meghna Group, Square Pharma) who pay a `1.5%` flat MDR fee. Wash-trading cannot extract cash unless a national corporate wholesaler colludes, which is blocked by $H_{\text{sup}}$ and KYB auditing!
      * **Q3 (Security / Cryptography Judge):** *"How do peer agents know $v - T \ge 0$ without seeing $v$, and where do raw cash flows live?"*
        - **Defense:** Explain our 16-bit CDS94 Disjunctive OR-Sigma Range Proof over `secp256k1` ($\sum_{k=0}^{15} 2^k C_{b_k} = C_i - T \cdot G$) and our server-side Supabase RLS isolation + local edge commitment architecture.
 ```
 * **5. What We Are Actually Building (Description):**
-  We are generating the complete 12-slide Presentation Deck (`PRESENTATION_DECK_SLIDES.md`), the 180-second bilingual Video Storyboard (`VIDEO_STORYBOARD_180S.md`), and the live Shenzhen Q&A Defense Playbook (`SHENZHEN_QA_DEFENSE_PLAYBOOK.md`)[cite: 2].
+  We are generating `docs/PITCH_SCRIPT_CLOUDDAMP.md` — the 1-minute transition, the timed 3-minute pitch script, the click-by-click Scenario A demo flow, and the word-for-word judge Q&A defenses[cite: 2].
 * **6. Senior Architect, Debugger & Tester Review (Potential Pitfalls & Edge Cases):**
-  * *Consistency Between Slides and Live Demo:* Every number on Slide 5, Slide 7, and Slide 11 matches the live UI (`45,462.33 BDT`, `44,325.00 BDT`, `18,184.93 / 15,911.82 / 11,365.58 BDT`, `12.50% APR`, `1.6800x DSCR`).
+  * *Consistency Between Pitch and Live Demo:* Every spoken number (Beat 5, Beat 7, Beat 11) matches the live UI (`45,462.33 BDT`, `44,325.00 BDT`, `18,184.93 / 15,911.82 / 11,365.58 BDT`, `12.50% APR`, `1.6800x DSCR`).
 * **7. Feature Verification Checklist:**
-  - [ ] `docs/PRESENTATION_DECK_SLIDES.md` covers all 12 slides within the 10-minute limit[cite: 2].
-  - [ ] `docs/VIDEO_STORYBOARD_180S.md` includes bilingual `EN + 中文` subtitles and reconciled numbers[cite: 2].
-  - [ ] `docs/SHENZHEN_QA_DEFENSE_PLAYBOOK.md` includes complete defenses for Grameen II domino defaults, circular MFS wash-trading, and `secp256k1` range proof soundness[cite: 2].
+  - [ ] `docs/PITCH_SCRIPT_CLOUDDAMP.md` fits the official segment map and runtime (Problem 0:00–0:30 → Solution 0:30–1:00 → Demo 1:00–2:00 → AI Approach 2:00–2:30 → Impact & Next 2:30–3:00)[cite: 2].
+  - [ ] Every spoken number is a locked `CONTEXT.md` §2 constant or a `docs/backtest_results.json` output[cite: 2].
+  - [ ] The same file includes complete Q&A defenses for Grameen II domino defaults, circular MFS wash-trading, and `secp256k1` range proof soundness[cite: 2].
 
 ---
 
 ## 4. Final Master Verification Checklist (All Prompts 00 – 11 & All Reviewer Fixes)
 
-Run through this final checklist to confirm that every prompt and every mathematical, cryptographic, and architectural fix is verified before submitting to **`wangyr@pbcsf.tsinghua.edu.cn`**[cite: 2]:
+Run through this final checklist to confirm that every prompt and every mathematical, cryptographic, and architectural fix is verified before submitting the International AI Builders Congress 2026 entry[cite: 2]:
 
 ### 4.1 Mathematical & Logic Reconciliation Checklist
 - [x] **Exact ACT/365 Gross Repayment:** $45,000 \times (1 + 0.125 \times 30 / 365) = \mathbf{45,462.33\text{ \textbf{BDT}}}$ everywhere (no `45,468` discrepancy).
@@ -575,4 +571,4 @@ Run through this final checklist to confirm that every prompt and every mathemat
 - [x] **Honest Tx Hash Badging & Serverless Nonce Lock (Prompt 07):** All wallet addresses use `Web3.to_checksum_address()`, nonces are locked via pending count + Supabase RPC, and any fallback replay is explicitly labeled `[REPLAY OF VERIFIED TESTNET TX]`[cite: 2].
 - [x] **Multi-Round CNP & JSON Trace Export (Prompt 08):** `syndicate_fsm.py` runs 3 rounds of Contract Net Protocol negotiation and exports `docs/traces/scenario_{a,b,c}_trace.json`[cite: 2].
 - [x] **Supabase RLS, Immutability Trigger & Lean Serverless Bundle (Prompts 01–02):** `merchant_private_cashflows` is RLS-isolated (`[ZERO-TRUST RLS ISOLATED — SERVER/EDGE ONLY]`), `kendra_fsm_events` has a `SELECT` policy for Realtime, `zerotrust_security_intercepts` has a `BEFORE UPDATE OR DELETE` trigger, and `scipy` is excluded from `api/requirements.txt` (<65 MB bundle).
-- [x] **5 Mandatory Competition Deliverables Ready (Prompts 10–11):** (1) Registration + 5 Passports emailed to `wangyr@pbcsf.tsinghua.edu.cn`, (2) `TECHNICAL_DOCUMENTATION.pdf` (from `docs/TECHNICAL_DOCUMENTATION.md`), (3) `SECURITY_SELF_ASSESSMENT.pdf` (from `docs/SECURITY_SELF_ASSESSMENT.md`), (4) `PRESENTATION_DECK_SLIDES.pdf` ($\le 10$ min, from `docs/PRESENTATION_DECK_SLIDES.md`), and (5) 3-Minute Demo Video (`docs/VIDEO_STORYBOARD_180S.md`) + `ONCHAIN_EXECUTION_EVIDENCE.pdf` + `docs/traces/*.json`[cite: 2].
+- [x] **Competition Deliverables Ready (Prompts 10–11):** (1) Submission entry + links recorded in `docs/submissions/`, (2) `TECHNICAL_DOCUMENTATION.md` in `docs/`, (3) `SECURITY_SELF_ASSESSMENT.md` in `docs/`, (4) the timed pitch script in `docs/PITCH_SCRIPT_CLOUDDAMP.md`, and (5) `docs/ONCHAIN_EXECUTION_EVIDENCE.md` + `docs/traces/*.json`[cite: 2].

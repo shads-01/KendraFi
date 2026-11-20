@@ -1,6 +1,6 @@
 -- ==============================================================================
 -- Migration: 20261015000000_kendra_zerotrust_schema.sql
--- Project: KendraFi (Weiyedai-Global) — 2026 Shenzhen International FinTechathon
+-- Project: KendraFi — International AI Builders Congress 2026
 -- Description: Zero-Trust Schema with Deny-All Private Cashflows, Realtime Public
 --              Event Policies, Immutability Audit Triggers & Atomic Nonce Locks
 -- ==============================================================================

@@ -1,7 +1,7 @@
 """
 tests/test_prompt04_risk_engine.py
 Automated Test Suite for Prompt 04: Tier-2 Deterministic Python Risk Engine.
-2026 Shenzhen International FinTechathon — Tsinghua PBCSF & WeBank.
+International AI Builders Congress 2026 — FinSphere AI / SME Capital Engine.
 
 Verifies:
 1. Exact ACT/365 DSCR and Gross Repayment (R_1 = 45,462.33 BDT, DSCR = 1.6800x >= 1.25)
